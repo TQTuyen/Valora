@@ -80,9 +80,12 @@
     "format:check": "prettier --check \"src/**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist",
+    "commitlint": "commitlint --edit",
     "prepublishOnly": "bun run build"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.2.0",
+    "@commitlint/config-conventional": "^20.2.0",
     "@eslint/js": "^9.39.1",
     "@types/bun": "latest",
     "@types/node": "^22.10.2",
@@ -98,6 +101,7 @@
     "eslint-plugin-prettier": "^5.4.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-unused-imports": "^4.1.4",
+    "husky": "^9.1.7",
     "prettier": "^3.7.4",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.49.0",
