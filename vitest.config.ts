@@ -48,7 +48,7 @@ export default defineConfig({
       '@plugins': resolve(__dirname, 'src/plugins'),
       '@schema': resolve(__dirname, 'src/schema'),
       '@utils': resolve(__dirname, 'src/utils'),
-      '@types': resolve(__dirname, 'src/types'),
+      '#types': resolve(__dirname, 'src/types'),
     },
   },
 });

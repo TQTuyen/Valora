@@ -24,6 +24,8 @@ coverage/
 .vscode/
 .zed/
 .cursors/
+.agent/
+.codemap/
 *.swp
 *.swo
 *~

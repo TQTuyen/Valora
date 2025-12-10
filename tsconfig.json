@@ -43,7 +43,7 @@
       "@plugins/*": ["src/plugins/*"],
       "@schema/*": ["src/schema/*"],
       "@utils/*": ["src/utils/*"],
-      "@types/*": ["src/types/*"]
+      "#types/*": ["src/types/*"]
     }
   },
   "include": ["src/**/*", "tests/**/*", "vite.config.ts", "vitest.config.ts"],
