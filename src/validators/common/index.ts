@@ -1,6 +1,21 @@
 /**
- * Common/shared validators
+ * Common Validators and Base Classes
+ * Provides the foundation for all type-specific validators
  * @module validators/common
  */
 
-export {};
+// Base validator
+export { BaseValidator } from './base-validator';
+
+// Common strategies
+export {
+  ArrayTypeStrategy,
+  BooleanTypeStrategy,
+  CustomStrategy,
+  DateTypeStrategy,
+  NumberTypeStrategy,
+  ObjectTypeStrategy,
+  RequiredStrategy,
+  StringTypeStrategy,
+  TypeCheckStrategy,
+} from './strategies/index';
