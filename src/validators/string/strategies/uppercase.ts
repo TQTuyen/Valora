@@ -1,0 +1,20 @@
+/**
+ * Uppercase Strategy
+ * @module validators/string/strategies/uppercase
+ */
+
+import { BaseValidationStrategy } from '@core/index';
+
+import type { ValidationContext, ValidationResult } from '#types/index';
+
+/** Uppercase strategy */
+export class UppercaseStrategy extends BaseValidationStrategy<string, string> {
+  readonly name = 'uppercase';
+
+  validate(value: string, context: ValidationContext): ValidationResult<string> {
+    if (value !== value.toUpperCase()) {
+      return this.failure('string.uppercase', context);
+    }
+    return this.success(value, context);
+  }
+}
