@@ -1,6 +1,10 @@
 /**
- * Boolean validators
+ * Boolean Validators
  * @module validators/boolean
  */
 
-export {};
+// Re-export validator and factory
+export { boolean, BooleanValidator } from './validator';
+
+// Re-export strategies for advanced use
+export { IsFalseStrategy, IsTrueStrategy } from './strategies/index';
