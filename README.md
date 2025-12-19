@@ -165,7 +165,7 @@ All path aliases are configured in `tsconfig.json` and `vite.config.ts`:
 ```typescript
 import { required } from '@validators/common';
 import { deepGet } from '@utils';
-import type { ValidationResult } from '@types';
+import type { ValidationResult } from '#types';
 ```
 
 ### Testing
