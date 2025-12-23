@@ -36,6 +36,7 @@ export function validate(
       return instance;
     } as unknown as TFunction;
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     newConstructor.prototype = original.prototype;
     Object.setPrototypeOf(newConstructor, original);
     return newConstructor;

@@ -18,12 +18,8 @@ import { createError, createFailureResult, createSuccessResult, measure } from '
 
 import { CustomStrategy, RequiredStrategy } from './strategies/index';
 
-import type {
-  IValidationStrategy,
-  IValidator,
-  ValidationContext,
-  ValidationResult,
-} from '#types/index';
+import type { ValidationContext, ValidationResult } from '#types/results';
+import type { IAsyncValidationStrategy, IValidationStrategy, IValidator } from '#types/validators';
 
 /**
  * Abstract base class for all validators
@@ -56,8 +52,11 @@ export abstract class BaseValidator<TInput = unknown, TOutput = TInput> implemen
   /** Type identifier for this validator */
   abstract readonly _type: string;
 
-  /** Array of validation strategies */
-  protected strategies: IValidationStrategy<TOutput, TOutput>[] = [];
+  /** Array of validation strategies (sync or async) */
+  protected strategies: (
+    | IValidationStrategy<TOutput, TOutput>
+    | IAsyncValidationStrategy<TOutput, TOutput>
+  )[] = [];
 
   /** Custom error message override */
   protected customMessage?: string;
@@ -182,7 +181,9 @@ export abstract class BaseValidator<TInput = unknown, TOutput = TInput> implemen
    * @param strategy - Strategy to add
    * @returns Cloned validator with new strategy
    */
-  protected addStrategy(strategy: IValidationStrategy<TOutput, TOutput>): this {
+  protected addStrategy(
+    strategy: IValidationStrategy<TOutput, TOutput> | IAsyncValidationStrategy<TOutput, TOutput>,
+  ): this {
     const cloned = this.clone();
     cloned.strategies = [...this.strategies, strategy];
     cloned.isRequired = this.isRequired;

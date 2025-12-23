@@ -19,6 +19,18 @@ export interface IValidationStrategy<TInput = unknown, TOutput = TInput> {
 }
 
 /**
+ * Interface for async validation strategies
+ * @template TInput - Input type for the strategy
+ * @template TOutput - Output type after validation
+ */
+export interface IAsyncValidationStrategy<TInput = unknown, TOutput = TInput> {
+  /** Unique name for this strategy */
+  readonly name: string;
+  /** Execute the async validation */
+  validate(value: TInput, context: ValidationContext): Promise<ValidationResult<TOutput>>;
+}
+
+/**
  * Core validator interface
  * All validators must implement this interface
  * @template TInput - Input type accepted by the validator
@@ -35,4 +47,32 @@ export interface IValidator<TInput = unknown, TOutput = TInput> {
    * @returns Validation result
    */
   validate(value: TInput, context?: ValidationContext): ValidationResult<TOutput>;
+}
+
+/**
+ * Async validator interface
+ * @template TInput - Input type accepted by the validator
+ * @template TOutput - Output type after validation/transformation
+ */
+export interface IAsyncValidator<TInput = unknown, TOutput = TInput> {
+  /** Type identifier for this validator */
+  readonly _type: string;
+
+  /**
+   * Validate a value asynchronously
+   * @param value - Value to validate
+   * @param context - Optional validation context
+   * @returns Promise of validation result
+   */
+  validateAsync(value: TInput, context?: ValidationContext): Promise<ValidationResult<TOutput>>;
+
+  /**
+   * Cancel pending validation
+   */
+  cancel(): void;
+
+  /**
+   * Check if validation is currently pending
+   */
+  isPending(): boolean;
 }

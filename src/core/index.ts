@@ -17,6 +17,7 @@
 export { createError, createFailureResult, createSuccessResult } from './utils/results';
 
 // Pattern 1: Strategy Pattern
+export { BaseAsyncValidationStrategy } from './strategy/base-async-strategy';
 export { BaseValidationStrategy } from './strategy/base-strategy';
 
 // Pattern 2: Chain of Responsibility
@@ -47,6 +48,8 @@ export { field, validate, validateInstance, ValoraValidationError } from './deco
 
 // Type exports
 export type {
+  IAsyncValidationStrategy,
+  IAsyncValidator,
   IValidationHandler,
   IValidationObserver,
   IValidationPipeline,

@@ -11,7 +11,12 @@ export type { ValidationError } from './errors';
 export type { ValidationContext, ValidationResult } from './results';
 
 // Validator Types
-export type { IValidationStrategy, IValidator } from './validators';
+export type {
+  IAsyncValidationStrategy,
+  IAsyncValidator,
+  IValidationStrategy,
+  IValidator,
+} from './validators';
 
 // Pattern Types (Chain of Responsibility, Observer, Factory)
 export type {

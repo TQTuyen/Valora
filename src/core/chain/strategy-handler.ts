@@ -6,17 +6,28 @@
 
 import { BaseValidationHandler } from './base-handler';
 
-import type { IValidationStrategy, ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationResult } from '#types/results';
+import type { IAsyncValidationStrategy, IValidationStrategy } from '#types/validators';
 
 /**
  * Wraps a strategy as a handler for the chain
  */
 export class StrategyHandler<T> extends BaseValidationHandler<T> {
-  constructor(private readonly strategy: IValidationStrategy<T, T>) {
+  constructor(
+    private readonly strategy: IValidationStrategy<T, T> | IAsyncValidationStrategy<T, T>,
+  ) {
     super();
   }
 
   protected process(value: T, context: ValidationContext): ValidationResult<T> {
-    return this.strategy.validate(value, context);
+    const result = this.strategy.validate(value, context);
+
+    if (result instanceof Promise) {
+      throw new Error(
+        `Strategy "${this.strategy.name}" is asynchronous and cannot be used in a synchronous validation pipeline. Use validateAsync() instead.`,
+      );
+    }
+
+    return result;
   }
 }
