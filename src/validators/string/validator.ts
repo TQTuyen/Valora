@@ -40,7 +40,7 @@ import type { ValidationContext, ValidationResult } from '#types/index';
  * ```
  */
 export class StringValidator extends BaseValidator<unknown, string> {
-  readonly _type = 'string';
+  readonly _type: string = 'string';
 
   protected clone(): StringValidator {
     const cloned = new StringValidator();

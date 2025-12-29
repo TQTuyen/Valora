@@ -169,3 +169,38 @@ export {
   OneOfValueStrategy,
   SameAsStrategy,
 } from './comparison/index';
+
+// -------------------------------------------------------------------------
+// Async Validators
+// -------------------------------------------------------------------------
+export type { AsyncValidationFn, RetryConfig } from './async/index';
+export { async, AsyncValidator } from './async/index';
+
+// -------------------------------------------------------------------------
+// Business Validators
+// -------------------------------------------------------------------------
+export type {
+  CreditCardStrategy,
+  IBANStrategy,
+  PhoneStrategy,
+  SSNStrategy,
+  UrlSlugStrategy,
+} from './business/index';
+export { business, BusinessValidator } from './business/index';
+export { CreditCardType, slugify } from './business/index';
+
+// -------------------------------------------------------------------------
+// File Validators
+// -------------------------------------------------------------------------
+export type {
+  DimensionConstraints,
+  FileExtensionStrategy,
+  ImageDimensionsStrategy,
+  ImageFile,
+  MaxFileSizeStrategy,
+  MimeTypeStrategy,
+  MinFileSizeStrategy,
+  ValidatableFile,
+} from './file/index';
+export { file, FileValidator } from './file/index';
+export { FILE_SIZE_UNITS, MIME_TYPES } from './file/index';
