@@ -151,12 +151,8 @@ describe('File Validator', () => {
     it('should work with FILE_SIZE_UNITS', () => {
       const validator = file().maxSize(5 * FILE_SIZE_UNITS.MB);
 
-      expectSuccess(
-        validator.validate(createMockFile('image/jpeg', 3 * FILE_SIZE_UNITS.MB), ctx),
-      );
-      expectFailure(
-        validator.validate(createMockFile('image/jpeg', 6 * FILE_SIZE_UNITS.MB), ctx),
-      );
+      expectSuccess(validator.validate(createMockFile('image/jpeg', 3 * FILE_SIZE_UNITS.MB), ctx));
+      expectFailure(validator.validate(createMockFile('image/jpeg', 6 * FILE_SIZE_UNITS.MB), ctx));
     });
 
     it('should handle zero-byte files', () => {
@@ -260,13 +256,9 @@ describe('File Validator', () => {
     it('should chain extension and size validations', () => {
       const validator = file().extension(['jpg', 'png']).minSize(1000).maxSize(10000);
 
-      expectSuccess(
-        validator.validate(createMockFile('image/jpeg', 5000, 'photo.jpg'), ctx),
-      );
+      expectSuccess(validator.validate(createMockFile('image/jpeg', 5000, 'photo.jpg'), ctx));
       expectFailure(validator.validate(createMockFile('image/jpeg', 500, 'photo.jpg'), ctx)); // Too small
-      expectFailure(
-        validator.validate(createMockFile('image/jpeg', 5000, 'photo.gif'), ctx),
-      ); // Wrong extension
+      expectFailure(validator.validate(createMockFile('image/jpeg', 5000, 'photo.gif'), ctx)); // Wrong extension
     });
 
     it('should combine all validation types', async () => {
@@ -325,7 +317,13 @@ describe('File Validator', () => {
           maxHeight: 2000,
         });
 
-      const validAvatar = createMockFile('image/jpeg', 500 * FILE_SIZE_UNITS.KB, 'avatar.jpg', 400, 400);
+      const validAvatar = createMockFile(
+        'image/jpeg',
+        500 * FILE_SIZE_UNITS.KB,
+        'avatar.jpg',
+        400,
+        400,
+      );
       expectSuccess(await avatarValidator.validateAsync(validAvatar, ctx));
 
       const tooSmall = createMockFile('image/jpeg', 100 * FILE_SIZE_UNITS.KB, 'avatar.jpg', 50, 50);
@@ -367,10 +365,22 @@ describe('File Validator', () => {
           aspectRatioTolerance: 0.05,
         });
 
-      const squareImage = createMockFile('image/jpeg', 2 * FILE_SIZE_UNITS.MB, 'product.jpg', 1000, 1000);
+      const squareImage = createMockFile(
+        'image/jpeg',
+        2 * FILE_SIZE_UNITS.MB,
+        'product.jpg',
+        1000,
+        1000,
+      );
       expectSuccess(await productImageValidator.validateAsync(squareImage, ctx));
 
-      const rectangularImage = createMockFile('image/jpeg', 2 * FILE_SIZE_UNITS.MB, 'product.jpg', 1600, 900);
+      const rectangularImage = createMockFile(
+        'image/jpeg',
+        2 * FILE_SIZE_UNITS.MB,
+        'product.jpg',
+        1600,
+        900,
+      );
       expectFailure(await productImageValidator.validateAsync(rectangularImage, ctx));
     });
   });

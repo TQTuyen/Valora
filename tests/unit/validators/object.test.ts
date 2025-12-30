@@ -110,7 +110,9 @@ describe('Object Validator', () => {
       expectSuccess(partialValidator.validate({}, ctx));
       expectSuccess(partialValidator.validate({ name: 'John' }, ctx));
       expectSuccess(partialValidator.validate({ name: 'John', age: 30 }, ctx));
-      expectSuccess(partialValidator.validate({ name: 'John', age: 30, email: 'j@example.com' }, ctx));
+      expectSuccess(
+        partialValidator.validate({ name: 'John', age: 30, email: 'j@example.com' }, ctx),
+      );
     });
 
     it('should pick specific keys', () => {

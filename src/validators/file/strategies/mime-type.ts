@@ -55,8 +55,10 @@ export const MIME_TYPES = {
   IMAGE: /^image\/(jpeg|png|gif|webp|svg\+xml)$/,
   VIDEO: /^video\/(mp4|webm|ogg|avi|mov)$/,
   AUDIO: /^audio\/(mpeg|wav|ogg|mp3|flac)$/,
-  DOCUMENT: /^application\/(pdf|msword|vnd\.openxmlformats-officedocument\.wordprocessingml\.document)$/,
-  SPREADSHEET: /^application\/(vnd\.ms-excel|vnd\.openxmlformats-officedocument\.spreadsheetml\.sheet)$/,
+  DOCUMENT:
+    /^application\/(pdf|msword|vnd\.openxmlformats-officedocument\.wordprocessingml\.document)$/,
+  SPREADSHEET:
+    /^application\/(vnd\.ms-excel|vnd\.openxmlformats-officedocument\.spreadsheetml\.sheet)$/,
   TEXT: /^text\/(plain|csv|html|css|javascript)$/,
   JSON: /^application\/(json|ld\+json)$/,
   ZIP: /^application\/(zip|x-zip-compressed|x-rar-compressed|x-7z-compressed)$/,

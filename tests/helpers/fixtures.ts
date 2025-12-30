@@ -51,20 +51,12 @@ export const VALID_UUIDS = [
 /**
  * Invalid UUIDs
  */
-export const INVALID_UUIDS = [
-  'invalid-uuid',
-  '550e8400-e29b-41d4-a716',
-  'not-a-uuid-at-all',
-];
+export const INVALID_UUIDS = ['invalid-uuid', '550e8400-e29b-41d4-a716', 'not-a-uuid-at-all'];
 
 /**
  * Valid dates
  */
-export const VALID_DATES = [
-  new Date('2024-01-01'),
-  new Date('2023-12-31T23:59:59'),
-  new Date(),
-];
+export const VALID_DATES = [new Date('2024-01-01'), new Date('2023-12-31T23:59:59'), new Date()];
 
 /**
  * Test user object
@@ -95,7 +87,11 @@ export const TEST_ARRAYS = {
   numbers: [1, 2, 3, 4, 5],
   strings: ['apple', 'banana', 'cherry'],
   mixed: [1, 'two', true, null],
-  nested: [[1, 2], [3, 4], [5, 6]],
+  nested: [
+    [1, 2],
+    [3, 4],
+    [5, 6],
+  ],
   empty: [],
 };
 

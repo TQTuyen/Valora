@@ -62,10 +62,7 @@ describe('Logic Validator', () => {
 
     describe('or() / anyOf()', () => {
       it('should validate when any validator passes', () => {
-        const validator = or(
-          compare<string>().equalTo('yes'),
-          compare<string>().equalTo('no'),
-        );
+        const validator = or(compare<string>().equalTo('yes'), compare<string>().equalTo('no'));
 
         expectSuccess(validator.validate('yes', ctx));
         expectSuccess(validator.validate('no', ctx));
@@ -96,10 +93,7 @@ describe('Logic Validator', () => {
 
     describe('xor()', () => {
       it('should validate when exactly one validator passes', () => {
-        const validator = xor(
-          compare<string>().equalTo('a'),
-          compare<string>().equalTo('b'),
-        );
+        const validator = xor(compare<string>().equalTo('a'), compare<string>().equalTo('b'));
 
         expectSuccess(validator.validate('a', ctx)); // Only first passes
         expectSuccess(validator.validate('b', ctx)); // Only second passes
@@ -133,10 +127,7 @@ describe('Logic Validator', () => {
 
     describe('oneOf()', () => {
       it('should be alias for xor with two validators', () => {
-        const validator = oneOf(
-          compare<string>().equalTo('a'),
-          compare<string>().equalTo('b'),
-        );
+        const validator = oneOf(compare<string>().equalTo('a'), compare<string>().equalTo('b'));
 
         expectSuccess(validator.validate('a', ctx)); // Only first passes
         expectSuccess(validator.validate('b', ctx)); // Only second passes
@@ -183,10 +174,7 @@ describe('Logic Validator', () => {
 
     describe('intersection()', () => {
       it('should validate intersection of object types', () => {
-        const validator = intersection(
-          object({ name: string() }),
-          object({ age: number() }),
-        );
+        const validator = intersection(object({ name: string() }), object({ age: number() }));
 
         expectSuccess(validator.validate({ name: 'John', age: 30 }, ctx));
         expectFailure(validator.validate({ name: 'John' }, ctx)); // Missing age
@@ -264,7 +252,7 @@ describe('Logic Validator', () => {
     describe('lazy()', () => {
       it('should support simple recursive validation', () => {
         const nestedValidator: any = lazy(() =>
-          or(string() as any, object({ nested: nestedValidator }) as any)
+          or(string() as any, object({ nested: nestedValidator }) as any),
         );
 
         expectSuccess(nestedValidator.validate('leaf', ctx));
@@ -333,10 +321,7 @@ describe('Logic Validator', () => {
     });
 
     it('should validate complex combinations', () => {
-      const validator = and(
-        or(string().email(), string().url()),
-        not(string().contains('test')),
-      );
+      const validator = and(or(string().email(), string().url()), not(string().contains('test')));
 
       expectSuccess(validator.validate('user@example.com', ctx));
       expectSuccess(validator.validate('https://example.com', ctx));
@@ -358,10 +343,7 @@ describe('Logic Validator', () => {
         phone: string().minLength(10),
       });
 
-      const userValidator = intersection(
-        baseUser,
-        union(withEmail as any, withPhone as any),
-      );
+      const userValidator = intersection(baseUser, union(withEmail as any, withPhone as any));
 
       expectSuccess(
         userValidator.validate(

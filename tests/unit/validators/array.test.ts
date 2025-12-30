@@ -251,7 +251,10 @@ describe('Array Validator', () => {
     });
 
     it('should transform after validation', () => {
-      const validator = array<number>().of(number()).min(2).transform((arr) => arr.join(','));
+      const validator = array<number>()
+        .of(number())
+        .min(2)
+        .transform((arr) => arr.join(','));
 
       const result = validator.validate([1, 2, 3], ctx);
 
@@ -275,11 +278,7 @@ describe('Array Validator', () => {
 
   describe('Chaining Validations', () => {
     it('should chain multiple array validations', () => {
-      const validator = array<number>()
-        .of(number().positive())
-        .min(2)
-        .max(5)
-        .unique();
+      const validator = array<number>().of(number().positive()).min(2).max(5).unique();
 
       expectSuccess(validator.validate([1, 2, 3], ctx));
       expectFailure(validator.validate([1], ctx)); // Too short

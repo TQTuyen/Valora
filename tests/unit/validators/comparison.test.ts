@@ -380,15 +380,9 @@ describe('Comparison Validator', () => {
     it('should work with between', () => {
       const validator = compare<number>().between(ref('min'), ref('max'));
 
-      expectSuccess(
-        validator.validate(50, createContext({ data: { min: 10, max: 100 } })),
-      );
-      expectFailure(
-        validator.validate(5, createContext({ data: { min: 10, max: 100 } })),
-      );
-      expectFailure(
-        validator.validate(150, createContext({ data: { min: 10, max: 100 } })),
-      );
+      expectSuccess(validator.validate(50, createContext({ data: { min: 10, max: 100 } })));
+      expectFailure(validator.validate(5, createContext({ data: { min: 10, max: 100 } })));
+      expectFailure(validator.validate(150, createContext({ data: { min: 10, max: 100 } })));
     });
   });
 
