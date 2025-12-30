@@ -6,9 +6,12 @@
  */
 
 import { array } from '@validators/array/index';
+import { async } from '@validators/async/index';
 import { boolean } from '@validators/boolean/index';
+import { business } from '@validators/business/index';
 import { compare, literal, nativeEnum, ref } from '@validators/comparison/index';
 import { date } from '@validators/date/index';
+import { file } from '@validators/file/index';
 import {
   and,
   intersection,
@@ -71,6 +74,11 @@ export const v = {
   date,
   array,
   object,
+
+  // Specialized validators
+  async,
+  business,
+  file,
 
   // Logic combinators
   and,
