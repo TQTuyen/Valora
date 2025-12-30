@@ -2,7 +2,15 @@
  * Base Adapter Tests
  */
 
-import { AdapterUtils, BaseFrameworkAdapter } from '@adapters/base';
+import { BaseFrameworkAdapter } from '@adapters/base-adapter';
+import {
+  canSubmit,
+  formatErrors,
+  getFieldBindings,
+  getFirstError,
+  hasFieldErrors,
+  shouldShowErrors,
+} from '@adapters/adapter-utils';
 import { number } from '@validators/number';
 import { string } from '@validators/string';
 import { describe, expect, it } from 'vitest';
@@ -350,7 +358,7 @@ describe('Base Framework Adapter', () => {
     });
   });
 
-  describe('AdapterUtils', () => {
+  describe('Adapter Utilities', () => {
     it('should check if field has errors', () => {
       const fieldState = {
         value: 'test',
@@ -361,9 +369,9 @@ describe('Base Framework Adapter', () => {
         isValid: false,
       };
 
-      expect(AdapterUtils.hasFieldErrors(fieldState)).toBe(true);
+      expect(hasFieldErrors(fieldState)).toBe(true);
       expect(
-        AdapterUtils.hasFieldErrors({
+        hasFieldErrors({
           ...fieldState,
           errors: [],
         }),
@@ -383,7 +391,7 @@ describe('Base Framework Adapter', () => {
         isValid: false,
       };
 
-      expect(AdapterUtils.getFirstError(fieldState)).toBe('First error');
+      expect(getFirstError(fieldState)).toBe('First error');
     });
 
     it('should check if errors should be shown', () => {
@@ -396,9 +404,9 @@ describe('Base Framework Adapter', () => {
         isValid: false,
       };
 
-      expect(AdapterUtils.shouldShowErrors(fieldState)).toBe(true);
+      expect(shouldShowErrors(fieldState)).toBe(true);
       expect(
-        AdapterUtils.shouldShowErrors({
+        shouldShowErrors({
           ...fieldState,
           touched: false,
         }),
@@ -418,7 +426,7 @@ describe('Base Framework Adapter', () => {
         isValid: false,
       };
 
-      const formatted = AdapterUtils.formatErrors(fieldState);
+      const formatted = formatErrors(fieldState);
 
       expect(formatted).toEqual(['Error 1', 'Error 2']);
     });
@@ -433,9 +441,9 @@ describe('Base Framework Adapter', () => {
         errors: [],
       };
 
-      expect(AdapterUtils.canSubmit(formState)).toBe(true);
-      expect(AdapterUtils.canSubmit({ ...formState, isValid: false })).toBe(false);
-      expect(AdapterUtils.canSubmit({ ...formState, validating: true })).toBe(false);
+      expect(canSubmit(formState)).toBe(true);
+      expect(canSubmit({ ...formState, isValid: false })).toBe(false);
+      expect(canSubmit({ ...formState, validating: true })).toBe(false);
     });
 
     it('should get field bindings', () => {
@@ -447,7 +455,7 @@ describe('Base Framework Adapter', () => {
         initialValues: { name: 'John' },
       });
 
-      const bindings = AdapterUtils.getFieldBindings(adapter, 'name');
+      const bindings = getFieldBindings(adapter, 'name');
 
       expect(bindings.value).toBe('John');
       expect(bindings.onChange).toBeInstanceOf(Function);
