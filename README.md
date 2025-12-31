@@ -1,41 +1,177 @@
 # Valora
 
-A modern, tree-shakeable validation framework for JavaScript/TypeScript with framework adapters for React, Vue, Svelte, Solid, and Vanilla JS.
+**Production-grade TypeScript-first validation framework with class-validator style decorators**
 
-## Features
+A modern, tree-shakeable validation framework for JavaScript/TypeScript with dual APIs: elegant class decorators and chainable fluent validators.
 
-- 🎯 **Tree-shakeable** - Import only what you need
-- 📦 **Framework Agnostic** - Core works everywhere
-- 🔒 **Type-safe** - Full TypeScript support with strict mode
-- 🔌 **Extensible** - Plugin system for customization
-- ⚡ **Performant** - Lazy evaluation and caching support
-- 🌍 **i18n Ready** - Built-in internationalization
+## ✨ Features
+
+- 🎨 **Class-Validator Style Decorators** - Familiar, elegant validation syntax with 63+ decorators
+- 🔗 **Fluent Chainable API** - `v.string().email().minLength(5)` for schema-based validation
+- 🌳 **Tree-Shakeable** - Import only what you need, zero unused code
+- 🏗️ **SOLID Architecture** - Built with 6 GoF design patterns for maintainability
+- 🌍 **i18n Support** - English & Vietnamese built-in, easily extensible
+- 🔒 **Type-Safe** - Full TypeScript inference with `Infer<T>`
+- 🎯 **Framework Agnostic** - Core works everywhere
 - 🎨 **Framework Adapters** - React, Vue, Svelte, Solid, Vanilla JS
+- ⚡ **Production-Ready** - Comprehensive test coverage
 
-## Quick Start
-
-### Installation
+## 📦 Installation
 
 ```bash
-bun install
+# Using bun (recommended)
+bun add valora
+
+# Using npm
+npm install valora
+
+# Using yarn
+yarn add valora
+
+# Using pnpm
+pnpm add valora
 ```
 
-### Basic Usage
+## 🚀 Quick Start
+
+### Option 1: Decorators (Recommended for Classes)
+
+Perfect for validating class instances, DTOs, and domain models.
 
 ```typescript
-import { required, email, minLength } from 'valora/validators/string';
+import { Validate, IsString, IsEmail, MinLength, Min, IsNumber } from 'valora/decorators';
 
-// Create a validator
-const validator = required();
+@Validate()
+class CreateUserDto {
+  @IsString()
+  @MinLength(2, { message: 'Name must be at least 2 characters' })
+  name: string;
 
-// Validate a value
-const result = validator.validate('user@example.com');
-console.log(result.valid); // true
+  @IsEmail()
+  email: string;
+
+  @IsNumber()
+  @Min(18)
+  age: number;
+}
+
+// Auto-validates on construction!
+try {
+  const user = new CreateUserDto({
+    name: 'John Doe',
+    email: 'john@example.com',
+    age: 25
+  });
+  console.log('Valid user:', user);
+} catch (error) {
+  console.error('Validation error:', error.message);
+}
 ```
 
-### With Adapters
+### Option 2: Fluent API (Recommended for Schemas)
 
-#### React
+Perfect for validating data, API requests, and configuration.
+
+```typescript
+import { v, Infer } from 'valora';
+
+// Define schema
+const createUserSchema = v.object({
+  name: v.string().minLength(2),
+  email: v.string().email(),
+  age: v.number().min(18).optional(),
+});
+
+// Infer TypeScript type
+type CreateUserDto = Infer<typeof createUserSchema>;
+
+// Validate data
+const result = createUserSchema.validate({
+  name: 'John Doe',
+  email: 'john@example.com',
+  age: 25
+});
+
+if (result.success) {
+  console.log('Valid data:', result.data); // Fully typed!
+} else {
+  console.error('Validation errors:', result.errors);
+}
+```
+
+## 📚 Documentation
+
+**Complete guides for learning and reference:**
+
+- **[Getting Started](./docs/getting-started.md)** - Installation, first steps, and basic patterns
+- **[Decorators Guide](./docs/decorators-guide.md)** - Complete reference for all 63 decorators
+- **[Validators Guide](./docs/validators-guide.md)** - Fluent API reference and schema validation
+- **[Nested Validation](./docs/nested-validation.md)** - Working with nested objects and arrays
+- **[Advanced Usage](./docs/advanced-usage.md)** - Custom validators, i18n, async validation, and more
+- **[Examples](./docs/examples.md)** - Real-world use cases and patterns
+- **[API Reference](./docs/api-reference.md)** - Complete API documentation
+- **[Migration Guide](./docs/migration-guide.md)** - Upgrading from legacy decorators
+
+## 🎯 Available Decorators
+
+### Common (2)
+`@IsOptional()` `@IsRequired()`
+
+### String (17)
+`@IsString()` `@IsEmail()` `@IsUrl()` `@IsUuid()` `@MinLength()` `@MaxLength()` `@Length()` `@Matches()` `@StartsWith()` `@EndsWith()` `@Contains()` `@IsAlpha()` `@IsAlphanumeric()` `@IsNumeric()` `@IsLowercase()` `@IsUppercase()` `@NotEmpty()`
+
+### Number (10)
+`@IsNumber()` `@IsInt()` `@IsFinite()` `@IsSafeInt()` `@Min()` `@Max()` `@Range()` `@IsPositive()` `@IsNegative()` `@IsMultipleOf()`
+
+### Boolean (3)
+`@IsBoolean()` `@IsTrue()` `@IsFalse()`
+
+### Date (12)
+`@IsDate()` `@MinDate()` `@MaxDate()` `@IsPast()` `@IsFuture()` `@IsToday()` `@IsBefore()` `@IsAfter()` `@IsWeekday()` `@IsWeekend()` `@MinAge()` `@MaxAge()`
+
+### Array (7)
+`@IsArray()` `@ArrayMinSize()` `@ArrayMaxSize()` `@ArrayLength()` `@ArrayNotEmpty()` `@ArrayUnique()` `@ArrayContains()`
+
+### Object (2)
+`@IsObject()` `@ValidateNested()`
+
+## 🔧 Validators
+
+### Built-in Categories
+
+- **String** - `email()`, `url()`, `uuid()`, `minLength()`, `maxLength()`, `matches()`, etc.
+- **Number** - `min()`, `max()`, `range()`, `positive()`, `integer()`, `finite()`, etc.
+- **Date** - `past()`, `future()`, `minAge()`, `maxAge()`, `weekday()`, `weekend()`, etc.
+- **Array** - `of()`, `min()`, `max()`, `unique()`, `contains()`, `every()`, `some()`, etc.
+- **Object** - `shape()`, `partial()`, `pick()`, `omit()`, `strict()`, `passthrough()`, etc.
+- **Boolean** - `true()`, `false()`, `required()`
+- **File** - `maxSize()`, `mimeType()`, `extension()`, `dimensions()`
+- **Business** - `creditCard()`, `phone()`, `iban()`, `ssn()`, `slug()`
+- **Async** - `async()`, `debounce()`, `timeout()`, `retry()`
+- **Logic** - `and()`, `or()`, `not()`, `union()`, `intersection()`, `ifThenElse()`
+
+## 🌍 Internationalization
+
+Built-in support for English and Vietnamese, easily extensible:
+
+```typescript
+import { globalI18n } from 'valora/plugins';
+
+// Switch to Vietnamese
+globalI18n.setLocale('vi');
+
+// Add custom locale
+globalI18n.loadLocale('fr', {
+  string: {
+    required: 'Ce champ est obligatoire',
+    email: 'Adresse email invalide',
+  },
+});
+```
+
+## 🎨 Framework Adapters
+
+### React
 
 ```tsx
 import { useValora } from 'valora/adapters/react';
@@ -52,7 +188,7 @@ export function LoginForm() {
 }
 ```
 
-#### Vue
+### Vue
 
 ```vue
 <script setup>
@@ -67,7 +203,27 @@ const { validate, errors } = useValora();
 </template>
 ```
 
-## Available Scripts
+## 📁 Project Structure
+
+```
+valora/
+├── src/
+│   ├── core/             # Validation engine & design patterns
+│   ├── decorators/       # Class-validator style decorators
+│   ├── validators/       # Fluent validators (string, number, date, etc.)
+│   ├── adapters/         # Framework integrations (React, Vue, Svelte, etc.)
+│   ├── plugins/          # i18n, logger, cache, transform, devtools
+│   ├── schema/           # Schema builder & coercion
+│   ├── notification/     # Event notification system
+│   ├── utils/            # Utility functions
+│   └── types/            # TypeScript type definitions
+├── tests/                # Test files (unit, integration, e2e)
+├── examples/             # Framework-specific examples
+├── docs/                 # Comprehensive documentation
+└── dist/                 # Build output (generated)
+```
+
+## 🛠️ Available Scripts
 
 ```bash
 # Development
@@ -91,84 +247,39 @@ bun run format:check     # Check formatting without changes
 bun run clean            # Remove dist/ directory
 ```
 
-## Project Structure
+## 🏗️ Architecture
 
-```
-valora/
-├── src/
-│   ├── core/             # Validation engine & core logic
-│   ├── validators/       # Validators (string, number, date, etc.)
-│   ├── adapters/         # Framework integrations
-│   ├── plugins/          # i18n, logger, cache, transform, devtools
-│   ├── schema/           # Schema builder & parser
-│   ├── notification/     # Event notification system
-│   ├── utils/            # Utility functions
-│   └── types/            # TypeScript type definitions
-├── tests/                # Test files (unit, integration, e2e)
-├── examples/             # Framework-specific examples
-├── docs/                 # Documentation
-└── dist/                 # Build output (generated)
-```
+Valora is built with SOLID principles and implements 6 Gang of Four design patterns:
 
-## Validators
+- **Strategy Pattern** - Pluggable validation strategies
+- **Chain of Responsibility** - Validation pipeline
+- **Observer Pattern** - Event notifications
+- **Factory Pattern** - Validator creation
+- **Decorator Pattern** - Validator composition
+- **Composite Pattern** - Nested validation
 
-### Built-in Categories
+## 🔒 Type Safety
 
-- **String** - `email`, `url`, `uuid`, `minLength`, `maxLength`, `pattern`, etc.
-- **Number** - `min`, `max`, `between`, `positive`, `integer`, `finite`, etc.
-- **Date** - `before`, `after`, `future`, `past`, `weekday`, `age`, etc.
-- **Array** - `minLength`, `maxLength`, `unique`, `includes`, `every`, `some`, etc.
-- **Object** - `hasKey`, `hasKeys`, `shape`, `strict`, `partial`, etc.
-- **Boolean** - `isTrue`, `isFalse`, `required`
-- **File** - `maxSize`, `minSize`, `mimeType`, `extension`, `dimensions`
-- **Business** - `creditCard`, `phone`, `iban`, `postalCode`, `ssn`, etc.
-- **Async** - `unique`, `exists`, `available`, `remote`
-- **Logic** - `and`, `or`, `not`, `when`, `unless`, `switch`
-- **Comparison** - `equals`, `oneOf`, `equalsField`, `differentFrom`
+Full TypeScript support with:
 
-### Custom Validators
-
-```typescript
-import { createValidator } from 'valora/validators/common';
-
-const myValidator = createValidator({
-  name: 'myRule',
-  validate: (value) => ({
-    valid: value.length > 0,
-    errors: value.length > 0 ? [] : [{ message: 'Value is required' }],
-  }),
-});
-```
-
-## Plugins
-
-- **i18n** - Multi-language error messages (en, vi, ja, ko, zh, fr, de, es)
-- **Logger** - Debug logging for validations
-- **Cache** - Cache validation results
-- **Transform** - Transform values during validation
-- **DevTools** - Developer tools integration
-
-## Type Safety
-
-Valora uses TypeScript strict mode with:
-
+- Strict mode enabled
 - Explicit return types
-- Type-safe validators
-- Full path aliases support (`@/`, `@validators/`, etc.)
-
-## Configuration
-
-### Path Aliases
-
-All path aliases are configured in `tsconfig.json` and `vite.config.ts`:
+- Type inference with `Infer<T>`
+- Path aliases support (`@/`, `@validators/`, etc.)
 
 ```typescript
-import { required } from '@validators/common';
-import { deepGet } from '@utils';
-import type { ValidationResult } from '#types';
+import { v, Infer } from 'valora';
+
+const userSchema = v.object({
+  name: v.string(),
+  age: v.number().optional(),
+});
+
+type User = Infer<typeof userSchema>;
+// type User = { name: string; age?: number }
 ```
 
-### Testing
+## 🧪 Testing
 
 Tests use Vitest with:
 
@@ -177,7 +288,7 @@ Tests use Vitest with:
 - Type checking enabled
 - Both unit and integration tests
 
-## Contributing
+## 🤝 Contributing
 
 1. Create a feature branch: `git checkout -b feat/my-feature`
 2. Make your changes following the code conventions
@@ -186,12 +297,12 @@ Tests use Vitest with:
 5. Format code: `bun run format`
 6. Commit: `git commit -m "feat: add my feature"`
 
-## Code Conventions
+## 📝 Code Conventions
 
 - **Variables/Functions**: `camelCase`
 - **Classes/Interfaces/Types**: `PascalCase`
 - **Constants**: `UPPER_SNAKE_CASE`
-- **Files**: `camelCase.ts` for modules
+- **Files**: `kebab-case.ts` for modules
 
 ### TypeScript Best Practices
 
@@ -201,7 +312,7 @@ Tests use Vitest with:
 - No `any` types without justification
 - Explicit return types on public functions
 
-## Development Setup
+## 🚀 Development Setup
 
 1. Install Bun (https://bun.sh)
 2. Clone the repository
@@ -209,25 +320,15 @@ Tests use Vitest with:
 4. Run `bun run dev` to start watch mode
 5. Check `.claude/CLAUDE.md` for project guidelines
 
-## Documentation
-
-- [Getting Started](./docs/getting-started.md)
-- [Validators Guide](./docs/validators.md)
-- [Custom Validators](./docs/custom-validators.md)
-- [Framework Adapters](./docs/adapters.md)
-- [Plugins](./docs/plugins.md)
-- [Internationalization](./docs/i18n.md)
-- [API Reference](./docs/api-reference.md)
-
-## License
+## 📄 License
 
 MIT © Valora Team
 
-## Resources
+## 🔗 Resources
 
-- [Official Website](#) - Coming soon
+- [GitHub Repository](https://github.com/TQTuyen/valora)
 - [GitHub Issues](https://github.com/TQTuyen/valora/issues)
-- [Discussions](#) - Coming soon
+- [Documentation](./docs/README.md)
 
 ---
 
