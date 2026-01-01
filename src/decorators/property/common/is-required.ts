@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * @IsRequired Decorator
  * @module decorators/property/common/is-required

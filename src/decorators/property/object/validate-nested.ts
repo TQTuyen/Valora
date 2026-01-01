@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * @ValidateNested Decorator
  * @module decorators/property/object/validate-nested
