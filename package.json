@@ -111,9 +111,9 @@
   },
   "peerDependencies": {
     "react": ">=17.0.0",
-    "vue": ">=3.0.0",
+    "solid-js": ">=1.0.0",
     "svelte": ">=4.0.0",
-    "solid-js": ">=1.0.0"
+    "vue": "^3.5.26"
   },
   "peerDependenciesMeta": {
     "react": {
