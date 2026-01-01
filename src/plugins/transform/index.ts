@@ -34,13 +34,24 @@ export type { TransformConfig } from './config';
 export { DEFAULT_TRANSFORM_CONFIG, mergeConfig } from './config';
 
 // Plugin class
-export { createTransformPlugin,TransformPlugin } from './plugin';
+export { createTransformPlugin, TransformPlugin } from './plugin';
 
 // Global instance
-export { configureTransform, getTransformPlugin, globalTransform,resetTransformPlugin } from './global';
+export {
+  configureTransform,
+  getTransformPlugin,
+  globalTransform,
+  resetTransformPlugin,
+} from './global';
 
 // Composition utilities
-export { attempt, chain, compose, debounce,memoize, pipe, sequence, tap, when } from './composers';
+export { attempt, chain, compose, debounce, memoize, pipe, sequence, tap, when } from './composers';
 
 // Built-in transforms
-export { arrayTransforms,dateTransforms, numberTransforms, objectTransforms, stringTransforms } from './transforms';
+export {
+  arrayTransforms,
+  dateTransforms,
+  numberTransforms,
+  objectTransforms,
+  stringTransforms,
+} from './transforms';

@@ -22,9 +22,7 @@ import type { SameTypeTransformer } from '../types';
  * );
  * ```
  */
-export function sequence<T>(
-  ...transforms: SameTypeTransformer<T>[]
-): SameTypeTransformer<T> {
+export function sequence<T>(...transforms: SameTypeTransformer<T>[]): SameTypeTransformer<T> {
   return (value: T) => {
     let result = value;
 

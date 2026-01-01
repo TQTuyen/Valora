@@ -18,7 +18,9 @@ export const compact: SameTypeTransformer<unknown[]> = <T>(value: T[]) => value.
 /**
  * Filter by predicate
  */
-export function filter<T>(predicate: (item: T, index: number) => boolean): SameTypeTransformer<T[]> {
+export function filter<T>(
+  predicate: (item: T, index: number) => boolean,
+): SameTypeTransformer<T[]> {
   return (value: T[]) => value.filter(predicate);
 }
 

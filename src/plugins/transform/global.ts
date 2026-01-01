@@ -6,7 +6,7 @@
 import { createTransformPlugin } from './plugin';
 
 import type { TransformConfig } from './config';
-import type { TransformPlugin} from './plugin';
+import type { TransformPlugin } from './plugin';
 
 /**
  * Global transform plugin instance

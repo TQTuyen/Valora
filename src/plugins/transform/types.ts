@@ -86,11 +86,7 @@ export interface ITransformPlugin {
    * @param transform - The transformer function
    * @param meta - Optional metadata
    */
-  register(
-    name: string,
-    transform: Transformer,
-    meta?: Partial<TransformerMeta>,
-  ): void;
+  register(name: string, transform: Transformer, meta?: Partial<TransformerMeta>): void;
 
   /**
    * Apply a transform by name

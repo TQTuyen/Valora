@@ -26,6 +26,6 @@ import { createPropertyDecorator } from '../../core/factory';
  */
 export function Range(min: number, max: number): PropertyDecorator {
   return createPropertyDecorator((minimum: number, maximum: number) =>
-    number().range(minimum, maximum)
+    number().range(minimum, maximum),
   )(min, max);
 }

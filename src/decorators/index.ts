@@ -31,7 +31,7 @@
 // Class decorators
 export * from './class';
 export type { ValidateOptions } from './class/validate';
-export { validate, validateClassInstance,ValoraValidationError } from './class/validate';
+export { validate, validateClassInstance, ValoraValidationError } from './class/validate';
 
 // Core utilities
 export * from './core';

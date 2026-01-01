@@ -8,10 +8,7 @@ import type { SameTypeTransformer } from '../../types';
 /**
  * Replace substring or pattern
  */
-export function replace(
-  search: string | RegExp,
-  replacement: string,
-): SameTypeTransformer<string> {
+export function replace(search: string | RegExp, replacement: string): SameTypeTransformer<string> {
   return (value: string) => value.replace(search, replacement);
 }
 

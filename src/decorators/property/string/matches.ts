@@ -25,7 +25,8 @@ import { createPropertyDecorator } from '../../core/factory';
  * ```
  */
 export function Matches(pattern: RegExp, message?: string): PropertyDecorator {
-  return createPropertyDecorator((regex: RegExp, msg?: string) =>
-    string().matches(regex, msg)
-  )(pattern, message);
+  return createPropertyDecorator((regex: RegExp, msg?: string) => string().matches(regex, msg))(
+    pattern,
+    message,
+  );
 }

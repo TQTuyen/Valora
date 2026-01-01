@@ -20,15 +20,7 @@ import {
   subtractHours,
 } from './arithmetic';
 import { endOfDay, startOfDay } from './boundaries';
-import {
-  getDate,
-  getDay,
-  getHours,
-  getMinutes,
-  getMonth,
-  getSeconds,
-  getYear,
-} from './components';
+import { getDate, getDay, getHours, getMinutes, getMonth, getSeconds, getYear } from './components';
 import { toDateString, toISODate, toISOString, toTimeString, toUTCString } from './formatting';
 import { toLocaleDateString, toLocaleString, toLocaleTimeString } from './locale';
 import { fromMilliseconds, fromTimestamp, toMilliseconds, toTimestamp } from './timestamp';

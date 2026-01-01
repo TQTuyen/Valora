@@ -8,14 +8,18 @@ import type { Transformer } from '../../types';
 /**
  * Find element by predicate
  */
-export function find<T>(predicate: (item: T, index: number) => boolean): Transformer<T[], T | undefined> {
+export function find<T>(
+  predicate: (item: T, index: number) => boolean,
+): Transformer<T[], T | undefined> {
   return (value: T[]) => value.find(predicate);
 }
 
 /**
  * Find index by predicate
  */
-export function findIndex<T>(predicate: (item: T, index: number) => boolean): Transformer<T[], number> {
+export function findIndex<T>(
+  predicate: (item: T, index: number) => boolean,
+): Transformer<T[], number> {
   return (value: T[]) => value.findIndex(predicate);
 }
 
