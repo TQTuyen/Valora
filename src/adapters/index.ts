@@ -19,9 +19,9 @@ export {
   shouldShowErrors,
 } from './adapter-utils';
 
-// Framework-specific adapters (to be implemented)
+// Framework-specific adapters
+export * from './vue';
 // export * from './react';
-// export * from './vue';
 // export * from './svelte';
 // export * from './solid';
 // export * from './vanilla';
