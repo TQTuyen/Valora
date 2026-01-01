@@ -5,6 +5,7 @@ Complete example demonstrating Valora's **VanillaAdapter** for progressive enhan
 ## 📋 Features Demonstrated
 
 ### Core Validation Features
+
 - ✅ Real-time validation on input/blur
 - ✅ Multiple validation rules per field (min/max length, patterns, ranges)
 - ✅ Custom error messages
@@ -13,6 +14,7 @@ Complete example demonstrating Valora's **VanillaAdapter** for progressive enhan
 - ✅ Form reset functionality
 
 ### Advanced Features
+
 - 🔄 **Transform Plugin** - Automatic data transformation (trim, toLowerCase, toUpperCase)
 - 🎯 **Field Subscriptions** - React to field state changes
 - 📊 **Form State Management** - Track form validity, touched, dirty states
@@ -99,16 +101,10 @@ import { trim, toLowerCase } from '../../src/plugins/transform/transforms/string
 
 const adapter = createVanillaAdapter({
   // Basic validation
-  name: string()
-    .required({ message: 'Name is required' })
-    .minLength(2),
+  name: string().required({ message: 'Name is required' }).minLength(2),
 
   // With transform plugin
-  email: transform(
-    string().required().email(),
-    trim(),
-    toLowerCase()
-  ),
+  email: transform(string().required().email(), trim(), toLowerCase()),
 
   // Complex validation
   password: string()
@@ -118,16 +114,10 @@ const adapter = createVanillaAdapter({
     .matches(/[0-9]/, { message: 'Must contain number' }),
 
   // Number with range
-  age: number()
-    .optional()
-    .min(18)
-    .max(120)
-    .integer(),
+  age: number().optional().min(18).max(120).integer(),
 
   // Boolean validation
-  terms: boolean()
-    .required()
-    .isTrue({ message: 'You must agree' }),
+  terms: boolean().required().isTrue({ message: 'You must agree' }),
 });
 ```
 
@@ -276,20 +266,14 @@ import { transform } from '../../src/plugins/transform';
 import { trim, toLowerCase, toUpperCase } from '../../src/plugins/transform/transforms/string';
 
 // Email: trim whitespace and convert to lowercase
-email: transform(
-  string().required().email(),
-  trim(),
-  toLowerCase()
-)
+email: transform(string().required().email(), trim(), toLowerCase());
 
 // Name: trim whitespace
-name: transform(
-  string().required().minLength(2),
-  trim()
-)
+name: transform(string().required().minLength(2), trim());
 ```
 
 **Available string transforms:**
+
 - `trim()` - Remove leading/trailing whitespace
 - `toLowerCase()` - Convert to lowercase
 - `toUpperCase()` - Convert to uppercase
@@ -315,12 +299,14 @@ name: transform(
 ### Errors not displaying?
 
 **Check that:**
+
 - Form element has `id` attribute
 - Input elements have `name` attributes that match validator keys exactly
 - CSS classes for errors are included in `styles.css`
 - Browser console shows no JavaScript errors
 
 **Debug with:**
+
 ```javascript
 console.log(adapter.getFormState());
 console.log(adapter.getFieldState('email'));
@@ -329,12 +315,14 @@ console.log(adapter.getFieldState('email'));
 ### Validation not triggering?
 
 **Ensure:**
+
 - Adapter is bound to form before user interaction
 - `validateOnChange` or `validateOnBlur` are enabled (true by default)
 - Field names match validator keys exactly
 - Browser console shows no errors during initialization
 
 **Test manually:**
+
 ```javascript
 adapter.validateField('email');
 adapter.validateAll();
@@ -343,22 +331,25 @@ adapter.validateAll();
 ### Transforms not working?
 
 **Verify:**
+
 - Import transform plugin correctly
 - Transform is wrapped around the validator
 - Check console logs to see transformed values
 
 **Example:**
+
 ```typescript
 // ✅ Correct
-email: transform(string().email(), trim(), toLowerCase())
+email: transform(string().email(), trim(), toLowerCase());
 
 // ❌ Incorrect
-email: string().email().transform(trim()) // Wrong API
+email: string().email().transform(trim()); // Wrong API
 ```
 
 ### Submit button stays disabled?
 
 **This is intentional!** The submit button is disabled when:
+
 - Form has been touched (`state.touched === true`)
 - AND form is invalid (`state.isValid === false`)
 
@@ -367,6 +358,7 @@ This prevents submission of invalid data. Remove this behavior by modifying the 
 ### Cleanup not working?
 
 **Make sure to:**
+
 - Call the cleanup function returned by `bindForm()`
 - Call `adapter.destroy()` when completely done with the form
 - Clean up on page unload or component unmount
