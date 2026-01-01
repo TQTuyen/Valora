@@ -49,7 +49,7 @@ export interface VueFormState<T extends Record<string, unknown>> {
   canSubmit: ComputedRef<boolean>;
 }
 
-**
+/**
  * Vue adapter for Valora validation framework
  *
  * Provides Vue 3 Composition API integration with reactive refs and computed properties.
@@ -137,3 +137,174 @@ export class VueAdapter<T extends Record<string, unknown>> extends BaseFramework
     return reactiveState;
   }
 
+  /**
+   * Create or get reactive form state
+   */
+  useForm(): VueFormState<T> {
+    if (this.formStateRef) {
+      return this.formStateRef;
+    }
+
+    const formState = this.getFormState();
+
+    const fields = ref(formState.fields) as Ref<{ [K in keyof T]?: FieldState<T[K]> }>;
+    const isValid = ref(formState.isValid);
+    const validating = ref(formState.validating);
+    const touched = ref(formState.touched);
+    const dirty = ref(formState.dirty);
+    const errors = ref(formState.errors);
+
+    const canSubmitComputed = computed(() =>
+      canSubmit({
+        isValid: isValid.value,
+        validating: validating.value,
+      } as FormState<T>),
+    );
+
+    // Subscribe to form changes
+    this.subscribeToForm((state: FormState<T>) => {
+      fields.value = state.fields;
+      isValid.value = state.isValid;
+      validating.value = state.validating;
+      touched.value = state.touched;
+      dirty.value = state.dirty;
+      errors.value = state.errors;
+    });
+
+    this.formStateRef = {
+      fields,
+      isValid,
+      validating,
+      touched,
+      dirty,
+      errors,
+      canSubmit: canSubmitComputed,
+    };
+
+    return this.formStateRef;
+  }
+
+  /**
+   * Get field bindings for v-model and event handlers
+   *
+   * @example
+   * ```vue
+   * <script setup>
+   * const { modelValue, onBlur, error, hasError } = adapter.getFieldBindings('email');
+   * </script>
+   *
+   * <template>
+   *   <input v-model="modelValue" @blur="onBlur" />
+   *   <span v-if="hasError">{{ error }}</span>
+   * </template>
+   * ```
+   */
+  getFieldBindings<K extends keyof T>(field: K) {
+    const fieldState = this.useField(field);
+
+    return {
+      modelValue: computed({
+        get: () => fieldState.value.value,
+        set: (newValue: T[K]) => {
+          this.setFieldValue(field, newValue);
+        },
+      }),
+      onBlur: () => {
+        this.touchField(field);
+      },
+      error: fieldState.firstError,
+      hasError: fieldState.hasError,
+      shouldShowError: fieldState.shouldShowError,
+      errorMessages: fieldState.errorMessages,
+    };
+  }
+
+  /**
+   * Override destroy to cleanup Vue-specific resources
+   */
+  override destroy(): void {
+    this.fieldStates.clear();
+    this.formStateRef = null;
+    super.destroy();
+  }
+}
+
+/**
+ * Create a Vue adapter instance
+ *
+ * @example
+ * ```typescript
+ * const adapter = createVueAdapter({
+ *   email: string().email().required(),
+ *   password: string().minLength(8).required()
+ * });
+ * ```
+ */
+export function createVueAdapter<T extends Record<string, unknown>>(
+  validators: ValidatorMap<T>,
+  options?: FormStateOptions<T>,
+): VueAdapter<T> {
+  return new VueAdapter(validators, options);
+}
+
+/**
+ * Vue composable for form validation
+ *
+ * @example
+ * ```typescript
+ * const { adapter, formState } = useFormValidation({
+ *   email: string().email().required(),
+ *   password: string().minLength(8).required()
+ * });
+ * ```
+ */
+export function useFormValidation<T extends Record<string, unknown>>(
+  validators: ValidatorMap<T>,
+  options?: FormStateOptions<T>,
+) {
+  const adapter = new VueAdapter(validators, options);
+  const formState = adapter.useForm();
+
+  // Cleanup on unmount
+  onBeforeUnmount(() => {
+    adapter.destroy();
+  });
+
+  return {
+    adapter,
+    formState,
+    validateAll: () => adapter.validateAll(),
+    resetAll: (values?: Partial<T>) => adapter.resetAll(values),
+    getValues: () => adapter.getValues(),
+    setValues: (values: Partial<T>, opts?: { validate?: boolean }) =>
+      adapter.setValues(values, opts),
+  };
+}
+
+/**
+ * Vue composable for single field validation
+ *
+ * @example
+ * ```typescript
+ * const email = useFieldValidation(adapter, 'email');
+ * ```
+ */
+export function useFieldValidation<T extends Record<string, unknown>, K extends keyof T>(
+  adapter: VueAdapter<T>,
+  field: K,
+) {
+  const fieldState = adapter.useField(field);
+  const bindings = adapter.getFieldBindings(field);
+
+  return {
+    ...fieldState,
+    ...bindings,
+    setValue: (value: T[K]) => adapter.setFieldValue(field, value),
+    touch: () => adapter.touchField(field),
+    reset: (value?: T[K]) => adapter.resetField(field, value),
+    validate: () => adapter.validateField(field),
+  };
+}
+
+// Export types
+export type { ValidatorMap, FormStateOptions };
