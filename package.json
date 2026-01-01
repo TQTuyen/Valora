@@ -1,8 +1,8 @@
 {
-  "name": "valora",
-  "version": "0.1.0",
+  "name": "@tqtos/valora",
+  "version": "0.0.1",
   "description": "A modern, tree-shakeable validation framework with framework adapters",
-  "author": "Valora Team",
+  "author": "TQTos",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -142,10 +142,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/valora/valora.git"
+    "url": "https://github.com/TQTuyen/Valora.git"
   },
   "bugs": {
-    "url": "https://github.com/valora/valora/issues"
+    "url": "https://github.com/TQTuyen/Valora/issues"
   },
   "engines": {
     "node": ">=18.0.0"
