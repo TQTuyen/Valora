@@ -7,7 +7,7 @@
  *
  * @example
  * ```typescript
- * import { Validate, IsString, IsEmail, MinLength, IsNumber, Min } from 'valora/decorators';
+ * import { Validate, IsString, IsEmail, MinLength, IsNumber, Min } from '@tqtos/valora/decorators';
  *
  * @Validate()
  * class User {

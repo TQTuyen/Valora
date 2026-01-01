@@ -7,7 +7,7 @@
  *
  * @example
  * ```typescript
- * import { createFormState, createFieldValidator } from 'valora/notification';
+ * import { createFormState, createFieldValidator } from '@tqtos/valora/notification';
  *
  * const formState = createFormState({
  *   email: v.string().email(),

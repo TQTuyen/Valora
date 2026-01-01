@@ -11,7 +11,7 @@
  *
  * @example
  * ```typescript
- * import { v, Infer } from 'valora';
+ * import { v, Infer } from '@tqtos/valora';
  *
  * const userSchema = v.object({
  *   name: v.string().minLength(2),

@@ -4,7 +4,7 @@
  *
  * @example
  * ```typescript
- * import { getTransformPlugin, pipe } from 'valora/plugins/transform';
+ * import { getTransformPlugin, pipe } from '@tqtos/valora/plugins/transform';
  *
  * // Get global instance
  * const plugin = getTransformPlugin();
