@@ -24,4 +24,4 @@ export {
 // export * from './vue';
 // export * from './svelte';
 // export * from './solid';
-// export * from './vanilla';
+export * from './vanilla';
