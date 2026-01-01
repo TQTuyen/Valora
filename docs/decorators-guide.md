@@ -21,7 +21,7 @@ Complete reference for Valora's class-validator style decorators.
 Valora's decorator system provides a clean, declarative way to add validation to your classes.
 
 ```typescript
-import { Validate, IsString, IsEmail } from 'valora/decorators';
+import { Validate, IsString, IsEmail } from '@tqtos/valora/decorators';
 
 @Validate()
 class User {
@@ -40,6 +40,7 @@ class User {
 Marks a class for validation. Must be applied to use property decorators.
 
 **Options:**
+
 - `validateOnCreate` (boolean, default: `true`) - Auto-validate on instantiation
 - `throwOnError` (boolean, default: `true`) - Throw error on validation failure
 
@@ -69,7 +70,7 @@ class ManualUser {
 **Manual Validation:**
 
 ```typescript
-import { validateClassInstance } from 'valora/decorators';
+import { validateClassInstance } from '@tqtos/valora/decorators';
 
 const user = new ManualUser({ name: 'John' });
 const result = validateClassInstance(user);
@@ -95,7 +96,7 @@ class User {
 
   @IsOptional()
   @IsString()
-  middleName?: string;  // Can be undefined
+  middleName?: string; // Can be undefined
 }
 ```
 
@@ -108,7 +109,7 @@ Explicitly marks a property as required (rejects `null` and `undefined`).
 class User {
   @IsRequired()
   @IsString()
-  name: string;  // Must be present
+  name: string; // Must be present
 }
 ```
 
@@ -117,6 +118,7 @@ class User {
 ### Type Validators
 
 #### `@IsString()`
+
 Validates that value is a string.
 
 ```typescript
@@ -125,6 +127,7 @@ name: string;
 ```
 
 #### `@IsEmail()`
+
 Validates email format.
 
 ```typescript
@@ -133,6 +136,7 @@ email: string;
 ```
 
 #### `@IsUrl()`
+
 Validates URL format.
 
 ```typescript
@@ -141,6 +145,7 @@ website: string;
 ```
 
 #### `@IsUuid()`
+
 Validates UUID v4 format.
 
 ```typescript
@@ -151,6 +156,7 @@ id: string;
 ### Length Validators
 
 #### `@MinLength(min: number)`
+
 Validates minimum string length.
 
 ```typescript
@@ -160,6 +166,7 @@ name: string;
 ```
 
 #### `@MaxLength(max: number)`
+
 Validates maximum string length.
 
 ```typescript
@@ -169,6 +176,7 @@ bio: string;
 ```
 
 #### `@Length(exact: number)`
+
 Validates exact string length.
 
 ```typescript
@@ -180,6 +188,7 @@ verificationCode: string;
 ### Pattern Validators
 
 #### `@Matches(pattern: RegExp, message?: string)`
+
 Validates against regex pattern.
 
 ```typescript
@@ -189,6 +198,7 @@ username: string;
 ```
 
 #### `@StartsWith(prefix: string)`
+
 Validates string starts with prefix.
 
 ```typescript
@@ -198,6 +208,7 @@ secureUrl: string;
 ```
 
 #### `@EndsWith(suffix: string)`
+
 Validates string ends with suffix.
 
 ```typescript
@@ -207,6 +218,7 @@ filename: string;
 ```
 
 #### `@Contains(substring: string)`
+
 Validates string contains substring.
 
 ```typescript
@@ -218,6 +230,7 @@ email: string;
 ### Character Set Validators
 
 #### `@IsAlpha()`
+
 Validates only letters (a-z, A-Z).
 
 ```typescript
@@ -227,6 +240,7 @@ firstName: string;
 ```
 
 #### `@IsAlphanumeric()`
+
 Validates only letters and numbers.
 
 ```typescript
@@ -236,6 +250,7 @@ username: string;
 ```
 
 #### `@IsNumeric()`
+
 Validates only numeric characters.
 
 ```typescript
@@ -247,6 +262,7 @@ orderNumber: string;
 ### Case Validators
 
 #### `@IsLowercase()`
+
 Validates all lowercase.
 
 ```typescript
@@ -256,6 +272,7 @@ username: string;
 ```
 
 #### `@IsUppercase()`
+
 Validates all uppercase.
 
 ```typescript
@@ -267,6 +284,7 @@ countryCode: string;
 ### Empty Validators
 
 #### `@NotEmpty()`
+
 Validates string is not empty or whitespace.
 
 ```typescript
@@ -280,6 +298,7 @@ title: string;
 ### Type Validators
 
 #### `@IsNumber()`
+
 Validates that value is a number.
 
 ```typescript
@@ -288,6 +307,7 @@ age: number;
 ```
 
 #### `@IsInt()`
+
 Validates that number is an integer.
 
 ```typescript
@@ -297,6 +317,7 @@ count: number;
 ```
 
 #### `@IsFinite()`
+
 Validates that number is finite (not Infinity or -Infinity).
 
 ```typescript
@@ -306,6 +327,7 @@ result: number;
 ```
 
 #### `@IsSafeInt()`
+
 Validates safe integer (between MIN_SAFE_INTEGER and MAX_SAFE_INTEGER).
 
 ```typescript
@@ -317,6 +339,7 @@ timestamp: number;
 ### Range Validators
 
 #### `@Min(min: number)`
+
 Validates minimum value (inclusive).
 
 ```typescript
@@ -326,6 +349,7 @@ age: number;
 ```
 
 #### `@Max(max: number)`
+
 Validates maximum value (inclusive).
 
 ```typescript
@@ -335,6 +359,7 @@ age: number;
 ```
 
 #### `@Range(min: number, max: number)`
+
 Validates value is within range (inclusive).
 
 ```typescript
@@ -346,6 +371,7 @@ percentage: number;
 ### Sign Validators
 
 #### `@IsPositive()`
+
 Validates number is positive (> 0).
 
 ```typescript
@@ -355,6 +381,7 @@ price: number;
 ```
 
 #### `@IsNegative()`
+
 Validates number is negative (< 0).
 
 ```typescript
@@ -366,6 +393,7 @@ debt: number;
 ### Divisibility Validators
 
 #### `@IsMultipleOf(factor: number)`
+
 Validates number is divisible by factor.
 
 ```typescript
@@ -377,6 +405,7 @@ spacing: number;  // Must be divisible by 5
 ## Boolean Decorators
 
 ### `@IsBoolean()`
+
 Validates that value is a boolean.
 
 ```typescript
@@ -385,6 +414,7 @@ isActive: boolean;
 ```
 
 ### `@IsTrue()`
+
 Validates that value is `true`.
 
 ```typescript
@@ -394,6 +424,7 @@ termsAccepted: boolean;
 ```
 
 ### `@IsFalse()`
+
 Validates that value is `false`.
 
 ```typescript
@@ -407,6 +438,7 @@ disabled: boolean;
 ### Type Validator
 
 #### `@IsDate()`
+
 Validates that value is a Date.
 
 ```typescript
@@ -417,6 +449,7 @@ createdAt: Date;
 ### Range Validators
 
 #### `@MinDate(minDate: Date | string)`
+
 Validates minimum date (inclusive).
 
 ```typescript
@@ -426,6 +459,7 @@ startDate: Date;
 ```
 
 #### `@MaxDate(maxDate: Date | string)`
+
 Validates maximum date (inclusive).
 
 ```typescript
@@ -437,6 +471,7 @@ endDate: Date;
 ### Temporal Validators
 
 #### `@IsPast()`
+
 Validates date is in the past.
 
 ```typescript
@@ -446,6 +481,7 @@ birthDate: Date;
 ```
 
 #### `@IsFuture()`
+
 Validates date is in the future.
 
 ```typescript
@@ -455,6 +491,7 @@ expiryDate: Date;
 ```
 
 #### `@IsToday()`
+
 Validates date is today.
 
 ```typescript
@@ -466,6 +503,7 @@ checkInDate: Date;
 ### Comparison Validators
 
 #### `@IsBefore(date: Date | string)`
+
 Validates date is before given date (exclusive).
 
 ```typescript
@@ -475,6 +513,7 @@ deadline: Date;
 ```
 
 #### `@IsAfter(date: Date | string)`
+
 Validates date is after given date (exclusive).
 
 ```typescript
@@ -486,6 +525,7 @@ startDate: Date;
 ### Day of Week Validators
 
 #### `@IsWeekday()`
+
 Validates date is Monday-Friday.
 
 ```typescript
@@ -495,6 +535,7 @@ workDate: Date;
 ```
 
 #### `@IsWeekend()`
+
 Validates date is Saturday-Sunday.
 
 ```typescript
@@ -506,6 +547,7 @@ partyDate: Date;
 ### Age Validators
 
 #### `@MinAge(years: number)`
+
 Validates minimum age in years (for birthdates).
 
 ```typescript
@@ -515,6 +557,7 @@ birthDate: Date;
 ```
 
 #### `@MaxAge(years: number)`
+
 Validates maximum age in years.
 
 ```typescript
@@ -528,6 +571,7 @@ birthDate: Date;
 ### Type Validator
 
 #### `@IsArray()`
+
 Validates that value is an array.
 
 ```typescript
@@ -538,6 +582,7 @@ tags: string[];
 ### Length Validators
 
 #### `@ArrayMinSize(min: number)`
+
 Validates minimum array length.
 
 ```typescript
@@ -547,6 +592,7 @@ tags: string[];
 ```
 
 #### `@ArrayMaxSize(max: number)`
+
 Validates maximum array length.
 
 ```typescript
@@ -556,6 +602,7 @@ tags: string[];
 ```
 
 #### `@ArrayLength(length: number)`
+
 Validates exact array length.
 
 ```typescript
@@ -567,6 +614,7 @@ coordinates: number[];  // [x, y]
 ### Content Validators
 
 #### `@ArrayNotEmpty()`
+
 Validates array is not empty.
 
 ```typescript
@@ -576,6 +624,7 @@ items: string[];
 ```
 
 #### `@ArrayUnique()`
+
 Validates all array items are unique.
 
 ```typescript
@@ -585,6 +634,7 @@ emails: string[];
 ```
 
 #### `@ArrayContains(value: T)`
+
 Validates array contains specific value.
 
 ```typescript
@@ -596,6 +646,7 @@ environments: string[];
 ## Object Decorators
 
 ### `@IsObject()`
+
 Validates that value is an object.
 
 ```typescript
@@ -604,9 +655,11 @@ metadata: Record<string, unknown>;
 ```
 
 ### `@ValidateNested(options?)`
+
 Enables nested validation. The nested class must have its own decorators.
 
 **Options:**
+
 - `each` (boolean, default: `false`) - If true, validates each item in an array
 
 ```typescript
@@ -639,16 +692,16 @@ Multiple decorators on one property are combined with **AND** logic:
 ```typescript
 @Validate()
 class Product {
-  @IsString()       // Must be string
-  @MinLength(3)     // AND minimum 3 characters
-  @MaxLength(100)   // AND maximum 100 characters
-  @NotEmpty()       // AND not empty
+  @IsString() // Must be string
+  @MinLength(3) // AND minimum 3 characters
+  @MaxLength(100) // AND maximum 100 characters
+  @NotEmpty() // AND not empty
   name: string;
 
-  @IsNumber()       // Must be number
-  @IsPositive()     // AND positive
-  @Min(0.01)        // AND at least 0.01
-  @Max(999999.99)   // AND at most 999999.99
+  @IsNumber() // Must be number
+  @IsPositive() // AND positive
+  @Min(0.01) // AND at least 0.01
+  @Max(999999.99) // AND at most 999999.99
   price: number;
 }
 ```

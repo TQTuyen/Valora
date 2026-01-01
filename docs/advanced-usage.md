@@ -21,8 +21,8 @@ Advanced patterns, customization, and integration techniques for Valora.
 Create reusable custom decorators for domain-specific validation:
 
 ```typescript
-import { createPropertyDecorator } from 'valora/decorators';
-import { CustomStrategy } from 'valora';
+import { createPropertyDecorator } from '@tqtos/valora/decorators';
+import { CustomStrategy } from '@tqtos/valora';
 
 // Custom validator function
 function isDivisibleBy(divisor: number): IValidator {
@@ -31,12 +31,14 @@ function isDivisibleBy(divisor: number): IValidator {
       if (typeof value !== 'number' || value % divisor !== 0) {
         return {
           success: false,
-          errors: [{
-            path: context.path.join('.'),
-            message: `Must be divisible by ${divisor}`,
-            code: 'custom.divisibleBy',
-            value,
-          }],
+          errors: [
+            {
+              path: context.path.join('.'),
+              message: `Must be divisible by ${divisor}`,
+              code: 'custom.divisibleBy',
+              value,
+            },
+          ],
         };
       }
       return { success: true, data: value };
@@ -54,7 +56,7 @@ export function IsDivisibleBy(divisor: number): PropertyDecorator {
 class Product {
   @IsNumber()
   @IsDivisibleBy(10)
-  price: number;  // Must be divisible by 10
+  price: number; // Must be divisible by 10
 }
 ```
 
@@ -63,8 +65,8 @@ class Product {
 Extend BaseValidator for custom fluent validators:
 
 ```typescript
-import { BaseValidator } from 'valora';
-import type { ValidationContext, ValidationResult } from 'valora/types';
+import { BaseValidator } from '@tqtos/valora';
+import type { ValidationContext, ValidationResult } from '@tqtos/valora/types';
 
 class IPAddressValidator extends BaseValidator<unknown, string> {
   readonly _type = 'ipaddress';
@@ -76,10 +78,7 @@ class IPAddressValidator extends BaseValidator<unknown, string> {
     return cloned;
   }
 
-  protected checkType(
-    value: unknown,
-    context: ValidationContext
-  ): ValidationResult<string> {
+  protected checkType(value: unknown, context: ValidationContext): ValidationResult<string> {
     if (typeof value !== 'string') {
       return this.fail('ipaddress.type', context);
     }
@@ -102,16 +101,12 @@ class IPv4Strategy extends BaseValidationStrategy<string, string> {
   validate(value: string, context: ValidationContext): ValidationResult<string> {
     const ipv4Regex = /^(\d{1,3}\.){3}\d{1,3}$/;
     if (!ipv4Regex.test(value)) {
-      return this.failure(
-        createError('ipaddress.v4', 'Invalid IPv4 address', context.path)
-      );
+      return this.failure(createError('ipaddress.v4', 'Invalid IPv4 address', context.path));
     }
 
     const parts = value.split('.').map(Number);
-    if (parts.some(part => part > 255)) {
-      return this.failure(
-        createError('ipaddress.v4', 'IPv4 octets must be 0-255', context.path)
-      );
+    if (parts.some((part) => part > 255)) {
+      return this.failure(createError('ipaddress.v4', 'IPv4 octets must be 0-255', context.path));
     }
 
     return this.success(value, context);
@@ -134,20 +129,18 @@ const schema = v.object({
 Use the custom() method for inline validation:
 
 ```typescript
-import { v } from 'valora';
+import { v } from '@tqtos/valora';
 
-const passwordSchema = v.string()
+const passwordSchema = v
+  .string()
   .minLength(8)
-  .custom(
-    (value) => {
-      // Custom logic
-      const hasUpper = /[A-Z]/.test(value);
-      const hasLower = /[a-z]/.test(value);
-      const hasDigit = /\d/.test(value);
-      return hasUpper && hasLower && hasDigit;
-    },
-    'Password must contain uppercase, lowercase, and number'
-  );
+  .custom((value) => {
+    // Custom logic
+    const hasUpper = /[A-Z]/.test(value);
+    const hasLower = /[a-z]/.test(value);
+    const hasDigit = /\d/.test(value);
+    return hasUpper && hasLower && hasDigit;
+  }, 'Password must contain uppercase, lowercase, and number');
 ```
 
 ## Error Handling
@@ -155,19 +148,22 @@ const passwordSchema = v.string()
 ### Structured Error Handling
 
 ```typescript
-import { ValoraValidationError } from 'valora/decorators';
+import { ValoraValidationError } from '@tqtos/valora/decorators';
 
 try {
   const user = new CreateUserDto(req.body);
 } catch (error) {
   if (error instanceof ValoraValidationError) {
     // Group errors by field
-    const errorsByField = error.errors.reduce((acc, err) => {
-      const field = err.path || 'root';
-      if (!acc[field]) acc[field] = [];
-      acc[field].push(err.message);
-      return acc;
-    }, {} as Record<string, string[]>);
+    const errorsByField = error.errors.reduce(
+      (acc, err) => {
+        const field = err.path || 'root';
+        if (!acc[field]) acc[field] = [];
+        acc[field].push(err.message);
+        return acc;
+      },
+      {} as Record<string, string[]>,
+    );
 
     return res.status(400).json({
       error: 'Validation failed',
@@ -184,7 +180,7 @@ try {
 
 ```typescript
 function formatValidationErrors(errors: ValidationError[]): string[] {
-  return errors.map(error => {
+  return errors.map((error) => {
     // Customize error messages
     if (error.code === 'string.email') {
       return `The email address "${error.value}" is not valid`;
@@ -204,16 +200,16 @@ const result = schema.validate(data);
 
 if (!result.success) {
   // Get all error paths
-  const errorPaths = result.errors.map(e => e.path);
+  const errorPaths = result.errors.map((e) => e.path);
 
   // Get errors for specific field
-  const emailErrors = result.errors.filter(e => e.path === 'email');
+  const emailErrors = result.errors.filter((e) => e.path === 'email');
 
   // Count errors
   const errorCount = result.errors.length;
 
   // Get unique error codes
-  const errorCodes = [...new Set(result.errors.map(e => e.code))];
+  const errorCodes = [...new Set(result.errors.map((e) => e.code))];
 }
 ```
 
@@ -224,7 +220,7 @@ if (!result.success) {
 Valora comes with English (en) and Vietnamese (vi) locales:
 
 ```typescript
-import { I18nPlugin } from 'valora/plugins';
+import { I18nPlugin } from '@tqtos/valora/plugins';
 
 const i18n = new I18nPlugin({ defaultLocale: 'en' });
 
@@ -264,7 +260,7 @@ i18n.setLocale('fr');
 ### Custom Error Messages with i18n
 
 ```typescript
-import { globalI18n } from 'valora/plugins';
+import { globalI18n } from '@tqtos/valora/plugins';
 
 // Set global locale
 globalI18n.setLocale('vi');
@@ -273,7 +269,7 @@ globalI18n.setLocale('vi');
 @Validate()
 class User {
   @IsString()
-  @MinLength(2)  // Error message will be in Vietnamese
+  @MinLength(2) // Error message will be in Vietnamese
   name: string;
 }
 ```
@@ -287,8 +283,8 @@ const i18n = new I18nPlugin();
 const ts = i18n.namespace('string');
 
 // Use without prefix
-ts('minLength', { min: 5 });  // string.minLength
-ts('email');                   // string.email
+ts('minLength', { min: 5 }); // string.minLength
+ts('email'); // string.email
 ```
 
 ### Custom Interpolation
@@ -312,7 +308,7 @@ i18n.t('custom.between', { min: 10, max: 100 });
 Create validators that perform async operations:
 
 ```typescript
-import { AsyncValidator } from 'valora/validators';
+import { AsyncValidator } from '@tqtos/valora/validators';
 
 // Check if email exists in database
 const emailExistsValidator = new AsyncValidator(async (email: string) => {
@@ -332,9 +328,10 @@ const result = await emailExistsValidator.validate('user@example.com');
 Useful for real-time form validation:
 
 ```typescript
-import { debounce } from 'valora/validators/async';
+import { debounce } from '@tqtos/valora/validators/async';
 
-const usernameValidator = v.string()
+const usernameValidator = v
+  .string()
   .minLength(3)
   .async(async (username) => {
     // This will be debounced
@@ -352,21 +349,21 @@ const debouncedValidator = debounce(usernameValidator, 500);
 ### Timeout for Async Validation
 
 ```typescript
-import { timeout } from 'valora/validators/async';
+import { timeout } from '@tqtos/valora/validators/async';
 
 const apiValidator = timeout(
   async (value) => {
     const result = await fetch(`/api/validate?value=${value}`);
     return result.json();
   },
-  3000  // 3 second timeout
+  3000, // 3 second timeout
 );
 ```
 
 ### Retry on Failure
 
 ```typescript
-import { retry } from 'valora/validators/async';
+import { retry } from '@tqtos/valora/validators/async';
 
 const unreliableValidator = retry(
   async (value) => {
@@ -389,8 +386,8 @@ Transform values during validation:
 ```typescript
 const schema = v.object({
   email: v.string().trim().toLowerCase().email(),
-  price: v.number().transform(n => Math.round(n * 100) / 100),  // Round to 2 decimals
-  tags: v.array().transform(arr => [...new Set(arr)]),  // Remove duplicates
+  price: v.number().transform((n) => Math.round(n * 100) / 100), // Round to 2 decimals
+  tags: v.array().transform((arr) => [...new Set(arr)]), // Remove duplicates
 });
 
 const result = schema.validate({
@@ -412,22 +409,22 @@ const result = schema.validate({
 Convert types automatically:
 
 ```typescript
-import { coerce } from 'valora';
+import { coerce } from '@tqtos/valora';
 
 // String to number
 const ageSchema = coerce.number().min(0);
-ageSchema.validate('25');  // ✅ → 25
+ageSchema.validate('25'); // ✅ → 25
 
 // String to boolean
 const activeSchema = coerce.boolean();
-activeSchema.validate('true');   // ✅ → true
-activeSchema.validate('false');  // ✅ → false
-activeSchema.validate('1');      // ✅ → true
-activeSchema.validate('0');      // ✅ → false
+activeSchema.validate('true'); // ✅ → true
+activeSchema.validate('false'); // ✅ → false
+activeSchema.validate('1'); // ✅ → true
+activeSchema.validate('0'); // ✅ → false
 
 // String to date
 const dateSchema = coerce.date();
-dateSchema.validate('2024-01-01');  // ✅ → Date object
+dateSchema.validate('2024-01-01'); // ✅ → Date object
 ```
 
 ### Preprocessing
@@ -435,17 +432,18 @@ dateSchema.validate('2024-01-01');  // ✅ → Date object
 Transform before validation:
 
 ```typescript
-const schema = v.string()
+const schema = v
+  .string()
   .preprocess((value) => {
     // Normalize phone number
     if (typeof value === 'string') {
-      return value.replace(/\D/g, '');  // Remove non-digits
+      return value.replace(/\D/g, ''); // Remove non-digits
     }
     return value;
   })
   .matches(/^\d{10}$/);
 
-schema.validate('(555) 123-4567');  // ✅ → '5551234567'
+schema.validate('(555) 123-4567'); // ✅ → '5551234567'
 ```
 
 ## Cross-Field Validation
@@ -453,40 +451,41 @@ schema.validate('(555) 123-4567');  // ✅ → '5551234567'
 ### Compare Fields
 
 ```typescript
-const schema = v.object({
-  password: v.string().minLength(8),
-  confirmPassword: v.string(),
-}).custom(
-  (data) => data.password === data.confirmPassword,
-  'Passwords must match'
-);
+const schema = v
+  .object({
+    password: v.string().minLength(8),
+    confirmPassword: v.string(),
+  })
+  .custom((data) => data.password === data.confirmPassword, 'Passwords must match');
 ```
 
 ### Conditional Validation
 
 ```typescript
-const orderSchema = v.object({
-  type: v.string().oneOf(['pickup', 'delivery']),
-  address: v.string().optional(),
-}).custom((data) => {
-  if (data.type === 'delivery' && !data.address) {
-    throw new Error('Address required for delivery orders');
-  }
-  return true;
-}, 'Invalid order data');
+const orderSchema = v
+  .object({
+    type: v.string().oneOf(['pickup', 'delivery']),
+    address: v.string().optional(),
+  })
+  .custom((data) => {
+    if (data.type === 'delivery' && !data.address) {
+      throw new Error('Address required for delivery orders');
+    }
+    return true;
+  }, 'Invalid order data');
 ```
 
 ### Dependent Fields
 
 ```typescript
-import { ifThenElse } from 'valora';
+import { ifThenElse } from '@tqtos/valora';
 
 const schema = v.object({
   hasDiscount: v.boolean(),
   discountCode: ifThenElse(
     (data) => data.hasDiscount,
-    v.string().required(),  // If hasDiscount is true
-    v.string().optional()   // Otherwise
+    v.string().required(), // If hasDiscount is true
+    v.string().optional(), // Otherwise
   ),
 });
 ```
@@ -498,12 +497,12 @@ const schema = v.object({
 Defer validation until needed:
 
 ```typescript
-import { Validate, validateClassInstance } from 'valora/decorators';
+import { Validate, validateClassInstance } from '@tqtos/valora/decorators';
 
-@Validate({ validateOnCreate: false })  // Don't validate on construction
+@Validate({ validateOnCreate: false }) // Don't validate on construction
 class HeavyData {
   @ValidateNested({ each: true })
-  items: Item[];  // Large array
+  items: Item[]; // Large array
 }
 
 // Create without validation
@@ -523,7 +522,7 @@ const cache = new Map();
 function cachedValidate<T>(
   schema: IValidator<unknown, T>,
   key: string,
-  data: unknown
+  data: unknown,
 ): ValidationResult<T> {
   if (cache.has(key)) {
     return cache.get(key);
@@ -540,11 +539,13 @@ function cachedValidate<T>(
 Validate only changed fields:
 
 ```typescript
-const updateSchema = v.object({
-  name: v.string().optional(),
-  email: v.string().email().optional(),
-  age: v.number().min(0).optional(),
-}).partial();
+const updateSchema = v
+  .object({
+    name: v.string().optional(),
+    email: v.string().email().optional(),
+    age: v.number().min(0).optional(),
+  })
+  .partial();
 
 // Only validate provided fields
 updateSchema.validate({ email: 'new@example.com' });
@@ -556,7 +557,7 @@ updateSchema.validate({ email: 'new@example.com' });
 
 ```typescript
 import { describe, it, expect } from 'vitest';
-import { Validate, IsString, MinLength } from 'valora/decorators';
+import { Validate, IsString, MinLength } from '@tqtos/valora/decorators';
 
 describe('User validation', () => {
   @Validate({ throwOnError: false })
@@ -580,7 +581,7 @@ describe('User validation', () => {
 ### Unit Testing Schemas
 
 ```typescript
-import { v } from 'valora';
+import { v } from '@tqtos/valora';
 
 describe('Email schema', () => {
   const emailSchema = v.string().email();
@@ -606,25 +607,21 @@ import { app } from './app';
 
 describe('POST /api/users', () => {
   it('should create user with valid data', async () => {
-    const response = await request(app)
-      .post('/api/users')
-      .send({
-        name: 'John Doe',
-        email: 'john@example.com',
-        age: 25,
-      });
+    const response = await request(app).post('/api/users').send({
+      name: 'John Doe',
+      email: 'john@example.com',
+      age: 25,
+    });
 
     expect(response.status).toBe(201);
   });
 
   it('should reject invalid email', async () => {
-    const response = await request(app)
-      .post('/api/users')
-      .send({
-        name: 'John Doe',
-        email: 'invalid-email',
-        age: 25,
-      });
+    const response = await request(app).post('/api/users').send({
+      name: 'John Doe',
+      email: 'invalid-email',
+      age: 25,
+    });
 
     expect(response.status).toBe(400);
     expect(response.body.error).toContain('email');
@@ -637,7 +634,7 @@ describe('POST /api/users', () => {
 ### Express Middleware
 
 ```typescript
-import { ValoraValidationError } from 'valora/decorators';
+import { ValoraValidationError } from '@tqtos/valora/decorators';
 
 function validateBody<T>(DtoClass: new (data: unknown) => T) {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -681,7 +678,7 @@ const resolvers = {
 
 ```typescript
 import { useForm } from 'react-hook-form';
-import { v } from 'valora';
+import { v } from '@tqtos/valora';
 
 const schema = v.object({
   email: v.string().email(),
@@ -718,7 +715,7 @@ function LoginForm() {
 
 ```typescript
 import { Entity, Column, BeforeInsert, BeforeUpdate } from 'typeorm';
-import { Validate, IsString, IsEmail, validateClassInstance } from 'valora/decorators';
+import { Validate, IsString, IsEmail, validateClassInstance } from '@tqtos/valora/decorators';
 
 @Entity()
 @Validate({ validateOnCreate: false })

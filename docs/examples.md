@@ -17,7 +17,7 @@ Real-world examples and common use cases for Valora.
 ### REST API DTOs
 
 ```typescript
-import { Validate, IsString, IsEmail, MinLength, IsOptional } from 'valora/decorators';
+import { Validate, IsString, IsEmail, MinLength, IsOptional } from '@tqtos/valora/decorators';
 
 // POST /api/users - Create user
 @Validate()
@@ -32,7 +32,7 @@ class CreateUserDto {
   @IsString()
   @MinLength(8, { message: 'Password must be at least 8 characters' })
   @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, {
-    message: 'Password must contain uppercase, lowercase, and number'
+    message: 'Password must contain uppercase, lowercase, and number',
   })
   password: string;
 
@@ -74,10 +74,10 @@ app.post('/api/users', async (req, res) => {
     if (error instanceof ValoraValidationError) {
       res.status(400).json({
         error: 'Validation failed',
-        details: error.errors.map(e => ({
+        details: error.errors.map((e) => ({
           field: e.path,
-          message: e.message
-        }))
+          message: e.message,
+        })),
       });
     } else {
       res.status(500).json({ error: 'Internal server error' });
@@ -99,7 +99,7 @@ app.patch('/api/users/:id', async (req, res) => {
 ### GraphQL Inputs
 
 ```typescript
-import { Validate, IsString, IsInt, Min, IsOptional } from 'valora/decorators';
+import { Validate, IsString, IsInt, Min, IsOptional } from '@tqtos/valora/decorators';
 
 @Validate()
 class CreatePostInput {
@@ -136,8 +136,8 @@ const resolvers = {
     createPost: async (_, { input }) => {
       const validatedInput = new CreatePostInput(input);
       return await createPost(validatedInput);
-    }
-  }
+    },
+  },
 };
 ```
 
@@ -146,7 +146,7 @@ const resolvers = {
 ### Registration Form
 
 ```typescript
-import { Validate, IsString, IsEmail, IsDate, MinAge, IsBoolean, IsTrue } from 'valora/decorators';
+import { Validate, IsString, IsEmail, IsDate, MinAge, IsBoolean, IsTrue } from '@tqtos/valora/decorators';
 
 @Validate()
 class RegistrationForm {
@@ -474,7 +474,7 @@ class CartService {
   addItem(cart: ShoppingCart, product: Product, quantity: number) {
     const newItem = new CartItem({
       productId: product.id,
-      quantity
+      quantity,
     });
 
     cart.items.push(newItem);
@@ -575,7 +575,7 @@ class UserProfile {
 ### Application Config
 
 ```typescript
-import { v } from 'valora';
+import { v } from '@tqtos/valora';
 
 const databaseConfig = v.object({
   host: v.string().notEmpty(),
@@ -591,10 +591,12 @@ const serverConfig = v.object({
   port: v.number().min(1024).max(65535).default(3000),
   host: v.string().default('localhost'),
   corsOrigins: v.array().of(v.string().url()),
-  rateLimit: v.object({
-    windowMs: v.number().min(1000),
-    maxRequests: v.number().min(1),
-  }).optional(),
+  rateLimit: v
+    .object({
+      windowMs: v.number().min(1000),
+      maxRequests: v.number().min(1),
+    })
+    .optional(),
 });
 
 const appConfig = v.object({
@@ -635,7 +637,7 @@ const result = appConfig.validate({
 
 if (!result.success) {
   console.error('Configuration validation failed:');
-  result.errors.forEach(err => {
+  result.errors.forEach((err) => {
     console.error(`  ${err.path}: ${err.message}`);
   });
   process.exit(1);
@@ -709,7 +711,7 @@ async function handleImageUpload(file: Express.Multer.File) {
 
 ```typescript
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { Validate, IsString, IsEmail, MinLength } from 'valora/decorators';
+import { Validate, IsString, IsEmail, MinLength } from '@tqtos/valora/decorators';
 
 @Entity()
 @Validate({ validateOnCreate: false }) // Don't auto-validate

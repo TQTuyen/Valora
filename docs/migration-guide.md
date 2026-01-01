@@ -24,7 +24,7 @@ Valora v1.0 introduces a class-validator style decorator system that replaces th
 ### Before (Legacy)
 
 ```typescript
-import { field, validate } from 'valora';
+import { field, validate } from '@tqtos/valora';
 
 class User {
   @field(string().minLength(2).maxLength(50))
@@ -46,7 +46,16 @@ class User {
 ### After (New Decorators)
 
 ```typescript
-import { Validate, IsString, MinLength, MaxLength, IsEmail, IsNumber, Min, IsOptional } from 'valora/decorators';
+import {
+  Validate,
+  IsString,
+  MinLength,
+  MaxLength,
+  IsEmail,
+  IsNumber,
+  Min,
+  IsOptional,
+} from '@tqtos/valora/decorators';
 
 @Validate()
 class User {
@@ -87,6 +96,7 @@ The legacy `@field()` decorator is **deprecated** but still functional. However,
 #### 2. Auto-Validation on Construction
 
 **Before:**
+
 ```typescript
 class User {
   @field(string())
@@ -100,8 +110,9 @@ class User {
 ```
 
 **After:**
+
 ```typescript
-@Validate()  // Auto-validates on construction
+@Validate() // Auto-validates on construction
 class User {
   @IsString()
   name: string;
@@ -114,6 +125,7 @@ class User {
 ```
 
 To disable auto-validation:
+
 ```typescript
 @Validate({ validateOnCreate: false })
 class User {
@@ -127,13 +139,15 @@ const result = validateClassInstance(user);
 #### 3. Error Handling Changes
 
 **Before:**
+
 ```typescript
 // No specific error type
 ```
 
 **After:**
+
 ```typescript
-import { ValoraValidationError } from 'valora/decorators';
+import { ValoraValidationError } from '@tqtos/valora/decorators';
 
 try {
   new User(invalidData);
@@ -147,17 +161,21 @@ try {
 #### 4. Nested Validation
 
 **Before:**
+
 ```typescript
 class User {
-  @field(object({
-    street: string(),
-    city: string(),
-  }))
+  @field(
+    object({
+      street: string(),
+      city: string(),
+    }),
+  )
   address: Address;
 }
 ```
 
 **After:**
+
 ```typescript
 @Validate()
 class Address {
@@ -182,12 +200,14 @@ class User {
 **Removal**: Planned for v2.0.0
 
 **Warning Message:**
+
 ```
 @field() decorator is deprecated. Use type-specific decorators instead.
 Example: @IsString() @MinLength(5) instead of @field(string().minLength(5))
 ```
 
 **Migration:**
+
 ```typescript
 // Old
 @field(string().email())
@@ -204,11 +224,13 @@ email: string;
 **Removal**: Planned for v2.0.0
 
 **Warning Message:**
+
 ```
 @validate() decorator is deprecated. Use @Validate() class decorator instead.
 ```
 
 **Migration:**
+
 ```typescript
 // Old
 class User {
@@ -238,11 +260,13 @@ class User {
 Migrate incrementally while maintaining backward compatibility.
 
 **Step 1**: Install latest version
+
 ```bash
-bun add valora@latest
+bun add @tqtos/valora@latest
 ```
 
 **Step 2**: Update TypeScript config
+
 ```json
 {
   "compilerOptions": {
@@ -252,6 +276,7 @@ bun add valora@latest
 ```
 
 **Step 3**: Migrate one class at a time
+
 ```typescript
 // Keep old classes working
 class OldUser {
@@ -266,12 +291,13 @@ class NewUser {
 ```
 
 **Step 4**: Update imports as you migrate
+
 ```typescript
 // Old imports (still work)
-import { field, validate } from 'valora';
+import { field, validate } from '@tqtos/valora';
 
 // New imports
-import { Validate, IsString } from 'valora/decorators';
+import { Validate, IsString } from '@tqtos/valora/decorators';
 ```
 
 **Step 5**: Test thoroughly after each migration
@@ -281,11 +307,13 @@ import { Validate, IsString } from 'valora/decorators';
 Migrate everything at once (for smaller codebases).
 
 **Step 1**: Find all uses of `@field()`
+
 ```bash
 rg "@field\(" src/
 ```
 
 **Step 2**: Create migration script
+
 ```typescript
 // migration-helper.ts
 export function mapFieldToDecorators(fieldValidator: string): string[] {
@@ -307,9 +335,10 @@ export function mapFieldToDecorators(fieldValidator: string): string[] {
 **Step 3**: Update all classes systematically
 
 **Step 4**: Remove old imports
+
 ```bash
 # Find files using old decorators
-rg "from 'valora'" --files-with-matches | grep -v "valora/decorators"
+rg "from '@tqtos/valora'" --files-with-matches | grep -v "@tqtos/valora/decorators"
 ```
 
 ## Common Migration Patterns
@@ -449,30 +478,30 @@ termsAccepted: boolean;
 
 Quick reference for migrating validators:
 
-| Legacy `@field()` | New Decorators |
-|-------------------|----------------|
-| `string()` | `@IsString()` |
-| `number()` | `@IsNumber()` |
-| `boolean()` | `@IsBoolean()` |
-| `date()` | `@IsDate()` |
-| `array()` | `@IsArray()` |
-| `object()` | `@IsObject()` + `@ValidateNested()` |
-| `.optional()` | `@IsOptional()` |
-| `.required()` | `@IsRequired()` |
-| `.email()` | `@IsEmail()` |
-| `.url()` | `@IsUrl()` |
-| `.uuid()` | `@IsUuid()` |
-| `.minLength(n)` | `@MinLength(n)` |
-| `.maxLength(n)` | `@MaxLength(n)` |
-| `.length(n)` | `@Length(n)` |
-| `.min(n)` | `@Min(n)` |
-| `.max(n)` | `@Max(n)` |
-| `.positive()` | `@IsPositive()` |
-| `.negative()` | `@IsNegative()` |
-| `.integer()` | `@IsInt()` |
-| `.past()` | `@IsPast()` |
-| `.future()` | `@IsFuture()` |
-| `.minAge(n)` | `@MinAge(n)` |
+| Legacy `@field()` | New Decorators                      |
+| ----------------- | ----------------------------------- |
+| `string()`        | `@IsString()`                       |
+| `number()`        | `@IsNumber()`                       |
+| `boolean()`       | `@IsBoolean()`                      |
+| `date()`          | `@IsDate()`                         |
+| `array()`         | `@IsArray()`                        |
+| `object()`        | `@IsObject()` + `@ValidateNested()` |
+| `.optional()`     | `@IsOptional()`                     |
+| `.required()`     | `@IsRequired()`                     |
+| `.email()`        | `@IsEmail()`                        |
+| `.url()`          | `@IsUrl()`                          |
+| `.uuid()`         | `@IsUuid()`                         |
+| `.minLength(n)`   | `@MinLength(n)`                     |
+| `.maxLength(n)`   | `@MaxLength(n)`                     |
+| `.length(n)`      | `@Length(n)`                        |
+| `.min(n)`         | `@Min(n)`                           |
+| `.max(n)`         | `@Max(n)`                           |
+| `.positive()`     | `@IsPositive()`                     |
+| `.negative()`     | `@IsNegative()`                     |
+| `.integer()`      | `@IsInt()`                          |
+| `.past()`         | `@IsPast()`                         |
+| `.future()`       | `@IsFuture()`                       |
+| `.minAge(n)`      | `@MinAge(n)`                        |
 
 ## Testing After Migration
 
@@ -513,6 +542,7 @@ try {
 
 **Cause**: TypeScript configuration missing
 **Fix**: Add to `tsconfig.json`:
+
 ```json
 {
   "compilerOptions": {
@@ -530,9 +560,10 @@ try {
 
 **Cause**: Nested class missing `@Validate()` or using `@ValidateNested()`
 **Fix**:
+
 ```typescript
 @Validate()
-class NestedClass { }
+class NestedClass {}
 
 @Validate()
 class ParentClass {
@@ -545,6 +576,7 @@ class ParentClass {
 
 **Cause**: Missing `@IsOptional()` decorator
 **Fix**: Add `@IsOptional()` before type decorators:
+
 ```typescript
 @IsOptional()
 @IsString()
@@ -555,11 +587,12 @@ middleName?: string;
 
 - Check [Examples](./examples.md) for migration patterns
 - Review [API Reference](./api-reference.md) for decorator details
-- Visit [GitHub Issues](https://github.com/your-org/valora/issues) for support
+- Visit [GitHub Issues](https://github.com/TQTuyen/Valora/issues) for support
 
 ## Version History
 
 ### v1.0.0 (Current)
+
 - Introduced new decorator system (63 decorators)
 - Deprecated `@field()` and constructor `@validate()`
 - Added `@Validate()` class decorator
@@ -567,6 +600,7 @@ middleName?: string;
 - Full backward compatibility maintained
 
 ### Planned v2.0.0
+
 - Remove deprecated `@field()` decorator
 - Remove constructor `@validate()` decorator
 - New features TBD

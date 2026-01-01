@@ -18,16 +18,16 @@ Complete API documentation for Valora validation framework.
 
 ```typescript
 // Fluent API (schema-based)
-import { v } from 'valora';
+import { v } from '@tqtos/valora';
 
 // Decorators (class-based)
-import { Validate, IsString, IsEmail } from 'valora/decorators';
+import { Validate, IsString, IsEmail } from '@tqtos/valora/decorators';
 
 // Types
-import type { ValidationResult, ValidationError, Infer } from 'valora/types';
+import type { ValidationResult, ValidationError, Infer } from '@tqtos/valora/types';
 
 // Plugins
-import { I18nPlugin, globalI18n } from 'valora/plugins';
+import { I18nPlugin, globalI18n } from '@tqtos/valora/plugins';
 ```
 
 ## Decorator API
@@ -39,6 +39,7 @@ import { I18nPlugin, globalI18n } from 'valora/plugins';
 Marks a class for validation and enables property decorators.
 
 **Options:**
+
 - `validateOnCreate` (boolean, default: `true`) - Auto-validate on instantiation
 - `throwOnError` (boolean, default: `true`) - Throw ValoraValidationError on failure
 
@@ -81,86 +82,87 @@ name: string;
 
 #### String Decorators
 
-| Decorator | Description | Example |
-|-----------|-------------|---------|
-| `@IsString()` | Must be a string | `@IsString()` |
-| `@IsEmail()` | Valid email format | `@IsEmail()` |
-| `@IsUrl()` | Valid URL format | `@IsUrl()` |
-| `@IsUuid()` | Valid UUID v4 | `@IsUuid()` |
-| `@MinLength(min)` | Minimum string length | `@MinLength(5)` |
-| `@MaxLength(max)` | Maximum string length | `@MaxLength(100)` |
-| `@Length(exact)` | Exact string length | `@Length(6)` |
-| `@Matches(pattern)` | Regex pattern match | `@Matches(/^[a-z]+$/)` |
-| `@StartsWith(prefix)` | Starts with prefix | `@StartsWith('https://')` |
-| `@EndsWith(suffix)` | Ends with suffix | `@EndsWith('.pdf')` |
-| `@Contains(substring)` | Contains substring | `@Contains('@')` |
-| `@IsAlpha()` | Only letters | `@IsAlpha()` |
-| `@IsAlphanumeric()` | Letters and numbers | `@IsAlphanumeric()` |
-| `@IsNumeric()` | Only numeric chars | `@IsNumeric()` |
-| `@IsLowercase()` | All lowercase | `@IsLowercase()` |
-| `@IsUppercase()` | All uppercase | `@IsUppercase()` |
-| `@NotEmpty()` | Not empty/whitespace | `@NotEmpty()` |
+| Decorator              | Description           | Example                   |
+| ---------------------- | --------------------- | ------------------------- |
+| `@IsString()`          | Must be a string      | `@IsString()`             |
+| `@IsEmail()`           | Valid email format    | `@IsEmail()`              |
+| `@IsUrl()`             | Valid URL format      | `@IsUrl()`                |
+| `@IsUuid()`            | Valid UUID v4         | `@IsUuid()`               |
+| `@MinLength(min)`      | Minimum string length | `@MinLength(5)`           |
+| `@MaxLength(max)`      | Maximum string length | `@MaxLength(100)`         |
+| `@Length(exact)`       | Exact string length   | `@Length(6)`              |
+| `@Matches(pattern)`    | Regex pattern match   | `@Matches(/^[a-z]+$/)`    |
+| `@StartsWith(prefix)`  | Starts with prefix    | `@StartsWith('https://')` |
+| `@EndsWith(suffix)`    | Ends with suffix      | `@EndsWith('.pdf')`       |
+| `@Contains(substring)` | Contains substring    | `@Contains('@')`          |
+| `@IsAlpha()`           | Only letters          | `@IsAlpha()`              |
+| `@IsAlphanumeric()`    | Letters and numbers   | `@IsAlphanumeric()`       |
+| `@IsNumeric()`         | Only numeric chars    | `@IsNumeric()`            |
+| `@IsLowercase()`       | All lowercase         | `@IsLowercase()`          |
+| `@IsUppercase()`       | All uppercase         | `@IsUppercase()`          |
+| `@NotEmpty()`          | Not empty/whitespace  | `@NotEmpty()`             |
 
 #### Number Decorators
 
-| Decorator | Description | Example |
-|-----------|-------------|---------|
-| `@IsNumber()` | Must be a number | `@IsNumber()` |
-| `@IsInt()` | Must be integer | `@IsInt()` |
-| `@IsFinite()` | Must be finite | `@IsFinite()` |
-| `@IsSafeInt()` | Safe integer | `@IsSafeInt()` |
-| `@Min(min)` | Minimum value | `@Min(0)` |
-| `@Max(max)` | Maximum value | `@Max(100)` |
-| `@Range(min, max)` | Value range | `@Range(0, 100)` |
-| `@IsPositive()` | Positive (> 0) | `@IsPositive()` |
-| `@IsNegative()` | Negative (< 0) | `@IsNegative()` |
-| `@IsMultipleOf(n)` | Multiple of n | `@IsMultipleOf(5)` |
+| Decorator          | Description      | Example            |
+| ------------------ | ---------------- | ------------------ |
+| `@IsNumber()`      | Must be a number | `@IsNumber()`      |
+| `@IsInt()`         | Must be integer  | `@IsInt()`         |
+| `@IsFinite()`      | Must be finite   | `@IsFinite()`      |
+| `@IsSafeInt()`     | Safe integer     | `@IsSafeInt()`     |
+| `@Min(min)`        | Minimum value    | `@Min(0)`          |
+| `@Max(max)`        | Maximum value    | `@Max(100)`        |
+| `@Range(min, max)` | Value range      | `@Range(0, 100)`   |
+| `@IsPositive()`    | Positive (> 0)   | `@IsPositive()`    |
+| `@IsNegative()`    | Negative (< 0)   | `@IsNegative()`    |
+| `@IsMultipleOf(n)` | Multiple of n    | `@IsMultipleOf(5)` |
 
 #### Boolean Decorators
 
-| Decorator | Description | Example |
-|-----------|-------------|---------|
+| Decorator      | Description     | Example        |
+| -------------- | --------------- | -------------- |
 | `@IsBoolean()` | Must be boolean | `@IsBoolean()` |
-| `@IsTrue()` | Must be true | `@IsTrue()` |
-| `@IsFalse()` | Must be false | `@IsFalse()` |
+| `@IsTrue()`    | Must be true    | `@IsTrue()`    |
+| `@IsFalse()`   | Must be false   | `@IsFalse()`   |
 
 #### Date Decorators
 
-| Decorator | Description | Example |
-|-----------|-------------|---------|
-| `@IsDate()` | Must be a Date | `@IsDate()` |
-| `@MinDate(date)` | Minimum date | `@MinDate(new Date('2024-01-01'))` |
-| `@MaxDate(date)` | Maximum date | `@MaxDate(new Date('2025-12-31'))` |
-| `@IsPast()` | Must be past | `@IsPast()` |
-| `@IsFuture()` | Must be future | `@IsFuture()` |
-| `@IsToday()` | Must be today | `@IsToday()` |
-| `@IsBefore(date)` | Before date | `@IsBefore(new Date())` |
-| `@IsAfter(date)` | After date | `@IsAfter(new Date())` |
-| `@IsWeekday()` | Mon-Fri | `@IsWeekday()` |
-| `@IsWeekend()` | Sat-Sun | `@IsWeekend()` |
-| `@MinAge(years)` | Min age | `@MinAge(18)` |
-| `@MaxAge(years)` | Max age | `@MaxAge(120)` |
+| Decorator         | Description    | Example                            |
+| ----------------- | -------------- | ---------------------------------- |
+| `@IsDate()`       | Must be a Date | `@IsDate()`                        |
+| `@MinDate(date)`  | Minimum date   | `@MinDate(new Date('2024-01-01'))` |
+| `@MaxDate(date)`  | Maximum date   | `@MaxDate(new Date('2025-12-31'))` |
+| `@IsPast()`       | Must be past   | `@IsPast()`                        |
+| `@IsFuture()`     | Must be future | `@IsFuture()`                      |
+| `@IsToday()`      | Must be today  | `@IsToday()`                       |
+| `@IsBefore(date)` | Before date    | `@IsBefore(new Date())`            |
+| `@IsAfter(date)`  | After date     | `@IsAfter(new Date())`             |
+| `@IsWeekday()`    | Mon-Fri        | `@IsWeekday()`                     |
+| `@IsWeekend()`    | Sat-Sun        | `@IsWeekend()`                     |
+| `@MinAge(years)`  | Min age        | `@MinAge(18)`                      |
+| `@MaxAge(years)`  | Max age        | `@MaxAge(120)`                     |
 
 #### Array Decorators
 
-| Decorator | Description | Example |
-|-----------|-------------|---------|
-| `@IsArray()` | Must be array | `@IsArray()` |
-| `@ArrayMinSize(min)` | Min array length | `@ArrayMinSize(1)` |
-| `@ArrayMaxSize(max)` | Max array length | `@ArrayMaxSize(10)` |
-| `@ArrayLength(n)` | Exact length | `@ArrayLength(3)` |
-| `@ArrayNotEmpty()` | Not empty | `@ArrayNotEmpty()` |
-| `@ArrayUnique()` | All unique | `@ArrayUnique()` |
-| `@ArrayContains(val)` | Contains value | `@ArrayContains('admin')` |
+| Decorator             | Description      | Example                   |
+| --------------------- | ---------------- | ------------------------- |
+| `@IsArray()`          | Must be array    | `@IsArray()`              |
+| `@ArrayMinSize(min)`  | Min array length | `@ArrayMinSize(1)`        |
+| `@ArrayMaxSize(max)`  | Max array length | `@ArrayMaxSize(10)`       |
+| `@ArrayLength(n)`     | Exact length     | `@ArrayLength(3)`         |
+| `@ArrayNotEmpty()`    | Not empty        | `@ArrayNotEmpty()`        |
+| `@ArrayUnique()`      | All unique       | `@ArrayUnique()`          |
+| `@ArrayContains(val)` | Contains value   | `@ArrayContains('admin')` |
 
 #### Object Decorators
 
-| Decorator | Description | Example |
-|-----------|-------------|---------|
-| `@IsObject()` | Must be object | `@IsObject()` |
+| Decorator                | Description       | Example             |
+| ------------------------ | ----------------- | ------------------- |
+| `@IsObject()`            | Must be object    | `@IsObject()`       |
 | `@ValidateNested(opts?)` | Nested validation | `@ValidateNested()` |
 
 **ValidateNested Options:**
+
 - `each` (boolean) - Validate each item in array
 
 ```typescript
@@ -178,7 +180,7 @@ addresses: Address[];
 Manually validate a class instance.
 
 ```typescript
-import { validateClassInstance } from 'valora/decorators';
+import { validateClassInstance } from '@tqtos/valora/decorators';
 
 @Validate({ validateOnCreate: false })
 class User {
@@ -204,11 +206,7 @@ if (result.success) {
 Create a string validator.
 
 ```typescript
-v.string()
-  .required()
-  .email()
-  .minLength(5)
-  .maxLength(255);
+v.string().required().email().minLength(5).maxLength(255);
 ```
 
 #### `v.number(): NumberValidator`
@@ -216,11 +214,7 @@ v.string()
 Create a number validator.
 
 ```typescript
-v.number()
-  .required()
-  .integer()
-  .min(0)
-  .max(100);
+v.number().required().integer().min(0).max(100);
 ```
 
 #### `v.boolean(): BooleanValidator`
@@ -244,11 +238,7 @@ v.date().required().past().minAge(18);
 Create an array validator.
 
 ```typescript
-v.array()
-  .of(v.string())
-  .min(1)
-  .max(10)
-  .unique();
+v.array().of(v.string()).min(1).max(10).unique();
 ```
 
 #### `v.object<T>(schema?): ObjectValidator<T>`
@@ -271,7 +261,7 @@ All validators share these methods:
 Make the validator required (reject `undefined`).
 
 ```typescript
-v.string().required()
+v.string().required();
 ```
 
 #### `.optional(): this`
@@ -279,7 +269,7 @@ v.string().required()
 Make the validator optional (allow `undefined`).
 
 ```typescript
-v.string().optional()
+v.string().optional();
 ```
 
 #### `.nullable(): this`
@@ -287,7 +277,7 @@ v.string().optional()
 Allow `null` values.
 
 ```typescript
-v.string().nullable()
+v.string().nullable();
 ```
 
 #### `.default(value): this`
@@ -295,8 +285,8 @@ v.string().nullable()
 Provide a default value when undefined.
 
 ```typescript
-v.string().default('N/A')
-v.number().default(0)
+v.string().default('N/A');
+v.number().default(0);
 ```
 
 #### `.message(msg): this`
@@ -304,7 +294,7 @@ v.number().default(0)
 Override error messages.
 
 ```typescript
-v.string().email().message('Invalid email address')
+v.string().email().message('Invalid email address');
 ```
 
 #### `.transform<U>(fn): Validator<U>`
@@ -312,7 +302,7 @@ v.string().email().message('Invalid email address')
 Transform the value after validation.
 
 ```typescript
-v.string().transform(s => s.toUpperCase())
+v.string().transform((s) => s.toUpperCase());
 ```
 
 #### `.validate(value): ValidationResult<T>`
@@ -323,9 +313,9 @@ Validate a value.
 const result = v.string().email().validate('user@example.com');
 
 if (result.success) {
-  console.log(result.data);  // Type: string
+  console.log(result.data); // Type: string
 } else {
-  console.log(result.errors);  // Type: ValidationError[]
+  console.log(result.errors); // Type: ValidationError[]
 }
 ```
 
@@ -340,31 +330,31 @@ interface StringValidator {
 
   // Length
   minLength(min: number): this;
-  min(min: number): this;  // Alias
+  min(min: number): this; // Alias
   maxLength(max: number): this;
-  max(max: number): this;  // Alias
+  max(max: number): this; // Alias
   length(exact: number): this;
 
   // Pattern
   matches(pattern: RegExp, message?: string): this;
-  pattern(pattern: RegExp, message?: string): this;  // Alias
-  regex(pattern: RegExp, message?: string): this;  // Alias
+  pattern(pattern: RegExp, message?: string): this; // Alias
+  regex(pattern: RegExp, message?: string): this; // Alias
   startsWith(prefix: string): this;
   endsWith(suffix: string): this;
   contains(substring: string): this;
-  includes(substring: string): this;  // Alias
+  includes(substring: string): this; // Alias
 
   // Character set
   alpha(): this;
   alphanumeric(): this;
-  alphanum(): this;  // Alias
+  alphanum(): this; // Alias
   numeric(): this;
   lowercase(): this;
   uppercase(): this;
 
   // Empty
   notEmpty(): this;
-  nonempty(): this;  // Alias
+  nonempty(): this; // Alias
 
   // Transform
   trim(): this;
@@ -381,26 +371,26 @@ interface NumberValidator {
   min(minimum: number): this;
   max(maximum: number): this;
   range(min: number, max: number): this;
-  between(min: number, max: number): this;  // Alias
+  between(min: number, max: number): this; // Alias
 
   // Type
   integer(): this;
-  int(): this;  // Alias
+  int(): this; // Alias
   finite(): this;
   safe(): this;
-  safeInteger(): this;  // Alias
+  safeInteger(): this; // Alias
 
   // Sign
   positive(): this;
   negative(): this;
   nonNegative(): this;
-  nonnegative(): this;  // Alias
+  nonnegative(): this; // Alias
   nonPositive(): this;
-  nonpositive(): this;  // Alias
+  nonpositive(): this; // Alias
 
   // Divisibility
   multipleOf(factor: number): this;
-  step(factor: number): this;  // Alias
+  step(factor: number): this; // Alias
 }
 ```
 
@@ -410,24 +400,24 @@ interface NumberValidator {
 interface ArrayValidator<T> {
   // Item validation
   of<U>(validator: IValidator<T, U>): ArrayValidator<U>;
-  items<U>(validator: IValidator<T, U>): ArrayValidator<U>;  // Alias
+  items<U>(validator: IValidator<T, U>): ArrayValidator<U>; // Alias
 
   // Length
   min(minLength: number): this;
-  minLength(minLength: number): this;  // Alias
+  minLength(minLength: number): this; // Alias
   max(maxLength: number): this;
-  maxLength(maxLength: number): this;  // Alias
+  maxLength(maxLength: number): this; // Alias
   length(exactLength: number): this;
   range(min: number, max: number): this;
-  between(min: number, max: number): this;  // Alias
+  between(min: number, max: number): this; // Alias
 
   // Content
   nonEmpty(): this;
-  notEmpty(): this;  // Alias
+  notEmpty(): this; // Alias
   unique(): this;
-  distinct(): this;  // Alias
+  distinct(): this; // Alias
   contains(value: T): this;
-  includes(value: T): this;  // Alias
+  includes(value: T): this; // Alias
 
   // Predicates
   every(predicate: (item: T, index: number) => boolean): this;
@@ -469,7 +459,7 @@ interface ObjectValidator<T> {
 Extract TypeScript type from a validator schema.
 
 ```typescript
-import { v, Infer } from 'valora';
+import { v, Infer } from '@tqtos/valora';
 
 const userSchema = v.object({
   name: v.string(),
@@ -499,11 +489,11 @@ Error information from failed validation.
 
 ```typescript
 interface ValidationError {
-  path: string;             // Property path (e.g., 'user.email')
-  message: string;          // Human-readable message
-  code: string;             // Error code (e.g., 'string.email')
-  value: unknown;           // The invalid value
-  context?: Record<string, unknown>;  // Additional context
+  path: string; // Property path (e.g., 'user.email')
+  message: string; // Human-readable message
+  code: string; // Error code (e.g., 'string.email')
+  value: unknown; // The invalid value
+  context?: Record<string, unknown>; // Additional context
 }
 ```
 
@@ -514,14 +504,14 @@ interface ValidationError {
 Exception thrown when validation fails (decorators only).
 
 ```typescript
-import { ValoraValidationError } from 'valora/decorators';
+import { ValoraValidationError } from '@tqtos/valora/decorators';
 
 try {
   new User({ name: '' });
 } catch (error) {
   if (error instanceof ValoraValidationError) {
-    console.log(error.message);  // "Validation failed"
-    console.log(error.errors);   // ValidationError[]
+    console.log(error.message); // "Validation failed"
+    console.log(error.errors); // ValidationError[]
   }
 }
 ```
@@ -580,7 +570,7 @@ i18n.loadLocale('fr', {
 Check if a locale is loaded.
 
 ```typescript
-i18n.hasLocale('fr');  // true/false
+i18n.hasLocale('fr'); // true/false
 ```
 
 **`.getLocales(): string[]`**
@@ -588,7 +578,7 @@ i18n.hasLocale('fr');  // true/false
 Get all loaded locales.
 
 ```typescript
-i18n.getLocales();  // ['en', 'vi', 'fr']
+i18n.getLocales(); // ['en', 'vi', 'fr']
 ```
 
 **`.namespace(ns: string): (key, params?) => string`**
@@ -597,13 +587,13 @@ Create a namespaced translation function.
 
 ```typescript
 const ts = i18n.namespace('string');
-ts('minLength', { min: 5 });  // Uses 'string.minLength'
+ts('minLength', { min: 5 }); // Uses 'string.minLength'
 ```
 
 ### Global i18n Instance
 
 ```typescript
-import { globalI18n } from 'valora/plugins';
+import { globalI18n } from '@tqtos/valora/plugins';
 
 // Use the global instance
 globalI18n.setLocale('vi');
@@ -615,54 +605,54 @@ globalI18n.t('string.email');
 ### Logic Combinators
 
 ```typescript
-import { and, or, not, xor } from 'valora';
+import { and, or, not, xor } from '@tqtos/valora';
 
 // AND - all must pass
-and(v.string().email(), v.string().endsWith('@company.com'))
+and(v.string().email(), v.string().endsWith('@company.com'));
 
 // OR - at least one must pass
-or(v.string().uuid(), v.string().email())
+or(v.string().uuid(), v.string().email());
 
 // NOT - must fail
-not(v.string().equals('admin'))
+not(v.string().equals('admin'));
 
 // XOR - exactly one must pass
-xor(v.string().email(), v.number())
+xor(v.string().email(), v.number());
 ```
 
 ### Conditional Validators
 
 ```typescript
-import { ifThenElse } from 'valora';
+import { ifThenElse } from '@tqtos/valora';
 
 ifThenElse(
-  v.boolean(),   // condition
-  v.string(),    // then
-  v.number()     // else
-)
+  v.boolean(), // condition
+  v.string(), // then
+  v.number(), // else
+);
 ```
 
 ### Union & Intersection
 
 ```typescript
-import { union, intersection } from 'valora';
+import { union, intersection } from '@tqtos/valora';
 
 // Accept multiple types
-union([v.string(), v.number()])
+union([v.string(), v.number()]);
 
 // Must satisfy all
-intersection([v.string().minLength(5), v.string().alpha()])
+intersection([v.string().minLength(5), v.string().alpha()]);
 ```
 
 ### Coercion
 
 ```typescript
-import { coerce } from 'valora';
+import { coerce } from '@tqtos/valora';
 
-coerce.number().validate('42');        // → 42
-coerce.boolean().validate('true');     // → true
-coerce.date().validate('2024-01-01');  // → Date object
-coerce.string().validate(123);         // → '123'
+coerce.number().validate('42'); // → 42
+coerce.boolean().validate('true'); // → true
+coerce.date().validate('2024-01-01'); // → Date object
+coerce.string().validate(123); // → '123'
 ```
 
 ## Version

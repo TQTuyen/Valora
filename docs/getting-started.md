@@ -6,16 +6,16 @@ This guide will help you get up and running with Valora in minutes.
 
 ```bash
 # Using bun (recommended)
-bun add valora
+bun add @tqtos/valora
 
 # Using npm
-npm install valora
+npm install @tqtos/valora
 
 # Using yarn
-yarn add valora
+yarn add @tqtos/valora
 
 # Using pnpm
-pnpm add valora
+pnpm add @tqtos/valora
 ```
 
 ## TypeScript Configuration
@@ -44,7 +44,7 @@ Valora offers two APIs: **Decorators** (class-validator style) and **Fluent API*
 Perfect for validating class instances, DTOs, and domain models.
 
 ```typescript
-import { Validate, IsString, IsEmail, MinLength, IsNumber, Min } from 'valora/decorators';
+import { Validate, IsString, IsEmail, MinLength, IsNumber, Min } from '@tqtos/valora/decorators';
 
 @Validate()
 class CreateUserDto {
@@ -65,7 +65,7 @@ try {
   const user = new CreateUserDto({
     name: 'John Doe',
     email: 'john@example.com',
-    age: 25
+    age: 25,
   });
   console.log('Valid user:', user);
 } catch (error) {
@@ -78,7 +78,7 @@ try {
 Perfect for validating data, API requests, and configuration.
 
 ```typescript
-import { v, Infer } from 'valora';
+import { v, Infer } from '@tqtos/valora';
 
 // Define schema
 const createUserSchema = v.object({
@@ -94,7 +94,7 @@ type CreateUserDto = Infer<typeof createUserSchema>;
 const result = createUserSchema.validate({
   name: 'John Doe',
   email: 'john@example.com',
-  age: 25
+  age: 25,
 });
 
 if (result.success) {
@@ -165,14 +165,14 @@ v.string().optional()
 ### Decorators Approach
 
 ```typescript
-import { ValoraValidationError } from 'valora/decorators';
+import { ValoraValidationError } from '@tqtos/valora/decorators';
 
 try {
   const user = new CreateUserDto(invalidData);
 } catch (error) {
   if (error instanceof ValoraValidationError) {
     console.log('Validation failed:');
-    error.errors.forEach(err => {
+    error.errors.forEach((err) => {
       console.log(`- ${err.path}: ${err.message}`);
     });
   }
@@ -185,7 +185,7 @@ try {
 const result = schema.validate(data);
 
 if (!result.success) {
-  result.errors.forEach(error => {
+  result.errors.forEach((error) => {
     console.log(`Field: ${error.path}`);
     console.log(`Message: ${error.message}`);
     console.log(`Code: ${error.code}`);
@@ -198,15 +198,15 @@ if (!result.success) {
 Sometimes you want validation without automatic exceptions:
 
 ```typescript
-import { Validate, validateClassInstance } from 'valora/decorators';
+import { Validate, validateClassInstance } from '@tqtos/valora/decorators';
 
-@Validate({ validateOnCreate: false })  // Don't auto-validate
+@Validate({ validateOnCreate: false }) // Don't auto-validate
 class User {
   @IsString()
   name: string;
 }
 
-const user = new User({ name: 123 });  // No error thrown
+const user = new User({ name: 123 }); // No error thrown
 
 // Manual validation
 const result = validateClassInstance(user);
@@ -228,7 +228,7 @@ if (!result.success) {
 ### API Request Validation
 
 ```typescript
-import { Validate, IsString, IsEmail } from 'valora/decorators';
+import { Validate, IsString, IsEmail } from '@tqtos/valora/decorators';
 
 @Validate()
 class LoginRequest {
@@ -255,7 +255,7 @@ app.post('/login', (req, res) => {
 ### Configuration Validation
 
 ```typescript
-import { v } from 'valora';
+import { v } from '@tqtos/valora';
 
 const configSchema = v.object({
   database: v.object({
@@ -291,7 +291,7 @@ if (!result.success) {
 
 Make sure `experimentalDecorators: true` is in your `tsconfig.json`.
 
-### "Cannot find module 'valora/decorators'"
+### "Cannot find module '@tqtos/valora/decorators'"
 
 Ensure you're using the correct import path and that Valora is installed.
 
@@ -303,4 +303,4 @@ Make sure you're using `Infer<typeof schema>` for fluent API schemas.
 
 - Check the [Examples](./examples.md) for real-world patterns
 - Read the [API Reference](./api-reference.md) for detailed docs
-- Visit our [GitHub Issues](https://github.com/your-org/valora/issues)
+- Visit our [GitHub Issues](https://github.com/TQTuyen/Valora/issues)

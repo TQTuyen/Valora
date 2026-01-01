@@ -17,6 +17,7 @@ Complete guide to validating nested objects and arrays in Valora.
 Valora supports recursive validation of nested objects and arrays using the `@ValidateNested()` decorator.
 
 **Key Points:**
+
 - Nested classes must have their own `@Validate()` decorator
 - Use `@ValidateNested()` on properties that contain other validated classes
 - Use `@ValidateNested({ each: true })` for arrays of validated objects
@@ -27,7 +28,7 @@ Valora supports recursive validation of nested objects and arrays using the `@Va
 ### Basic Example
 
 ```typescript
-import { Validate, IsString, ValidateNested } from 'valora/decorators';
+import { Validate, IsString, ValidateNested } from '@tqtos/valora/decorators';
 
 @Validate()
 class Address {
@@ -59,8 +60,8 @@ const user = new User({
   address: {
     street: '123 Main St',
     city: 'Boston',
-    zipCode: '02101'
-  }
+    zipCode: '02101',
+  },
 });
 // ✅ Valid - nested object is validated automatically
 ```
@@ -72,10 +73,10 @@ try {
   const user = new User({
     name: 'John',
     address: {
-      street: '',           // ❌ Empty
+      street: '', // ❌ Empty
       city: 'Boston',
-      zipCode: '123'        // ❌ Wrong length
-    }
+      zipCode: '123', // ❌ Wrong length
+    },
   });
 } catch (error) {
   console.log(error.errors);
@@ -96,7 +97,7 @@ Use `@ValidateNested({ each: true })` to validate each item in an array:
 @Validate()
 class PhoneNumber {
   @IsString()
-  type: string;  // 'home', 'work', 'mobile'
+  type: string; // 'home', 'work', 'mobile'
 
   @IsString()
   @Matches(/^\d{3}-\d{3}-\d{4}$/)
@@ -118,8 +119,8 @@ const contact = new Contact({
   name: 'John Doe',
   phoneNumbers: [
     { type: 'home', number: '555-123-4567' },
-    { type: 'work', number: '555-987-6543' }
-  ]
+    { type: 'work', number: '555-987-6543' },
+  ],
 });
 // ✅ Each phone number is validated
 ```
@@ -145,8 +146,8 @@ const user = new User({
   name: 'John',
   addresses: [
     { street: '123 Main', city: 'Boston', zipCode: '02101' },
-    { street: '456 Oak', city: 'NYC', zipCode: '10001' }
-  ]
+    { street: '456 Oak', city: 'NYC', zipCode: '10001' },
+  ],
 });
 ```
 
@@ -210,18 +211,18 @@ const employee = new Employee({
       city: 'San Francisco',
       country: {
         name: 'United States',
-        code: 'US'
-      }
-    }
+        code: 'US',
+      },
+    },
   },
   homeAddress: {
     street: '789 Home St',
     city: 'Oakland',
     country: {
       name: 'United States',
-      code: 'US'
-    }
-  }
+      code: 'US',
+    },
+  },
 });
 ```
 
@@ -240,11 +241,13 @@ try {
         city: 'SF',
         country: {
           name: 'USA',
-          code: 'USA'  // ❌ Wrong length
-        }
-      }
+          code: 'USA', // ❌ Wrong length
+        },
+      },
     },
-    homeAddress: { /* ... */ }
+    homeAddress: {
+      /* ... */
+    },
   });
 } catch (error) {
   console.log(error.errors[0].path);
@@ -279,15 +282,12 @@ const root = new TreeNode({
   children: [
     {
       value: 'child1',
-      children: [
-        { value: 'grandchild1' },
-        { value: 'grandchild2' }
-      ]
+      children: [{ value: 'grandchild1' }, { value: 'grandchild2' }],
     },
     {
-      value: 'child2'
-    }
-  ]
+      value: 'child2',
+    },
+  ],
 });
 ```
 
@@ -348,12 +348,12 @@ try {
     orderId: 'ORD-123',
     items: [
       { name: 'Widget', price: 10 },
-      { name: 'Gadget', price: -5 },  // ❌ Invalid
-      { name: '', price: 20 }          // ❌ Invalid
-    ]
+      { name: 'Gadget', price: -5 }, // ❌ Invalid
+      { name: '', price: 20 }, // ❌ Invalid
+    ],
   });
 } catch (error) {
-  error.errors.forEach(err => {
+  error.errors.forEach((err) => {
     console.log(`${err.path}: ${err.message}`);
   });
   // Output:
@@ -438,7 +438,7 @@ class User {
 const user1 = new User({ name: 'John' });
 const user2 = new User({
   name: 'Jane',
-  settings: { theme: 'dark', fontSize: 14 }
+  settings: { theme: 'dark', fontSize: 14 },
 });
 ```
 
@@ -471,7 +471,7 @@ class Order {
 const order = new Order({
   productId: 'PROD-123',
   requiresShipping: true,
-  shippingAddress: undefined
+  shippingAddress: undefined,
 });
 
 // Custom validation logic
@@ -506,15 +506,17 @@ if (!result.success) {
 Sometimes you only need to validate part of the structure:
 
 ```typescript
-import { v } from 'valora';
+import { v } from '@tqtos/valora';
 
 // For partial updates, use fluent API
 const partialSchema = v.object({
   name: v.string().optional(),
   email: v.string().email().optional(),
-  address: v.object({
-    city: v.string()
-  }).optional()
+  address: v
+    .object({
+      city: v.string(),
+    })
+    .optional(),
 });
 
 const result = partialSchema.validate(partialUpdateData);
@@ -523,16 +525,18 @@ const result = partialSchema.validate(partialUpdateData);
 ## Best Practices
 
 1. **Always Add `@Validate()` to Nested Classes**
+
    ```typescript
    // ✅ Good
    @Validate()
-   class Address { }
+   class Address {}
 
    // ❌ Bad - won't validate
-   class Address { }
+   class Address {}
    ```
 
 2. **Use `each: true` for Arrays**
+
    ```typescript
    // ✅ Good
    @ValidateNested({ each: true })
@@ -544,6 +548,7 @@ const result = partialSchema.validate(partialUpdateData);
    ```
 
 3. **Make One Side Optional in Circular References**
+
    ```typescript
    // ✅ Good
    @Validate()
@@ -562,6 +567,7 @@ const result = partialSchema.validate(partialUpdateData);
    ```
 
 4. **Use Type Safety**
+
    ```typescript
    // ✅ Good - TypeScript enforces correct types
    @ValidateNested()

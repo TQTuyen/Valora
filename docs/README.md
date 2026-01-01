@@ -34,7 +34,7 @@ Valora is a production-grade validation framework for TypeScript that offers:
 ### Using Decorators (Recommended)
 
 ```typescript
-import { Validate, IsString, IsEmail, MinLength, Min } from 'valora/decorators';
+import { Validate, IsString, IsEmail, MinLength, Min } from '@tqtos/valora/decorators';
 
 @Validate()
 class User {
@@ -54,14 +54,14 @@ class User {
 const user = new User({
   name: 'John',
   email: 'john@example.com',
-  age: 25
+  age: 25,
 });
 ```
 
 ### Using Fluent API
 
 ```typescript
-import { v, Infer } from 'valora';
+import { v, Infer } from '@tqtos/valora';
 
 const userSchema = v.object({
   name: v.string().minLength(2),
@@ -81,16 +81,16 @@ if (result.success) {
 
 ```bash
 # Using bun (recommended)
-bun add valora
+bun add @tqtos/valora
 
 # Using npm
-npm install valora
+npm install @tqtos/valora
 
 # Using yarn
-yarn add valora
+yarn add @tqtos/valora
 
 # Using pnpm
-pnpm add valora
+pnpm add @tqtos/valora
 ```
 
 ## 🎓 Learning Path
@@ -110,6 +110,6 @@ MIT License - see LICENSE file for details.
 
 ## 🔗 Links
 
-- [GitHub Repository](https://github.com/your-org/valora)
-- [NPM Package](https://npmjs.com/package/valora)
-- [Issue Tracker](https://github.com/your-org/valora/issues)
+- [GitHub Repository](https://github.com/TQTuyen/Valora)
+- [NPM Package](https://www.npmjs.com/package/@tqtos/valora)
+- [Issue Tracker](https://github.com/TQTuyen/Valora/issues)

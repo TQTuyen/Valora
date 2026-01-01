@@ -20,16 +20,16 @@ A modern, tree-shakeable validation framework for JavaScript/TypeScript with dua
 
 ```bash
 # Using bun (recommended)
-bun add valora
+bun add @tqtos/valora
 
 # Using npm
-npm install valora
+npm install @tqtos/valora
 
 # Using yarn
-yarn add valora
+yarn add @tqtos/valora
 
 # Using pnpm
-pnpm add valora
+pnpm add @tqtos/valora
 ```
 
 ## 🚀 Quick Start
@@ -39,7 +39,7 @@ pnpm add valora
 Perfect for validating class instances, DTOs, and domain models.
 
 ```typescript
-import { Validate, IsString, IsEmail, MinLength, Min, IsNumber } from 'valora/decorators';
+import { Validate, IsString, IsEmail, MinLength, Min, IsNumber } from '@tqtos/valora/decorators';
 
 @Validate()
 class CreateUserDto {
@@ -60,7 +60,7 @@ try {
   const user = new CreateUserDto({
     name: 'John Doe',
     email: 'john@example.com',
-    age: 25
+    age: 25,
   });
   console.log('Valid user:', user);
 } catch (error) {
@@ -73,7 +73,7 @@ try {
 Perfect for validating data, API requests, and configuration.
 
 ```typescript
-import { v, Infer } from 'valora';
+import { v, Infer } from '@tqtos/valora';
 
 // Define schema
 const createUserSchema = v.object({
@@ -89,7 +89,7 @@ type CreateUserDto = Infer<typeof createUserSchema>;
 const result = createUserSchema.validate({
   name: 'John Doe',
   email: 'john@example.com',
-  age: 25
+  age: 25,
 });
 
 if (result.success) {
@@ -115,24 +115,31 @@ if (result.success) {
 ## 🎯 Available Decorators
 
 ### Common (2)
+
 `@IsOptional()` `@IsRequired()`
 
 ### String (17)
+
 `@IsString()` `@IsEmail()` `@IsUrl()` `@IsUuid()` `@MinLength()` `@MaxLength()` `@Length()` `@Matches()` `@StartsWith()` `@EndsWith()` `@Contains()` `@IsAlpha()` `@IsAlphanumeric()` `@IsNumeric()` `@IsLowercase()` `@IsUppercase()` `@NotEmpty()`
 
 ### Number (10)
+
 `@IsNumber()` `@IsInt()` `@IsFinite()` `@IsSafeInt()` `@Min()` `@Max()` `@Range()` `@IsPositive()` `@IsNegative()` `@IsMultipleOf()`
 
 ### Boolean (3)
+
 `@IsBoolean()` `@IsTrue()` `@IsFalse()`
 
 ### Date (12)
+
 `@IsDate()` `@MinDate()` `@MaxDate()` `@IsPast()` `@IsFuture()` `@IsToday()` `@IsBefore()` `@IsAfter()` `@IsWeekday()` `@IsWeekend()` `@MinAge()` `@MaxAge()`
 
 ### Array (7)
+
 `@IsArray()` `@ArrayMinSize()` `@ArrayMaxSize()` `@ArrayLength()` `@ArrayNotEmpty()` `@ArrayUnique()` `@ArrayContains()`
 
 ### Object (2)
+
 `@IsObject()` `@ValidateNested()`
 
 ## 🔧 Validators
@@ -155,7 +162,7 @@ if (result.success) {
 Built-in support for English and Vietnamese, easily extensible:
 
 ```typescript
-import { globalI18n } from 'valora/plugins';
+import { globalI18n } from '@tqtos/valora/plugins';
 
 // Switch to Vietnamese
 globalI18n.setLocale('vi');
@@ -174,7 +181,7 @@ globalI18n.loadLocale('fr', {
 ### React
 
 ```tsx
-import { useValora } from 'valora/adapters/react';
+import { useValora } from '@tqtos/valora/adapters/react';
 
 export function LoginForm() {
   const { validate, errors } = useValora();
@@ -192,7 +199,7 @@ export function LoginForm() {
 
 ```vue
 <script setup>
-import { useValora } from 'valora/adapters/vue';
+import { useValora } from '@tqtos/valora/adapters/vue';
 
 const { validate, errors } = useValora();
 </script>
@@ -268,7 +275,7 @@ Full TypeScript support with:
 - Path aliases support (`@/`, `@validators/`, etc.)
 
 ```typescript
-import { v, Infer } from 'valora';
+import { v, Infer } from '@tqtos/valora';
 
 const userSchema = v.object({
   name: v.string(),
@@ -326,8 +333,8 @@ MIT © Valora Team
 
 ## 🔗 Resources
 
-- [GitHub Repository](https://github.com/TQTuyen/valora)
-- [GitHub Issues](https://github.com/TQTuyen/valora/issues)
+- [GitHub Repository](https://github.com/TQTuyen/Valora)
+- [GitHub Issues](https://github.com/TQTuyen/Valora/issues)
 - [Documentation](./docs/README.md)
 
 ---
