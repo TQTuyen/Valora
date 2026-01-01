@@ -2,145 +2,111 @@
   <div class="comprehensive-demo">
     
     <form @submit.prevent="handleSubmit" class="demo-form">
-      
-      <!-- TRƯỜNG 1: USERNAME - Demo yêu cầu 3, 4, 5, 6 -->
-      <div class="form-section highlight">
-        <div class="form-group">
-          <label for="username">
-            Username
-            <span class="required">*</span>
-          </label>
-          <input
-            id="username"
-            v-model="username.modelValue.value"
-            @blur="username.onBlur"
-            type="text"
-            placeholder="john_doe123"
-            :class="{ 'error': username.shouldShowError.value, 'success': username.isValid.value && username.touched.value }"
-          />
-          <div v-if="username.shouldShowError.value" class="inline-errors">
-            <p v-for="(msg, index) in username.errorMessages.value" :key="index" class="error-message">
-              {{ msg }}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- TRƯỜNG 2: PASSWORD - Demo yêu cầu 2, 3, 4, 6 + Cách hiển thị 3 -->
-      <div class="form-section highlight">
-        
-        <div class="form-group">
-          <label for="password">
-            Password
-            <span class="required">*</span>
-          </label>
-          <input
-            id="password"
-            v-model="password.modelValue.value"
-            @blur="password.onBlur"
-            type="password"
-            placeholder="••••••••"
-            :class="{ 'error': password.shouldShowError.value, 'success': password.isValid.value && password.touched.value }"
-          />
-          
-          
-          
-          <!-- YÊU CẦU 1: Cách 3 - Badge errors (dạng tag) -->
-          <div v-if="password.shouldShowError.value" class="badge-errors">
-            <span 
-              v-for="(msg, index) in password.errorMessages.value" 
-              :key="index"
-              class="error-badge"
-            >
-              {{ msg }}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <!-- TRƯỜNG 3: EMAIL - Demo yêu cầu 3, 5 + Cách hiển thị 4 -->
-      <div class="form-section highlight">
-       
-        
-        <div class="form-group">
-          <label for="email">
-            Email
-            <span class="required">*</span>
-          </label>
-          <input
-            id="email"
-            v-model="email.modelValue.value"
-            @blur="email.onBlur"
-            type="email"
-            placeholder="example@company.com"
-            :class="{ 'error': email.shouldShowError.value, 'success': email.isValid.value && email.touched.value }"
-          />
-          
-          <!-- YÊU CẦU 1: Cách 4 - Tooltip errors (hover để xem) -->
-          <div v-if="email.shouldShowError.value" class="tooltip-errors">
-            <div class="tooltip-trigger">❌ Có lỗi - di chuột vào đây</div>
-            <div class="tooltip-content">
-              <p v-for="(msg, index) in email.errorMessages.value" :key="index">
-                • {{ msg }}
-              </p>
-              <p class="hint-text">💡 Cách 4: <strong>Tooltip errors</strong> - hover để xem chi tiết</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- TRƯỜNG 4: PHONE - Demo yêu cầu 3, 4, 5, 6 -->
-      <div class="form-section highlight">
-        
-        <div class="form-group">
-          <label for="phoneNumber">
-            Số điện thoại
-            <span class="required">*</span>
-          </label>
-          <input
-            id="phoneNumber"
-            v-model="phoneNumber.modelValue.value"
-            @blur="phoneNumber.onBlur"
-            type="tel"
-            placeholder="0912345678"
-            :class="{ 'error': phoneNumber.shouldShowError.value, 'success': phoneNumber.isValid.value && phoneNumber.touched.value }"
-          />
-          
-          <!-- Inline errors cho phone -->
-          <div v-if="phoneNumber.shouldShowError.value" class="inline-errors">
-            <p v-for="(msg, index) in phoneNumber.errorMessages.value" :key="index" class="error-message">
+      <!-- USERNAME -->
+      <div class="form-group">
+        <label for="username">
+          Username
+          <span class="required">*</span>
+        </label>
+        <input
+          id="username"
+          v-model="username.modelValue.value"
+          @blur="username.onBlur"
+          type="text"
+          placeholder="john_doe123"
+          :class="{ 'error': username.shouldShowError.value, 'success': username.isValid.value && username.touched.value }"
+        />
+        <div v-if="username.shouldShowError.value" class="error-messages">
+          <p v-for="(msg, index) in username.errorMessages.value" :key="index" class="error-message">
             {{ msg }}
-            </p>
-          </div>
+          </p>
         </div>
       </div>
 
-      <!-- TRƯỜNG 5: AGE - Demo Number validation + Business logic -->
-      <div class="form-section highlight">
-        <div class="form-group">
-          <label for="age">
-            Tuổi
-            <span class="required">*</span>
-          </label>
-          <input
-            id="age"
-            v-model.number="age.modelValue.value"
-            @blur="age.onBlur"
-            type="number"
-            placeholder="25"
-            :class="{ 'error': age.shouldShowError.value, 'success': age.isValid.value && age.touched.value }"
-          />
-          
-          <div v-if="age.shouldShowError.value" class="inline-errors">
-            <p v-for="(msg, index) in age.errorMessages.value" :key="index" class="error-message">
-              {{ msg }}
-            </p>
-          </div>
-          
-          <!-- Age category indicator -->
-          <div v-if="age.modelValue.value && age.isValid.value" class="age-category">
-            <span class="category-badge">{{ getAgeCategory(age.modelValue.value) }}</span>
-          </div>
+      <!-- PASSWORD -->
+      <div class="form-group">
+        <label for="password">
+          Password
+          <span class="required">*</span>
+        </label>
+        <input
+          id="password"
+          v-model="password.modelValue.value"
+          @blur="password.onBlur"
+          type="password"
+          placeholder="••••••••"
+          :class="{ 'error': password.shouldShowError.value, 'success': password.isValid.value && password.touched.value }"
+        />
+        <div v-if="password.shouldShowError.value" class="error-messages">
+          <p v-for="(msg, index) in password.errorMessages.value" :key="index" class="error-message">
+            {{ msg }}
+          </p>
+        </div>
+      </div>
+
+      <!-- EMAIL -->
+      <div class="form-group">
+        <label for="email">
+          Email
+          <span class="required">*</span>
+        </label>
+        <input
+          id="email"
+          v-model="email.modelValue.value"
+          @blur="email.onBlur"
+          type="email"
+          placeholder="example@company.com"
+          :class="{ 'error': email.shouldShowError.value, 'success': email.isValid.value && email.touched.value }"
+        />
+        <div v-if="email.shouldShowError.value" class="error-messages">
+          <p v-for="(msg, index) in email.errorMessages.value" :key="index" class="error-message">
+            {{ msg }}
+          </p>
+        </div>
+      </div>
+
+      <!-- PHONE NUMBER -->
+      <div class="form-group">
+        <label for="phoneNumber">
+          Phone Number
+          <span class="required">*</span>
+        </label>
+        <input
+          id="phoneNumber"
+          v-model="phoneNumber.modelValue.value"
+          @blur="phoneNumber.onBlur"
+          type="tel"
+          placeholder="0912345678"
+          :class="{ 'error': phoneNumber.shouldShowError.value, 'success': phoneNumber.isValid.value && phoneNumber.touched.value }"
+        />
+        <div v-if="phoneNumber.shouldShowError.value" class="error-messages">
+          <p v-for="(msg, index) in phoneNumber.errorMessages.value" :key="index" class="error-message">
+            {{ msg }}
+          </p>
+        </div>
+      </div>
+
+      <!-- AGE -->
+      <div class="form-group">
+        <label for="age">
+          Age
+          <span class="required">*</span>
+        </label>
+        <input
+          id="age"
+          v-model.number="age.modelValue.value"
+          @blur="age.onBlur"
+          type="number"
+          placeholder="25"
+          :class="{ 'error': age.shouldShowError.value, 'success': age.isValid.value && age.touched.value }"
+        />
+        <div v-if="age.shouldShowError.value" class="error-messages">
+          <p v-for="(msg, index) in age.errorMessages.value" :key="index" class="error-message">
+            {{ msg }}
+          </p>
+        </div>
+        <div v-if="age.modelValue.value && age.isValid.value" class="age-info">
+          <span class="age-badge">{{ getAgeCategory(age.modelValue.value) }}</span>
         </div>
       </div>
 
@@ -151,21 +117,14 @@
           class="btn-submit"
           :disabled="formState.isSubmitting"
         >
-          {{ formState.isSubmitting ? '⏳ Đang xử lý...' : '✓ Submit Form' }}
-        </button>
-        <button 
-          type="button" 
-          class="btn-validate"
-          @click="validateAllFields"
-        >
-          🔍 Validate tất cả
+          {{ formState.isSubmitting ? 'Submitting...' : 'Submit' }}
         </button>
         <button 
           type="button" 
           class="btn-reset"
           @click="resetForm"
         >
-          🔄 Reset Form
+          Reset
         </button>
       </div>
     </form>
@@ -185,8 +144,8 @@
     <!-- Success Modal -->
     <div v-if="showSuccessModal" class="modal-overlay" @click="showSuccessModal = false">
       <div class="modal" @click.stop>
-        <h2>🎉 Validation thành công!</h2>
-        <p>Tất cả dữ liệu đã được validate và hợp lệ.</p>
+        <h2>Success!</h2>
+        <p>All data has been validated successfully.</p>
         <pre class="data-preview">{{ JSON.stringify({
   username: username.modelValue.value,
   password: password.modelValue.value,
@@ -194,7 +153,7 @@
   phoneNumber: phoneNumber.modelValue.value,
   age: age.modelValue.value
 }, null, 2) }}</pre>
-        <button @click="showSuccessModal = false" class="btn-close">Đóng</button>
+        <button @click="showSuccessModal = false" class="btn-close">Close</button>
       </div>
     </div>
   </div>
@@ -228,26 +187,26 @@ const validationSchema = {
 
   password: string()
     .required('Password is required')                             
-    .minLength(8, 'Mật khẩu phải có ít nhất 8 ký tự')            
-    .custom((value) => /[A-Z]/.test(value), 'Thiếu chữ hoa')    
-    .custom((value) => /[a-z]/.test(value), 'Thiếu chữ thường') 
-    .custom((value) => /[0-9]/.test(value), 'Thiếu chữ số')     
+    .minLength(8, 'Password must be at least 8 characters')            
+    .custom((value) => /[A-Z]/.test(value), 'Must contain uppercase letter')    
+    .custom((value) => /[a-z]/.test(value), 'Must contain lowercase letter') 
+    .custom((value) => /[0-9]/.test(value), 'Must contain a number')     
     .custom(                                                     
       (value) => /[!@#$%^&*(),.?":{}|<>]/.test(value),
-      'Thiếu ký tự đặc biệt'
+      'Must contain special character'
     ),
 
-  // Email: Demo yêu cầu 3, 5
+  // Email
   email: string()
-    .required('Email là bắt buộc')  // Yêu cầu 3: Declarative
-    .email('Email không hợp lệ'),   // Yêu cầu 3 + 5: Built-in regex pattern
+    .required('Email is required')
+    .email('Invalid email format'),
 
-  // Phone: Demo yêu cầu 3, 4, 5, 6
+  // Phone Number
   phoneNumber: string()
-    .required('Số điện thoại là bắt buộc')                                   
-    .numeric('Chỉ được chứa chữ số')                                          
-    .length(10, 'Số điện thoại phải có 10 chữ số')                            
-    .pattern(/^0\d{9}$/, 'Phải bắt đầu bằng số 0')                            
+    .required('Phone number is required')                                   
+    .numeric('Must contain only numbers')                                          
+    .length(10, 'Phone number must be 10 digits')                            
+    .pattern(/^0\d{9}$/, 'Must start with 0')                            
     .custom(                                                                   
       (value) => {
         const prefixes = ['086', '096', '097', '098', '032', '033', '034', '035', '036', '037', '038', '039', 
@@ -255,15 +214,15 @@ const validationSchema = {
                          '089', '090', '093', '070', '079', '077', '076', '078'];                             
         return prefixes.some(prefix => value.startsWith(prefix));
       },
-      'Số điện thoại không thuộc nhà mạng Việt Nam'
+      'Invalid Vietnamese phone number'
     ),
 
-  // Age: Demo yêu cầu 2, 3, 4, 6
+  // Age
   age: number()
-    .required('Tuổi là bắt buộc')             
-    .integer('Tuổi phải là số nguyên')      
-    .min(18, 'Phải từ 18 tuổi trở lên')       
-    .max(100, 'Tuổi không được quá 100'),      
+    .required('Age is required')             
+    .integer('Age must be an integer')      
+    .min(18, 'Must be at least 18 years old')       
+    .max(100, 'Age must not exceed 100'),      
 };
 
 // Form validation hook
@@ -278,17 +237,17 @@ const age = useFieldValidation(adapter, 'age');
 
 const fieldLabels: Record<string, string> = {
   username: 'Username',
-  password: 'Mật khẩu',
+  password: 'Password',
   email: 'Email',
-  phoneNumber: 'Số điện thoại',
-  age: 'Tuổi',
+  phoneNumber: 'Phone Number',
+  age: 'Age',
 };
 
 const getFieldLabel = (fieldName: string): string => {
   return fieldLabels[fieldName] || fieldName;
 };
 
-// Password strength calculator (Yêu cầu 2: Code-based validation)
+// Password strength calculator
 const passwordStrength = computed(() => {
   const pwd = password.modelValue.value || '';
   let strength = 0;
@@ -301,25 +260,25 @@ const passwordStrength = computed(() => {
   if (/[!@#$%^&*(),.?":{}|<>]/.test(pwd)) strength += 10;
   
   let level = 'weak';
-  let label = '❌ Yếu';
+  let label = 'Weak';
   
   if (strength >= 80) {
     level = 'strong';
-    label = '✅ Mạnh';
+    label = 'Strong';
   } else if (strength >= 50) {
     level = 'medium';
-    label = '⚠️ Trung bình';
+    label = 'Medium';
   }
   
   return { percentage: strength, level, label };
 });
 
-// Age category calculator (Yêu cầu 2: Code-based logic)
+// Age category calculator
 const getAgeCategory = (ageValue: number): string => {
-  if (ageValue < 18) return '🚫 Chưa đủ tuổi';
-  if (ageValue < 30) return '👨‍🎓 Thanh niên';
-  if (ageValue < 50) return '👨‍💼 Trung niên';
-  return '👴 Cao tuổi';
+  if (ageValue < 18) return 'Under 18';
+  if (ageValue < 30) return 'Young Adult';
+  if (ageValue < 50) return 'Middle Age';
+  return 'Senior';
 };
 
 // Toast notifications (Yêu cầu 1: Cách 5 - Toast)
@@ -349,9 +308,9 @@ const validateAllFields = () => {
   const result = validateAll();
   
   if (result.success) {
-    showToast('✅ Tất cả các trường đều hợp lệ!', 'success');
+    showToast('All fields are valid!', 'success');
   } else {
-    showToast(`❌ Có ${result.errors.length} lỗi cần sửa`, 'error');
+    showToast(`${result.errors.length} error(s) found`, 'error');
   }
 };
 
@@ -360,16 +319,16 @@ const handleSubmit = () => {
   const result = validateAll();
   
   if (result.success) {
-    showToast('✅ Form đã được submit thành công!', 'success');
+    showToast('Form submitted successfully!', 'success');
     showSuccessModal.value = true;
   } else {
-    showToast(`❌ Vui lòng sửa ${result.errors.length} lỗi trước khi submit`, 'error');
+    showToast(`Please fix ${result.errors.length} error(s) before submitting`, 'error');
   }
 };
 
 // Reset form
 const resetForm = () => {
   resetAll();
-  showToast('🔄 Form đã được reset', 'info');
+  showToast('Form has been reset', 'info');
 };
 </script>
