@@ -16,7 +16,7 @@ describe('Array Property Decorators', () => {
     it('should pass when value is an array', () => {
       class TestDto {
         @IsArray()
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -29,7 +29,7 @@ describe('Array Property Decorators', () => {
     it('should pass when value is an empty array', () => {
       class TestDto {
         @IsArray()
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -42,7 +42,7 @@ describe('Array Property Decorators', () => {
     it('should pass when value is an array of objects', () => {
       class TestDto {
         @IsArray()
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -55,7 +55,7 @@ describe('Array Property Decorators', () => {
     it('should fail when value is not an array', () => {
       class TestDto {
         @IsArray()
-        items: any;
+        items!: any;
       }
 
       const dto = new TestDto();
@@ -64,13 +64,13 @@ describe('Array Property Decorators', () => {
       const result = validateClassInstance(dto);
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].path).toEqual(['items']);
+      expect(result.errors[0]?.path).toEqual(['items']);
     });
 
     it('should fail when value is an object', () => {
       class TestDto {
         @IsArray()
-        items: any;
+        items!: any;
       }
 
       const dto = new TestDto();
@@ -83,7 +83,7 @@ describe('Array Property Decorators', () => {
     it('should fail when value is null', () => {
       class TestDto {
         @IsArray()
-        items: any;
+        items!: any;
       }
 
       const dto = new TestDto();
@@ -96,7 +96,7 @@ describe('Array Property Decorators', () => {
     it('should accept custom error message', () => {
       class TestDto {
         @IsArray({ message: 'Items must be an array' })
-        items: any;
+        items!: any;
       }
 
       const dto = new TestDto();
@@ -112,7 +112,7 @@ describe('Array Property Decorators', () => {
     it('should pass when array length is greater than minimum', () => {
       class TestDto {
         @ArrayMinSize(3)
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -125,7 +125,7 @@ describe('Array Property Decorators', () => {
     it('should pass when array length equals minimum', () => {
       class TestDto {
         @ArrayMinSize(3)
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -138,7 +138,7 @@ describe('Array Property Decorators', () => {
     it('should fail when array length is less than minimum', () => {
       class TestDto {
         @ArrayMinSize(3)
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -147,13 +147,13 @@ describe('Array Property Decorators', () => {
       const result = validateClassInstance(dto);
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].path).toEqual(['items']);
+      expect(result.errors[0]?.path).toEqual(['items']);
     });
 
     it('should fail when array is empty and minimum is greater than 0', () => {
       class TestDto {
         @ArrayMinSize(1)
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -166,7 +166,7 @@ describe('Array Property Decorators', () => {
     it('should accept custom error message', () => {
       class TestDto {
         @ArrayMinSize(3, { message: 'Array must have at least 3 items' })
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -182,7 +182,7 @@ describe('Array Property Decorators', () => {
     it('should pass when array length is less than maximum', () => {
       class TestDto {
         @ArrayMaxSize(5)
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -195,7 +195,7 @@ describe('Array Property Decorators', () => {
     it('should pass when array length equals maximum', () => {
       class TestDto {
         @ArrayMaxSize(5)
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -208,7 +208,7 @@ describe('Array Property Decorators', () => {
     it('should fail when array length exceeds maximum', () => {
       class TestDto {
         @ArrayMaxSize(5)
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -217,13 +217,13 @@ describe('Array Property Decorators', () => {
       const result = validateClassInstance(dto);
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].path).toEqual(['items']);
+      expect(result.errors[0]?.path).toEqual(['items']);
     });
 
     it('should pass when array is empty', () => {
       class TestDto {
         @ArrayMaxSize(5)
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -238,7 +238,7 @@ describe('Array Property Decorators', () => {
     it('should pass when array has exact length', () => {
       class TestDto {
         @ArrayLength(3)
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -251,7 +251,7 @@ describe('Array Property Decorators', () => {
     it('should fail when array is too short', () => {
       class TestDto {
         @ArrayLength(3)
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -265,7 +265,7 @@ describe('Array Property Decorators', () => {
     it('should fail when array is too long', () => {
       class TestDto {
         @ArrayLength(3)
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -278,7 +278,7 @@ describe('Array Property Decorators', () => {
     it('should work with empty array when length is 0', () => {
       class TestDto {
         @ArrayLength(0)
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -293,7 +293,7 @@ describe('Array Property Decorators', () => {
     it('should pass when array has items', () => {
       class TestDto {
         @ArrayNotEmpty()
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -306,7 +306,7 @@ describe('Array Property Decorators', () => {
     it('should pass when array has multiple items', () => {
       class TestDto {
         @ArrayNotEmpty()
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -319,7 +319,7 @@ describe('Array Property Decorators', () => {
     it('should fail when array is empty', () => {
       class TestDto {
         @ArrayNotEmpty()
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -328,13 +328,13 @@ describe('Array Property Decorators', () => {
       const result = validateClassInstance(dto);
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].path).toEqual(['items']);
+      expect(result.errors[0]?.path).toEqual(['items']);
     });
 
     it('should accept custom error message', () => {
       class TestDto {
         @ArrayNotEmpty({ message: 'Array cannot be empty' })
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -350,7 +350,7 @@ describe('Array Property Decorators', () => {
     it('should pass when array contains the value', () => {
       class TestDto {
         @ArrayContains('item')
-        items: string[];
+        items!: string[];
       }
 
       const dto = new TestDto();
@@ -363,7 +363,7 @@ describe('Array Property Decorators', () => {
     it('should pass when array contains multiple occurrences', () => {
       class TestDto {
         @ArrayContains('item')
-        items: string[];
+        items!: string[];
       }
 
       const dto = new TestDto();
@@ -376,7 +376,7 @@ describe('Array Property Decorators', () => {
     it('should fail when array does not contain the value', () => {
       class TestDto {
         @ArrayContains('item')
-        items: string[];
+        items!: string[];
       }
 
       const dto = new TestDto();
@@ -390,7 +390,7 @@ describe('Array Property Decorators', () => {
     it('should work with numbers', () => {
       class TestDto {
         @ArrayContains(42)
-        items: number[];
+        items!: number[];
       }
 
       const dto = new TestDto();
@@ -403,7 +403,7 @@ describe('Array Property Decorators', () => {
     it('should work with objects using deep equality', () => {
       class TestDto {
         @ArrayContains({ id: 1 })
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -416,7 +416,7 @@ describe('Array Property Decorators', () => {
     it('should fail when array is empty', () => {
       class TestDto {
         @ArrayContains('item')
-        items: string[];
+        items!: string[];
       }
 
       const dto = new TestDto();
@@ -431,7 +431,7 @@ describe('Array Property Decorators', () => {
     it('should pass when array has unique values', () => {
       class TestDto {
         @ArrayUnique()
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -444,7 +444,7 @@ describe('Array Property Decorators', () => {
     it('should pass when array is empty', () => {
       class TestDto {
         @ArrayUnique()
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -457,7 +457,7 @@ describe('Array Property Decorators', () => {
     it('should pass when array has one item', () => {
       class TestDto {
         @ArrayUnique()
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -470,7 +470,7 @@ describe('Array Property Decorators', () => {
     it('should fail when array has duplicate values', () => {
       class TestDto {
         @ArrayUnique()
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -479,13 +479,13 @@ describe('Array Property Decorators', () => {
       const result = validateClassInstance(dto);
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].path).toEqual(['items']);
+      expect(result.errors[0]?.path).toEqual(['items']);
     });
 
     it('should work with strings', () => {
       class TestDto {
         @ArrayUnique()
-        items: string[];
+        items!: string[];
       }
 
       const dto = new TestDto();
@@ -498,7 +498,7 @@ describe('Array Property Decorators', () => {
     it('should fail when strings are duplicated', () => {
       class TestDto {
         @ArrayUnique()
-        items: string[];
+        items!: string[];
       }
 
       const dto = new TestDto();
@@ -511,7 +511,7 @@ describe('Array Property Decorators', () => {
     it('should accept custom error message', () => {
       class TestDto {
         @ArrayUnique({ message: 'All items must be unique' })
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -530,7 +530,7 @@ describe('Array Property Decorators', () => {
         @ArrayNotEmpty()
         @ArrayMinSize(2)
         @ArrayMaxSize(10)
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -545,7 +545,7 @@ describe('Array Property Decorators', () => {
         @IsArray()
         @ArrayNotEmpty()
         @ArrayMinSize(2)
-        items: any[];
+        items!: any[];
       }
 
       const dto = new TestDto();
@@ -563,7 +563,7 @@ describe('Array Property Decorators', () => {
         @ArrayUnique()
         @ArrayMinSize(3)
         @ArrayMaxSize(5)
-        tags: string[];
+        tags!: string[];
       }
 
       const dto = new TestDto();
@@ -578,7 +578,7 @@ describe('Array Property Decorators', () => {
         @IsArray()
         @ArrayUnique()
         @ArrayMinSize(3)
-        tags: string[];
+        tags!: string[];
       }
 
       const dto = new TestDto();
@@ -593,7 +593,7 @@ describe('Array Property Decorators', () => {
         @IsArray()
         @ArrayLength(3)
         @ArrayUnique()
-        coordinates: number[];
+        coordinates!: number[];
       }
 
       const dto = new TestDto();
@@ -608,7 +608,7 @@ describe('Array Property Decorators', () => {
         @IsArray()
         @ArrayNotEmpty()
         @ArrayContains('admin')
-        roles: string[];
+        roles!: string[];
       }
 
       const dto = new TestDto();
@@ -623,7 +623,7 @@ describe('Array Property Decorators', () => {
         @IsArray()
         @ArrayNotEmpty()
         @ArrayContains('admin')
-        roles: string[];
+        roles!: string[];
       }
 
       const dto = new TestDto();
@@ -639,7 +639,7 @@ describe('Array Property Decorators', () => {
         @ArrayMinSize(1)
         @ArrayMaxSize(100)
         @ArrayNotEmpty()
-        users: any[];
+        users!: any[];
       }
 
       const dto = new TestDto();

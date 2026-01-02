@@ -7,22 +7,27 @@ import { array } from '@validators/array';
 
 import { createPropertyDecorator } from '../../core/factory';
 
+import type { ValidationOptions } from '#types/index';
+
 /**
- * Validates maximum array length
+ * Validates that array has at most the specified number of items
  *
- * @param max - Maximum number of items
+ * @param maxSize - Maximum array size
+ * @param options - Validation options
  * @decorator
  *
  * @example
+ *
  * ```typescript
- * @Validate()
- * class Post {
- *   @IsArray()
+ * class Example {
  *   @ArrayMaxSize(10)
- *   tags: string[];
+ *   items: any[];
  * }
  * ```
  */
-export function ArrayMaxSize(max: number): PropertyDecorator {
-  return createPropertyDecorator((maxLength: number) => array().max(maxLength))(max);
+export function ArrayMaxSize(maxSize: number, options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((max: number, opts?: ValidationOptions) => array().max(max, opts))(
+    maxSize,
+    options,
+  );
 }

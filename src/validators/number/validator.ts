@@ -18,7 +18,7 @@ import {
   SafeIntegerStrategy,
 } from './strategies';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /**
  * Number validator with fluent API
@@ -62,13 +62,17 @@ export class NumberValidator extends BaseValidator<unknown, number> {
   // -------------------------------------------------------------------------
 
   /** Minimum value (inclusive) */
-  min(minimum: number): this {
-    return this.addStrategy(new MinStrategy(minimum));
+  min(minimum: number, options?: ValidationOptions): this {
+    const strategy = new MinStrategy(minimum);
+    if (options?.message) strategy.withMessage(options.message);
+    return this.addStrategy(strategy);
   }
 
   /** Maximum value (inclusive) */
-  max(maximum: number): this {
-    return this.addStrategy(new MaxStrategy(maximum));
+  max(maximum: number, options?: ValidationOptions): this {
+    const strategy = new MaxStrategy(maximum);
+    if (options?.message) strategy.withMessage(options.message);
+    return this.addStrategy(strategy);
   }
 
   /** Value must be within range (inclusive) */
@@ -86,8 +90,10 @@ export class NumberValidator extends BaseValidator<unknown, number> {
   // -------------------------------------------------------------------------
 
   /** Must be an integer */
-  integer(): this {
-    return this.addStrategy(new IntegerStrategy());
+  integer(options?: ValidationOptions): this {
+    const strategy = new IntegerStrategy();
+    if (options?.message) strategy.withMessage(options.message);
+    return this.addStrategy(strategy);
   }
 
   /** Alias for integer */
@@ -96,13 +102,17 @@ export class NumberValidator extends BaseValidator<unknown, number> {
   }
 
   /** Must be a finite number */
-  finite(): this {
-    return this.addStrategy(new FiniteStrategy());
+  finite(options?: ValidationOptions): this {
+    const strategy = new FiniteStrategy();
+    if (options?.message) strategy.withMessage(options.message);
+    return this.addStrategy(strategy);
   }
 
   /** Must be a safe integer */
-  safe(): this {
-    return this.addStrategy(new SafeIntegerStrategy());
+  safe(options?: ValidationOptions): this {
+    const strategy = new SafeIntegerStrategy();
+    if (options?.message) strategy.withMessage(options.message);
+    return this.addStrategy(strategy);
   }
 
   /** Alias for safe */
@@ -115,13 +125,17 @@ export class NumberValidator extends BaseValidator<unknown, number> {
   // -------------------------------------------------------------------------
 
   /** Must be positive (> 0) */
-  positive(): this {
-    return this.addStrategy(new PositiveStrategy());
+  positive(options?: ValidationOptions): this {
+    const strategy = new PositiveStrategy();
+    if (options?.message) strategy.withMessage(options.message);
+    return this.addStrategy(strategy);
   }
 
   /** Must be negative (< 0) */
-  negative(): this {
-    return this.addStrategy(new NegativeStrategy());
+  negative(options?: ValidationOptions): this {
+    const strategy = new NegativeStrategy();
+    if (options?.message) strategy.withMessage(options.message);
+    return this.addStrategy(strategy);
   }
 
   /** Must be non-negative (>= 0) */
@@ -149,8 +163,10 @@ export class NumberValidator extends BaseValidator<unknown, number> {
   // -------------------------------------------------------------------------
 
   /** Must be a multiple of the given factor */
-  multipleOf(factor: number): this {
-    return this.addStrategy(new MultipleOfStrategy(factor));
+  multipleOf(factor: number, options?: ValidationOptions): this {
+    const strategy = new MultipleOfStrategy(factor);
+    if (options?.message) strategy.withMessage(options.message);
+    return this.addStrategy(strategy);
   }
 
   /** Alias for multipleOf */

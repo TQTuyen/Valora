@@ -5,7 +5,9 @@
 
 import { date } from '@validators/date';
 
-import { createTypeDecorator } from '../../core/factory';
+import { createPropertyDecorator } from '../../core/factory';
+
+import type { ValidationOptions } from '#types/index';
 
 /**
  * Validates that the value is a date
@@ -21,6 +23,12 @@ import { createTypeDecorator } from '../../core/factory';
  * }
  * ```
  */
-export function IsDate(): PropertyDecorator {
-  return createTypeDecorator(() => date())();
+export function IsDate(options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((opts?: ValidationOptions) => {
+    const v = date();
+    if (opts?.message) {
+      v.withMessage(opts.message);
+    }
+    return v;
+  })(options);
 }

@@ -5,10 +5,12 @@
 
 import { number } from '@validators/number';
 
-import { createTypeDecorator } from '../../core/factory';
+import { createPropertyDecorator } from '../../core/factory';
+
+import type { ValidationOptions } from '#types/index';
 
 /**
- * Validates that the value is an integer
+ * Validates that value is an integer
  *
  * @decorator
  *
@@ -21,6 +23,6 @@ import { createTypeDecorator } from '../../core/factory';
  * }
  * ```
  */
-export function IsInt(): PropertyDecorator {
-  return createTypeDecorator(() => number().integer())();
+export function IsInt(options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((opts?: ValidationOptions) => number().integer(opts))(options);
 }

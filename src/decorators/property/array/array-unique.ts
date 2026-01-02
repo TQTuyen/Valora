@@ -5,23 +5,24 @@
 
 import { array } from '@validators/array';
 
-import { createTypeDecorator } from '../../core/factory';
+import { createPropertyDecorator } from '../../core/factory';
+
+import type { ValidationOptions } from '#types/index';
 
 /**
- * Validates that all array items are unique
+ * Validates that all items in array are unique
  *
  * @decorator
  *
  * @example
+ *
  * ```typescript
- * @Validate()
- * class User {
- *   @IsArray()
+ * class Example {
  *   @ArrayUnique()
- *   emails: string[];
+ *   items: any[];
  * }
  * ```
  */
-export function ArrayUnique(): PropertyDecorator {
-  return createTypeDecorator(() => array().unique())();
+export function ArrayUnique(options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((opts?: ValidationOptions) => array().unique(opts))(options);
 }
