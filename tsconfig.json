@@ -37,6 +37,7 @@
     "paths": {
       "@/*": ["src/*"],
       "@core/*": ["src/core/*"],
+      "@decorators/*": ["src/decorators/*"],
       "@validators/*": ["src/validators/*"],
       "@notification/*": ["src/notification/*"],
       "@adapters/*": ["src/adapters/*"],

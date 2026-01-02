@@ -5,61 +5,112 @@
   "author": "TQTos",
   "license": "MIT",
   "type": "module",
+  "sideEffects": false,
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./decorators": {
+      "types": "./dist/decorators/index.d.ts",
+      "import": "./dist/decorators/index.js",
+      "require": "./dist/decorators/index.js",
+      "default": "./dist/decorators/index.js"
     },
     "./core": {
       "types": "./dist/core/index.d.ts",
-      "import": "./dist/core/index.js"
+      "import": "./dist/core/index.js",
+      "require": "./dist/core/index.js",
+      "default": "./dist/core/index.js"
     },
     "./validators": {
       "types": "./dist/validators/index.d.ts",
-      "import": "./dist/validators/index.js"
+      "import": "./dist/validators/index.js",
+      "require": "./dist/validators/index.js",
+      "default": "./dist/validators/index.js"
     },
     "./validators/*": {
       "types": "./dist/validators/*/index.d.ts",
-      "import": "./dist/validators/*/index.js"
+      "import": "./dist/validators/*/index.js",
+      "require": "./dist/validators/*/index.js",
+      "default": "./dist/validators/*/index.js"
     },
     "./notification": {
       "types": "./dist/notification/index.d.ts",
-      "import": "./dist/notification/index.js"
+      "import": "./dist/notification/index.js",
+      "require": "./dist/notification/index.js",
+      "default": "./dist/notification/index.js"
+    },
+    "./adapters": {
+      "types": "./dist/adapters/index.d.ts",
+      "import": "./dist/adapters/index.js",
+      "require": "./dist/adapters/index.js",
+      "default": "./dist/adapters/index.js"
     },
     "./adapters/react": {
       "types": "./dist/adapters/react/index.d.ts",
-      "import": "./dist/adapters/react/index.js"
+      "import": "./dist/adapters/react/index.js",
+      "require": "./dist/adapters/react/index.js",
+      "default": "./dist/adapters/react/index.js"
     },
     "./adapters/vue": {
       "types": "./dist/adapters/vue/index.d.ts",
-      "import": "./dist/adapters/vue/index.js"
+      "import": "./dist/adapters/vue/index.js",
+      "require": "./dist/adapters/vue/index.js",
+      "default": "./dist/adapters/vue/index.js"
     },
     "./adapters/svelte": {
       "types": "./dist/adapters/svelte/index.d.ts",
-      "import": "./dist/adapters/svelte/index.js"
+      "import": "./dist/adapters/svelte/index.js",
+      "require": "./dist/adapters/svelte/index.js",
+      "default": "./dist/adapters/svelte/index.js"
     },
     "./adapters/solid": {
       "types": "./dist/adapters/solid/index.d.ts",
-      "import": "./dist/adapters/solid/index.js"
+      "import": "./dist/adapters/solid/index.js",
+      "require": "./dist/adapters/solid/index.js",
+      "default": "./dist/adapters/solid/index.js"
     },
     "./adapters/vanilla": {
       "types": "./dist/adapters/vanilla/index.d.ts",
-      "import": "./dist/adapters/vanilla/index.js"
+      "import": "./dist/adapters/vanilla/index.js",
+      "require": "./dist/adapters/vanilla/index.js",
+      "default": "./dist/adapters/vanilla/index.js"
+    },
+    "./plugins": {
+      "types": "./dist/plugins/index.d.ts",
+      "import": "./dist/plugins/index.js",
+      "require": "./dist/plugins/index.js",
+      "default": "./dist/plugins/index.js"
     },
     "./plugins/*": {
       "types": "./dist/plugins/*/index.d.ts",
-      "import": "./dist/plugins/*/index.js"
+      "import": "./dist/plugins/*/index.js",
+      "require": "./dist/plugins/*/index.js",
+      "default": "./dist/plugins/*/index.js"
     },
     "./schema": {
       "types": "./dist/schema/index.d.ts",
-      "import": "./dist/schema/index.js"
+      "import": "./dist/schema/index.js",
+      "require": "./dist/schema/index.js",
+      "default": "./dist/schema/index.js"
+    },
+    "./types": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/types/index.js",
+      "require": "./dist/types/index.js",
+      "default": "./dist/types/index.js"
     },
     "./utils": {
       "types": "./dist/utils/index.d.ts",
-      "import": "./dist/utils/index.js"
+      "import": "./dist/utils/index.js",
+      "require": "./dist/utils/index.js",
+      "default": "./dist/utils/index.js"
     }
   },
   "files": [
