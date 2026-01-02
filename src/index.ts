@@ -72,23 +72,40 @@ export {
   array,
   // Array
   ArrayValidator,
+  // Async
+  async,
+  AsyncStrategy,
+  type AsyncValidationFn,
+  AsyncValidator,
   // Base
   BaseValidator,
   // Boolean
   boolean,
   BooleanValidator,
+  // Business
+  business,
+  BusinessValidator,
   compare,
   // Comparison
   ComparisonValidator,
-  // Date
+  type CreditCardStrategy,
+  CreditCardType,
   date,
+  // Date
   DateValidator,
+  DebounceStrategy,
+  // File
+  file,
+  FILE_SIZE_UNITS,
+  type FileExtensionStrategy,
+  FileValidator,
   ifThenElse,
   intersection,
   lazy,
   literal,
   // Logic Combinators
   LogicValidator,
+  MIME_TYPES,
   nativeEnum,
   negate,
   not,
@@ -105,9 +122,13 @@ export {
   optional,
   or,
   ref,
+  type RetryConfig,
+  RetryStrategy,
+  slugify,
   // String
   string,
   StringValidator,
+  TimeoutStrategy,
   union,
   when,
   xor,
@@ -135,15 +156,101 @@ export {
 } from './notification/index';
 
 // -------------------------------------------------------------------------
-// i18n Plugin
+// Decorators (Class-based validation)
 // -------------------------------------------------------------------------
+export {
+  Validate,
+  validateClassInstance,
+  type ValidateOptions,
+  ValoraValidationError,
+} from './decorators/class/index';
+
+// Property Decorators - Export all from decorators/property
+export * from './decorators/property/index';
+
+// -------------------------------------------------------------------------
+// Plugins
+// -------------------------------------------------------------------------
+// i18n Plugin
 export { configureI18n, getI18n, type I18nConfig, I18nPlugin, setI18n } from './plugins/i18n/index';
-export type { LocaleMessages, MessageParams } from './types/index';
+
+// Transform Plugin
+export {
+  arrayTransforms,
+  // Composition utilities
+  attempt,
+  chain,
+  compose,
+  configureTransform,
+  dateTransforms,
+  debounce,
+  getTransformPlugin,
+  memoize,
+  numberTransforms,
+  objectTransforms,
+  pipe,
+  sequence,
+  stringTransforms,
+  tap,
+  TransformPlugin,
+  when as whenTransform,
+} from './plugins/transform/index';
+
+// Transform Plugin Types
+export type {
+  ITransformPlugin,
+  NamedTransformer,
+  SameTypeTransformer,
+  Transformer,
+  TransformerMeta,
+  TransformOptions,
+} from './plugins/transform/types';
 
 // -------------------------------------------------------------------------
 // Types
 // -------------------------------------------------------------------------
 export type {
+  // Utility Types
+  DeepPartial,
+  DeepReadonly,
+  // i18n Types
+  II18nPlugin,
+  // Pattern Types
+  IValidationHandler,
+  IValidationPipeline,
+  LocaleMessages,
+  MessageParams,
+  Primitive,
+  SupportedLocale,
+} from './types/index';
+
+// -------------------------------------------------------------------------
+// Framework Adapters
+// -------------------------------------------------------------------------
+export {
+  BaseFrameworkAdapter,
+  canSubmit,
+  formatErrors,
+  getFieldBindings,
+  getFirstError,
+  hasFieldErrors,
+  type IFrameworkAdapter,
+  shouldShowErrors,
+  type ValidatorMap,
+} from './adapters/index';
+
+// Note: Vanilla adapter will be exported once implementation is complete
+// export { VanillaAdapter, createVanillaAdapter } from './adapters/index';
+
+// -------------------------------------------------------------------------
+// Additional Core Types (from types/index)
+// -------------------------------------------------------------------------
+export type {
+  // Async Validator Types
+  IAsyncValidationStrategy,
+  IAsyncValidator,
+  // Schema Types
+  InferSchema,
   // Observer Pattern Types
   IValidationObserver,
   IValidationStrategy,
@@ -151,6 +258,7 @@ export type {
   IValidator,
   // Factory Pattern Types
   IValidatorFactory,
+  SchemaDefinition,
   ValidationContext,
   ValidationError,
   ValidationEvent,
