@@ -2,6 +2,9 @@
 
 **Production-grade TypeScript-first validation framework with class-validator style decorators**
 
+🔗 **GitHub**: [https://github.com/TQTuyen/Valora](https://github.com/TQTuyen/Valora)  
+📦 **npm**: [https://www.npmjs.com/package/@tqtos/valora](https://www.npmjs.com/package/@tqtos/valora)
+
 A modern, tree-shakeable validation framework for JavaScript/TypeScript with dual APIs: elegant class decorators and chainable fluent validators.
 
 ## ✨ Features
