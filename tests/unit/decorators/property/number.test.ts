@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { validateClassInstance } from '@/decorators/class';
 import {
   IsFinite,
   IsInt,
@@ -12,14 +13,13 @@ import {
   Min,
   Range,
 } from '@/decorators/property/number';
-import { validateClassInstance } from '@/decorators/class';
 
 describe('Number Property Decorators', () => {
   describe('@IsNumber', () => {
     it('should pass when value is a number', () => {
       class TestDto {
         @IsNumber()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -32,7 +32,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value is zero', () => {
       class TestDto {
         @IsNumber()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -45,7 +45,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value is negative', () => {
       class TestDto {
         @IsNumber()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -58,7 +58,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value is a decimal', () => {
       class TestDto {
         @IsNumber()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -71,7 +71,7 @@ describe('Number Property Decorators', () => {
     it('should fail when value is not a number', () => {
       class TestDto {
         @IsNumber()
-        value: any;
+        value!: any;
       }
 
       const dto = new TestDto();
@@ -80,13 +80,13 @@ describe('Number Property Decorators', () => {
       const result = validateClassInstance(dto);
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].path).toEqual(['value']);
+      expect(result.errors[0]?.path).toEqual(['value']);
     });
 
     it('should fail when value is NaN', () => {
       class TestDto {
         @IsNumber()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -99,7 +99,7 @@ describe('Number Property Decorators', () => {
     it('should accept custom error message', () => {
       class TestDto {
         @IsNumber({ message: 'Value must be numeric' })
-        value: any;
+        value!: any;
       }
 
       const dto = new TestDto();
@@ -115,7 +115,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value is an integer', () => {
       class TestDto {
         @IsInt()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -128,7 +128,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value is zero', () => {
       class TestDto {
         @IsInt()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -141,7 +141,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value is negative integer', () => {
       class TestDto {
         @IsInt()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -154,7 +154,7 @@ describe('Number Property Decorators', () => {
     it('should fail when value is a decimal', () => {
       class TestDto {
         @IsInt()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -168,7 +168,7 @@ describe('Number Property Decorators', () => {
     it('should fail when value is not a number', () => {
       class TestDto {
         @IsInt()
-        value: any;
+        value!: any;
       }
 
       const dto = new TestDto();
@@ -183,7 +183,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value is a finite number', () => {
       class TestDto {
         @IsFinite()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -196,7 +196,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value is zero', () => {
       class TestDto {
         @IsFinite()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -209,7 +209,7 @@ describe('Number Property Decorators', () => {
     it('should fail when value is Infinity', () => {
       class TestDto {
         @IsFinite()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -223,7 +223,7 @@ describe('Number Property Decorators', () => {
     it('should fail when value is -Infinity', () => {
       class TestDto {
         @IsFinite()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -236,7 +236,7 @@ describe('Number Property Decorators', () => {
     it('should fail when value is NaN', () => {
       class TestDto {
         @IsFinite()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -251,7 +251,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value is a safe integer', () => {
       class TestDto {
         @IsSafeInt()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -264,7 +264,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value is Number.MAX_SAFE_INTEGER', () => {
       class TestDto {
         @IsSafeInt()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -277,7 +277,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value is Number.MIN_SAFE_INTEGER', () => {
       class TestDto {
         @IsSafeInt()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -290,7 +290,7 @@ describe('Number Property Decorators', () => {
     it('should fail when value exceeds MAX_SAFE_INTEGER', () => {
       class TestDto {
         @IsSafeInt()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -304,7 +304,7 @@ describe('Number Property Decorators', () => {
     it('should fail when value is below MIN_SAFE_INTEGER', () => {
       class TestDto {
         @IsSafeInt()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -317,7 +317,7 @@ describe('Number Property Decorators', () => {
     it('should fail when value is a decimal', () => {
       class TestDto {
         @IsSafeInt()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -332,7 +332,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value is greater than minimum', () => {
       class TestDto {
         @Min(10)
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -345,7 +345,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value equals minimum', () => {
       class TestDto {
         @Min(10)
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -358,7 +358,7 @@ describe('Number Property Decorators', () => {
     it('should fail when value is less than minimum', () => {
       class TestDto {
         @Min(10)
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -367,13 +367,13 @@ describe('Number Property Decorators', () => {
       const result = validateClassInstance(dto);
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].path).toEqual(['value']);
+      expect(result.errors[0]?.path).toEqual(['value']);
     });
 
     it('should work with negative numbers', () => {
       class TestDto {
         @Min(-10)
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -386,7 +386,7 @@ describe('Number Property Decorators', () => {
     it('should accept custom error message', () => {
       class TestDto {
         @Min(10, { message: 'Value must be at least 10' })
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -402,7 +402,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value is less than maximum', () => {
       class TestDto {
         @Max(100)
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -415,7 +415,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value equals maximum', () => {
       class TestDto {
         @Max(100)
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -428,7 +428,7 @@ describe('Number Property Decorators', () => {
     it('should fail when value is greater than maximum', () => {
       class TestDto {
         @Max(100)
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -437,13 +437,13 @@ describe('Number Property Decorators', () => {
       const result = validateClassInstance(dto);
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].path).toEqual(['value']);
+      expect(result.errors[0]?.path).toEqual(['value']);
     });
 
     it('should work with negative numbers', () => {
       class TestDto {
         @Max(-10)
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -458,7 +458,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value is within range', () => {
       class TestDto {
         @Range(10, 100)
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -471,7 +471,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value equals minimum', () => {
       class TestDto {
         @Range(10, 100)
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -484,7 +484,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value equals maximum', () => {
       class TestDto {
         @Range(10, 100)
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -497,7 +497,7 @@ describe('Number Property Decorators', () => {
     it('should fail when value is below range', () => {
       class TestDto {
         @Range(10, 100)
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -511,7 +511,7 @@ describe('Number Property Decorators', () => {
     it('should fail when value is above range', () => {
       class TestDto {
         @Range(10, 100)
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -524,7 +524,7 @@ describe('Number Property Decorators', () => {
     it('should work with negative ranges', () => {
       class TestDto {
         @Range(-100, -10)
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -539,7 +539,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value is positive', () => {
       class TestDto {
         @IsPositive()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -552,7 +552,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value is a small positive decimal', () => {
       class TestDto {
         @IsPositive()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -565,7 +565,7 @@ describe('Number Property Decorators', () => {
     it('should fail when value is zero', () => {
       class TestDto {
         @IsPositive()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -579,7 +579,7 @@ describe('Number Property Decorators', () => {
     it('should fail when value is negative', () => {
       class TestDto {
         @IsPositive()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -594,7 +594,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value is negative', () => {
       class TestDto {
         @IsNegative()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -607,7 +607,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value is a small negative decimal', () => {
       class TestDto {
         @IsNegative()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -620,7 +620,7 @@ describe('Number Property Decorators', () => {
     it('should fail when value is zero', () => {
       class TestDto {
         @IsNegative()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -634,7 +634,7 @@ describe('Number Property Decorators', () => {
     it('should fail when value is positive', () => {
       class TestDto {
         @IsNegative()
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -649,7 +649,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value is a multiple of the divisor', () => {
       class TestDto {
         @IsMultipleOf(5)
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -662,7 +662,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value equals the divisor', () => {
       class TestDto {
         @IsMultipleOf(5)
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -675,7 +675,7 @@ describe('Number Property Decorators', () => {
     it('should pass when value is zero', () => {
       class TestDto {
         @IsMultipleOf(5)
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -688,7 +688,7 @@ describe('Number Property Decorators', () => {
     it('should fail when value is not a multiple', () => {
       class TestDto {
         @IsMultipleOf(5)
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -702,7 +702,7 @@ describe('Number Property Decorators', () => {
     it('should work with decimal divisors', () => {
       class TestDto {
         @IsMultipleOf(0.5)
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -715,7 +715,7 @@ describe('Number Property Decorators', () => {
     it('should work with negative multiples', () => {
       class TestDto {
         @IsMultipleOf(3)
-        value: number;
+        value!: number;
       }
 
       const dto = new TestDto();
@@ -732,7 +732,7 @@ describe('Number Property Decorators', () => {
         @IsInt()
         @Min(0)
         @Max(150)
-        age: number;
+        age!: number;
       }
 
       const dto = new UserDto();
@@ -747,7 +747,7 @@ describe('Number Property Decorators', () => {
         @IsInt()
         @Min(0)
         @Max(150)
-        age: number;
+        age!: number;
       }
 
       const dto = new UserDto();
@@ -762,7 +762,7 @@ describe('Number Property Decorators', () => {
       class ProductDto {
         @IsPositive()
         @Max(10000)
-        price: number;
+        price!: number;
       }
 
       const dto = new ProductDto();
@@ -777,7 +777,7 @@ describe('Number Property Decorators', () => {
         @IsInt()
         @IsPositive()
         @IsMultipleOf(5)
-        quantity: number;
+        quantity!: number;
       }
 
       const dto = new OrderDto();
@@ -792,7 +792,7 @@ describe('Number Property Decorators', () => {
         @IsInt()
         @IsPositive()
         @IsMultipleOf(5)
-        quantity: number;
+        quantity!: number;
       }
 
       const dto = new OrderDto();
@@ -806,7 +806,7 @@ describe('Number Property Decorators', () => {
       class SensorDto {
         @IsFinite()
         @Range(-50, 100)
-        temperature: number;
+        temperature!: number;
       }
 
       const dto = new SensorDto();

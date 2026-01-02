@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { validateClassInstance } from '@/decorators/class';
 import {
   Contains,
   EndsWith,
@@ -19,14 +20,13 @@ import {
   NotEmpty,
   StartsWith,
 } from '@/decorators/property/string';
-import { validateClassInstance } from '@/decorators/class';
 
 describe('String Property Decorators', () => {
   describe('@IsString', () => {
     it('should pass for valid string', () => {
       class TestDto {
         @IsString()
-        name: string;
+        name!: string;
       }
 
       const dto = new TestDto();
@@ -47,7 +47,7 @@ describe('String Property Decorators', () => {
 
       const result = validateClassInstance(dto);
       expect(result.success).toBe(false);
-      expect(result.errors[0].path).toEqual(['name']);
+      expect(result.errors[0]?.path).toEqual(['name']);
     });
 
     it('should fail for boolean', () => {
@@ -79,7 +79,7 @@ describe('String Property Decorators', () => {
     it('should pass for empty string', () => {
       class TestDto {
         @IsString()
-        name: string;
+        name!: string;
       }
 
       const dto = new TestDto();
@@ -94,7 +94,7 @@ describe('String Property Decorators', () => {
     it('should pass when string length meets minimum', () => {
       class TestDto {
         @MinLength(3)
-        name: string;
+        name!: string;
       }
 
       const dto = new TestDto();
@@ -107,7 +107,7 @@ describe('String Property Decorators', () => {
     it('should pass when string length equals minimum', () => {
       class TestDto {
         @MinLength(4)
-        name: string;
+        name!: string;
       }
 
       const dto = new TestDto();
@@ -120,7 +120,7 @@ describe('String Property Decorators', () => {
     it('should fail when string is too short', () => {
       class TestDto {
         @MinLength(5)
-        name: string;
+        name!: string;
       }
 
       const dto = new TestDto();
@@ -128,13 +128,13 @@ describe('String Property Decorators', () => {
 
       const result = validateClassInstance(dto);
       expect(result.success).toBe(false);
-      expect(result.errors[0].path).toEqual(['name']);
+      expect(result.errors[0]?.path).toEqual(['name']);
     });
 
     it('should accept custom error message', () => {
       class TestDto {
         @MinLength(5, { message: 'Name too short' })
-        name: string;
+        name!: string;
       }
 
       const dto = new TestDto();
@@ -150,7 +150,7 @@ describe('String Property Decorators', () => {
     it('should pass when string length is within maximum', () => {
       class TestDto {
         @MaxLength(10)
-        name: string;
+        name!: string;
       }
 
       const dto = new TestDto();
@@ -163,7 +163,7 @@ describe('String Property Decorators', () => {
     it('should pass when string length equals maximum', () => {
       class TestDto {
         @MaxLength(4)
-        name: string;
+        name!: string;
       }
 
       const dto = new TestDto();
@@ -176,7 +176,7 @@ describe('String Property Decorators', () => {
     it('should fail when string is too long', () => {
       class TestDto {
         @MaxLength(3)
-        name: string;
+        name!: string;
       }
 
       const dto = new TestDto();
@@ -184,7 +184,7 @@ describe('String Property Decorators', () => {
 
       const result = validateClassInstance(dto);
       expect(result.success).toBe(false);
-      expect(result.errors[0].path).toEqual(['name']);
+      expect(result.errors[0]?.path).toEqual(['name']);
     });
   });
 
@@ -192,7 +192,7 @@ describe('String Property Decorators', () => {
     it('should pass when string length is exact', () => {
       class TestDto {
         @Length(4)
-        code: string;
+        code!: string;
       }
 
       const dto = new TestDto();
@@ -205,7 +205,7 @@ describe('String Property Decorators', () => {
     it('should fail when string is too short', () => {
       class TestDto {
         @Length(4)
-        code: string;
+        code!: string;
       }
 
       const dto = new TestDto();
@@ -218,7 +218,7 @@ describe('String Property Decorators', () => {
     it('should fail when string is too long', () => {
       class TestDto {
         @Length(4)
-        code: string;
+        code!: string;
       }
 
       const dto = new TestDto();
@@ -233,7 +233,7 @@ describe('String Property Decorators', () => {
     it('should pass for valid email', () => {
       class TestDto {
         @IsEmail()
-        email: string;
+        email!: string;
       }
 
       const dto = new TestDto();
@@ -246,7 +246,7 @@ describe('String Property Decorators', () => {
     it('should pass for email with subdomain', () => {
       class TestDto {
         @IsEmail()
-        email: string;
+        email!: string;
       }
 
       const dto = new TestDto();
@@ -259,7 +259,7 @@ describe('String Property Decorators', () => {
     it('should pass for email with plus sign', () => {
       class TestDto {
         @IsEmail()
-        email: string;
+        email!: string;
       }
 
       const dto = new TestDto();
@@ -272,7 +272,7 @@ describe('String Property Decorators', () => {
     it('should fail for invalid email format', () => {
       class TestDto {
         @IsEmail()
-        email: string;
+        email!: string;
       }
 
       const dto = new TestDto();
@@ -285,7 +285,7 @@ describe('String Property Decorators', () => {
     it('should fail for email without @', () => {
       class TestDto {
         @IsEmail()
-        email: string;
+        email!: string;
       }
 
       const dto = new TestDto();
@@ -298,7 +298,7 @@ describe('String Property Decorators', () => {
     it('should fail for email without domain', () => {
       class TestDto {
         @IsEmail()
-        email: string;
+        email!: string;
       }
 
       const dto = new TestDto();
@@ -313,7 +313,7 @@ describe('String Property Decorators', () => {
     it('should pass for valid HTTP URL', () => {
       class TestDto {
         @IsUrl()
-        website: string;
+        website!: string;
       }
 
       const dto = new TestDto();
@@ -326,7 +326,7 @@ describe('String Property Decorators', () => {
     it('should pass for valid HTTPS URL', () => {
       class TestDto {
         @IsUrl()
-        website: string;
+        website!: string;
       }
 
       const dto = new TestDto();
@@ -339,7 +339,7 @@ describe('String Property Decorators', () => {
     it('should pass for URL with path', () => {
       class TestDto {
         @IsUrl()
-        website: string;
+        website!: string;
       }
 
       const dto = new TestDto();
@@ -352,7 +352,7 @@ describe('String Property Decorators', () => {
     it('should pass for URL with query string', () => {
       class TestDto {
         @IsUrl()
-        website: string;
+        website!: string;
       }
 
       const dto = new TestDto();
@@ -365,7 +365,7 @@ describe('String Property Decorators', () => {
     it('should fail for invalid URL', () => {
       class TestDto {
         @IsUrl()
-        website: string;
+        website!: string;
       }
 
       const dto = new TestDto();
@@ -380,7 +380,7 @@ describe('String Property Decorators', () => {
     it('should pass for valid UUID v4', () => {
       class TestDto {
         @IsUuid()
-        id: string;
+        id!: string;
       }
 
       const dto = new TestDto();
@@ -393,7 +393,7 @@ describe('String Property Decorators', () => {
     it('should fail for invalid UUID', () => {
       class TestDto {
         @IsUuid()
-        id: string;
+        id!: string;
       }
 
       const dto = new TestDto();
@@ -406,7 +406,7 @@ describe('String Property Decorators', () => {
     it('should fail for UUID without dashes', () => {
       class TestDto {
         @IsUuid()
-        id: string;
+        id!: string;
       }
 
       const dto = new TestDto();
@@ -421,7 +421,7 @@ describe('String Property Decorators', () => {
     it('should pass for alphabetic string', () => {
       class TestDto {
         @IsAlpha()
-        name: string;
+        name!: string;
       }
 
       const dto = new TestDto();
@@ -434,7 +434,7 @@ describe('String Property Decorators', () => {
     it('should fail for string with numbers', () => {
       class TestDto {
         @IsAlpha()
-        name: string;
+        name!: string;
       }
 
       const dto = new TestDto();
@@ -447,7 +447,7 @@ describe('String Property Decorators', () => {
     it('should fail for string with special characters', () => {
       class TestDto {
         @IsAlpha()
-        name: string;
+        name!: string;
       }
 
       const dto = new TestDto();
@@ -460,7 +460,7 @@ describe('String Property Decorators', () => {
     it('should fail for string with spaces', () => {
       class TestDto {
         @IsAlpha()
-        name: string;
+        name!: string;
       }
 
       const dto = new TestDto();
@@ -475,7 +475,7 @@ describe('String Property Decorators', () => {
     it('should pass for alphanumeric string', () => {
       class TestDto {
         @IsAlphanumeric()
-        username: string;
+        username!: string;
       }
 
       const dto = new TestDto();
@@ -488,7 +488,7 @@ describe('String Property Decorators', () => {
     it('should pass for only letters', () => {
       class TestDto {
         @IsAlphanumeric()
-        username: string;
+        username!: string;
       }
 
       const dto = new TestDto();
@@ -501,7 +501,7 @@ describe('String Property Decorators', () => {
     it('should pass for only numbers', () => {
       class TestDto {
         @IsAlphanumeric()
-        username: string;
+        username!: string;
       }
 
       const dto = new TestDto();
@@ -514,7 +514,7 @@ describe('String Property Decorators', () => {
     it('should fail for string with special characters', () => {
       class TestDto {
         @IsAlphanumeric()
-        username: string;
+        username!: string;
       }
 
       const dto = new TestDto();
@@ -527,7 +527,7 @@ describe('String Property Decorators', () => {
     it('should fail for string with spaces', () => {
       class TestDto {
         @IsAlphanumeric()
-        username: string;
+        username!: string;
       }
 
       const dto = new TestDto();
@@ -542,7 +542,7 @@ describe('String Property Decorators', () => {
     it('should pass for numeric string', () => {
       class TestDto {
         @IsNumeric()
-        code: string;
+        code!: string;
       }
 
       const dto = new TestDto();
@@ -555,7 +555,7 @@ describe('String Property Decorators', () => {
     it('should fail for string with letters', () => {
       class TestDto {
         @IsNumeric()
-        code: string;
+        code!: string;
       }
 
       const dto = new TestDto();
@@ -568,7 +568,7 @@ describe('String Property Decorators', () => {
     it('should pass for decimal numbers', () => {
       class TestDto {
         @IsNumeric()
-        code: string;
+        code!: string;
       }
 
       const dto = new TestDto();
@@ -583,7 +583,7 @@ describe('String Property Decorators', () => {
     it('should pass for lowercase string', () => {
       class TestDto {
         @IsLowercase()
-        text: string;
+        text!: string;
       }
 
       const dto = new TestDto();
@@ -596,7 +596,7 @@ describe('String Property Decorators', () => {
     it('should fail for string with uppercase letters', () => {
       class TestDto {
         @IsLowercase()
-        text: string;
+        text!: string;
       }
 
       const dto = new TestDto();
@@ -609,7 +609,7 @@ describe('String Property Decorators', () => {
     it('should pass for string with numbers', () => {
       class TestDto {
         @IsLowercase()
-        text: string;
+        text!: string;
       }
 
       const dto = new TestDto();
@@ -624,7 +624,7 @@ describe('String Property Decorators', () => {
     it('should pass for uppercase string', () => {
       class TestDto {
         @IsUppercase()
-        text: string;
+        text!: string;
       }
 
       const dto = new TestDto();
@@ -637,7 +637,7 @@ describe('String Property Decorators', () => {
     it('should fail for string with lowercase letters', () => {
       class TestDto {
         @IsUppercase()
-        text: string;
+        text!: string;
       }
 
       const dto = new TestDto();
@@ -650,7 +650,7 @@ describe('String Property Decorators', () => {
     it('should pass for string with numbers', () => {
       class TestDto {
         @IsUppercase()
-        text: string;
+        text!: string;
       }
 
       const dto = new TestDto();
@@ -665,7 +665,7 @@ describe('String Property Decorators', () => {
     it('should pass when string contains substring', () => {
       class TestDto {
         @Contains('world')
-        text: string;
+        text!: string;
       }
 
       const dto = new TestDto();
@@ -678,7 +678,7 @@ describe('String Property Decorators', () => {
     it('should fail when string does not contain substring', () => {
       class TestDto {
         @Contains('world')
-        text: string;
+        text!: string;
       }
 
       const dto = new TestDto();
@@ -691,7 +691,7 @@ describe('String Property Decorators', () => {
     it('should be case-sensitive by default', () => {
       class TestDto {
         @Contains('WORLD')
-        text: string;
+        text!: string;
       }
 
       const dto = new TestDto();
@@ -706,7 +706,7 @@ describe('String Property Decorators', () => {
     it('should pass when string starts with prefix', () => {
       class TestDto {
         @StartsWith('hello')
-        text: string;
+        text!: string;
       }
 
       const dto = new TestDto();
@@ -719,7 +719,7 @@ describe('String Property Decorators', () => {
     it('should fail when string does not start with prefix', () => {
       class TestDto {
         @StartsWith('hello')
-        text: string;
+        text!: string;
       }
 
       const dto = new TestDto();
@@ -732,7 +732,7 @@ describe('String Property Decorators', () => {
     it('should be case-sensitive', () => {
       class TestDto {
         @StartsWith('Hello')
-        text: string;
+        text!: string;
       }
 
       const dto = new TestDto();
@@ -747,7 +747,7 @@ describe('String Property Decorators', () => {
     it('should pass when string ends with suffix', () => {
       class TestDto {
         @EndsWith('world')
-        text: string;
+        text!: string;
       }
 
       const dto = new TestDto();
@@ -760,7 +760,7 @@ describe('String Property Decorators', () => {
     it('should fail when string does not end with suffix', () => {
       class TestDto {
         @EndsWith('world')
-        text: string;
+        text!: string;
       }
 
       const dto = new TestDto();
@@ -773,7 +773,7 @@ describe('String Property Decorators', () => {
     it('should be case-sensitive', () => {
       class TestDto {
         @EndsWith('World')
-        text: string;
+        text!: string;
       }
 
       const dto = new TestDto();
@@ -788,7 +788,7 @@ describe('String Property Decorators', () => {
     it('should pass when string matches pattern', () => {
       class TestDto {
         @Matches(/^\d{3}-\d{2}-\d{4}$/)
-        ssn: string;
+        ssn!: string;
       }
 
       const dto = new TestDto();
@@ -801,7 +801,7 @@ describe('String Property Decorators', () => {
     it('should fail when string does not match pattern', () => {
       class TestDto {
         @Matches(/^\d{3}-\d{2}-\d{4}$/)
-        ssn: string;
+        ssn!: string;
       }
 
       const dto = new TestDto();
@@ -814,7 +814,7 @@ describe('String Property Decorators', () => {
     it('should work with complex regex patterns', () => {
       class TestDto {
         @Matches(/^[A-Z][a-z]+\s[A-Z][a-z]+$/)
-        fullName: string;
+        fullName!: string;
       }
 
       const dto = new TestDto();
@@ -829,7 +829,7 @@ describe('String Property Decorators', () => {
     it('should pass for non-empty string', () => {
       class TestDto {
         @NotEmpty()
-        text: string;
+        text!: string;
       }
 
       const dto = new TestDto();
@@ -842,7 +842,7 @@ describe('String Property Decorators', () => {
     it('should fail for empty string', () => {
       class TestDto {
         @NotEmpty()
-        text: string;
+        text!: string;
       }
 
       const dto = new TestDto();
@@ -855,7 +855,7 @@ describe('String Property Decorators', () => {
     it('should fail for string with only spaces', () => {
       class TestDto {
         @NotEmpty()
-        text: string;
+        text!: string;
       }
 
       const dto = new TestDto();
@@ -873,15 +873,15 @@ describe('String Property Decorators', () => {
         @IsString()
         @MinLength(2)
         @MaxLength(50)
-        name: string;
+        name!: string;
 
         @IsEmail()
-        email: string;
+        email!: string;
 
         @IsAlphanumeric()
         @MinLength(3)
         @MaxLength(20)
-        username: string;
+        username!: string;
       }
 
       const dto = new UserDto();
@@ -898,7 +898,7 @@ describe('String Property Decorators', () => {
         @IsString()
         @MinLength(5)
         @MaxLength(50)
-        name: string;
+        name!: string;
       }
 
       const dto = new UserDto();
@@ -906,16 +906,16 @@ describe('String Property Decorators', () => {
 
       const result = validateClassInstance(dto);
       expect(result.success).toBe(false);
-      expect(result.errors[0].path).toEqual(['name']);
+      expect(result.errors[0]?.path).toEqual(['name']);
     });
 
     it('should collect multiple errors', () => {
       class UserDto {
         @MinLength(5)
-        name: string;
+        name!: string;
 
         @IsEmail()
-        email: string;
+        email!: string;
       }
 
       const dto = new UserDto();

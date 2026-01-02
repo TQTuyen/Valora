@@ -7,22 +7,27 @@ import { date } from '@validators/date';
 
 import { createPropertyDecorator } from '../../core/factory';
 
+import type { ValidationOptions } from '#types/index';
+
 /**
- * Validates maximum age in years (for birthdate validation)
+ * Validates that birth date does not exceed maximum age requirement
  *
  * @param years - Maximum age in years
+ * @param options - Validation options
  * @decorator
  *
  * @example
  * ```typescript
  * @Validate()
  * class User {
- *   @IsDate()
- *   @MaxAge(120)
+ *   @MaxAge(18)
  *   birthDate: Date;
  * }
  * ```
  */
-export function MaxAge(years: number): PropertyDecorator {
-  return createPropertyDecorator((maxYears: number) => date().maxAge(maxYears))(years);
+export function MaxAge(years: number, options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((y: number, opts?: ValidationOptions) => date().maxAge(y, opts))(
+    years,
+    options,
+  );
 }

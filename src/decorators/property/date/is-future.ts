@@ -5,10 +5,12 @@
 
 import { date } from '@validators/date';
 
-import { createTypeDecorator } from '../../core/factory';
+import { createPropertyDecorator } from '../../core/factory';
+
+import type { ValidationOptions } from '#types/index';
 
 /**
- * Validates that date is in the future
+ * Validates that value is in the future
  *
  * @decorator
  *
@@ -16,12 +18,11 @@ import { createTypeDecorator } from '../../core/factory';
  * ```typescript
  * @Validate()
  * class Event {
- *   @IsDate()
  *   @IsFuture()
- *   scheduledDate: Date;
+ *   startDate: Date;
  * }
  * ```
  */
-export function IsFuture(): PropertyDecorator {
-  return createTypeDecorator(() => date().future())();
+export function IsFuture(options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((opts?: ValidationOptions) => date().future(opts))(options);
 }

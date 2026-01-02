@@ -6,7 +6,12 @@
 
 import { createPropertyDecorator } from '../../core/factory';
 
-import type { IValidator, ValidationContext, ValidationResult } from '#types/index';
+import type {
+  IValidator,
+  ValidationContext,
+  ValidationOptions,
+  ValidationResult,
+} from '#types/index';
 
 /**
  * Mark a property as required (cannot be null or undefined)
@@ -23,8 +28,8 @@ import type { IValidator, ValidationContext, ValidationResult } from '#types/ind
  * }
  * ```
  */
-export function IsRequired(): PropertyDecorator {
-  return createPropertyDecorator(() => {
+export function IsRequired(options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((opts?: ValidationOptions) => {
     return {
       _type: 'required',
       validate(value: unknown, context?: ValidationContext): ValidationResult<any> {
@@ -35,7 +40,7 @@ export function IsRequired(): PropertyDecorator {
             errors: [
               {
                 code: 'required',
-                message: 'This field is required',
+                message: opts?.message ?? 'This field is required',
                 path: context?.path ?? [],
                 field: context?.field ?? '',
               },
@@ -45,5 +50,5 @@ export function IsRequired(): PropertyDecorator {
         return { success: true, data: value, errors: [] };
       },
     } as IValidator;
-  })();
+  })(options);
 }

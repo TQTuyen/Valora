@@ -5,23 +5,24 @@
 
 import { date } from '@validators/date';
 
-import { createTypeDecorator } from '../../core/factory';
+import { createPropertyDecorator } from '../../core/factory';
+
+import type { ValidationOptions } from '#types/index';
 
 /**
- * Validates that date is a weekday (Monday-Friday)
+ * Validates that value is a weekday
  *
  * @decorator
  *
  * @example
  * ```typescript
  * @Validate()
- * class Meeting {
- *   @IsDate()
+ * class WorkDay {
  *   @IsWeekday()
- *   scheduledDate: Date;
+ *   date: Date;
  * }
  * ```
  */
-export function IsWeekday(): PropertyDecorator {
-  return createTypeDecorator(() => date().weekday())();
+export function IsWeekday(options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((opts?: ValidationOptions) => date().weekday(opts))(options);
 }

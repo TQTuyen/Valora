@@ -1,17 +1,17 @@
 import { describe, expect, it } from 'vitest';
 
-import { IsObject, ValidateNested } from '@/decorators/property/object';
-import { IsOptional, IsRequired } from '@/decorators/property/common';
-import { IsString, MinLength } from '@/decorators/property/string';
-import { IsNumber, Min } from '@/decorators/property/number';
 import { validateClassInstance } from '@/decorators/class';
+import { IsOptional } from '@/decorators/property/common';
+import { IsNumber, Min } from '@/decorators/property/number';
+import { IsObject, ValidateNested } from '@/decorators/property/object';
+import { IsString, MinLength } from '@/decorators/property/string';
 
 describe('Object Property Decorators', () => {
   describe('@IsObject', () => {
     it('should pass when value is an object', () => {
       class TestDto {
         @IsObject()
-        data: object;
+        data!: object;
       }
 
       const dto = new TestDto();
@@ -24,7 +24,7 @@ describe('Object Property Decorators', () => {
     it('should pass when value is an empty object', () => {
       class TestDto {
         @IsObject()
-        data: object;
+        data!: object;
       }
 
       const dto = new TestDto();
@@ -37,7 +37,7 @@ describe('Object Property Decorators', () => {
     it('should pass when value is a nested object', () => {
       class TestDto {
         @IsObject()
-        data: object;
+        data!: object;
       }
 
       const dto = new TestDto();
@@ -50,7 +50,7 @@ describe('Object Property Decorators', () => {
     it('should fail when value is not an object', () => {
       class TestDto {
         @IsObject()
-        data: any;
+        data!: any;
       }
 
       const dto = new TestDto();
@@ -59,13 +59,13 @@ describe('Object Property Decorators', () => {
       const result = validateClassInstance(dto);
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].path).toEqual(['data']);
+      expect(result.errors[0]?.path).toEqual(['data']);
     });
 
     it('should fail when value is an array', () => {
       class TestDto {
         @IsObject()
-        data: any;
+        data!: any;
       }
 
       const dto = new TestDto();
@@ -78,7 +78,7 @@ describe('Object Property Decorators', () => {
     it('should fail when value is null', () => {
       class TestDto {
         @IsObject()
-        data: any;
+        data!: any;
       }
 
       const dto = new TestDto();
@@ -91,7 +91,7 @@ describe('Object Property Decorators', () => {
     it('should fail when value is a number', () => {
       class TestDto {
         @IsObject()
-        data: any;
+        data!: any;
       }
 
       const dto = new TestDto();
@@ -104,7 +104,7 @@ describe('Object Property Decorators', () => {
     it('should fail when value is a boolean', () => {
       class TestDto {
         @IsObject()
-        data: any;
+        data!: any;
       }
 
       const dto = new TestDto();
@@ -117,7 +117,7 @@ describe('Object Property Decorators', () => {
     it('should accept custom error message', () => {
       class TestDto {
         @IsObject({ message: 'Data must be an object' })
-        data: any;
+        data!: any;
       }
 
       const dto = new TestDto();
@@ -135,7 +135,7 @@ describe('Object Property Decorators', () => {
 
       class TestDto {
         @IsObject()
-        data: object;
+        data!: object;
       }
 
       const dto = new TestDto();
@@ -151,15 +151,15 @@ describe('Object Property Decorators', () => {
       class AddressDto {
         @IsString()
         @MinLength(2)
-        street: string;
+        street!: string;
 
         @IsString()
-        city: string;
+        city!: string;
       }
 
       class UserDto {
         @ValidateNested()
-        address: AddressDto;
+        address!: AddressDto;
       }
 
       const user = new UserDto();
@@ -176,15 +176,15 @@ describe('Object Property Decorators', () => {
       class AddressDto {
         @IsString()
         @MinLength(2)
-        street: string;
+        street!: string;
 
         @IsString()
-        city: string;
+        city!: string;
       }
 
       class UserDto {
         @ValidateNested()
-        address: AddressDto;
+        address!: AddressDto;
       }
 
       const user = new UserDto();
@@ -201,26 +201,26 @@ describe('Object Property Decorators', () => {
     it('should validate deeply nested objects', () => {
       class CityDto {
         @IsString()
-        name: string;
+        name!: string;
 
         @IsString()
-        country: string;
+        country!: string;
       }
 
       class AddressDto {
         @IsString()
-        street: string;
+        street!: string;
 
         @ValidateNested()
-        city: CityDto;
+        city!: CityDto;
       }
 
       class UserDto {
         @IsString()
-        name: string;
+        name!: string;
 
         @ValidateNested()
-        address: AddressDto;
+        address!: AddressDto;
       }
 
       const user = new UserDto();
@@ -244,26 +244,26 @@ describe('Object Property Decorators', () => {
       class CityDto {
         @IsString()
         @MinLength(2)
-        name: string;
+        name!: string;
 
         @IsString()
-        country: string;
+        country!: string;
       }
 
       class AddressDto {
         @IsString()
-        street: string;
+        street!: string;
 
         @ValidateNested()
-        city: CityDto;
+        city!: CityDto;
       }
 
       class UserDto {
         @IsString()
-        name: string;
+        name!: string;
 
         @ValidateNested()
-        address: AddressDto;
+        address!: AddressDto;
       }
 
       const user = new UserDto();
@@ -286,16 +286,16 @@ describe('Object Property Decorators', () => {
     it('should validate array of nested objects', () => {
       class ItemDto {
         @IsString()
-        name: string;
+        name!: string;
 
         @IsNumber()
         @Min(0)
-        quantity: number;
+        quantity!: number;
       }
 
       class OrderDto {
         @ValidateNested({ each: true })
-        items: ItemDto[];
+        items!: ItemDto[];
       }
 
       const order = new OrderDto();
@@ -316,16 +316,16 @@ describe('Object Property Decorators', () => {
     it('should fail when one item in nested array is invalid', () => {
       class ItemDto {
         @IsString()
-        name: string;
+        name!: string;
 
         @IsNumber()
         @Min(0)
-        quantity: number;
+        quantity!: number;
       }
 
       class OrderDto {
         @ValidateNested({ each: true })
-        items: ItemDto[];
+        items!: ItemDto[];
       }
 
       const order = new OrderDto();
@@ -347,12 +347,12 @@ describe('Object Property Decorators', () => {
     it('should handle optional nested objects', () => {
       class ProfileDto {
         @IsString()
-        bio: string;
+        bio!: string;
       }
 
       class UserDto {
         @IsString()
-        name: string;
+        name!: string;
 
         @IsOptional()
         @ValidateNested()
@@ -371,12 +371,12 @@ describe('Object Property Decorators', () => {
       class ProfileDto {
         @IsString()
         @MinLength(10)
-        bio: string;
+        bio!: string;
       }
 
       class UserDto {
         @IsString()
-        name: string;
+        name!: string;
 
         @ValidateNested()
         profile?: ProfileDto;
@@ -397,12 +397,12 @@ describe('Object Property Decorators', () => {
       class ProfileDto {
         @IsString()
         @MinLength(10)
-        bio: string;
+        bio!: string;
       }
 
       class UserDto {
         @IsString()
-        name: string;
+        name!: string;
 
         @ValidateNested()
         profile?: ProfileDto;
@@ -424,16 +424,16 @@ describe('Object Property Decorators', () => {
     it('should validate object type and nested validation', () => {
       class SettingsDto {
         @IsString()
-        theme: string;
+        theme!: string;
 
         @IsNumber()
-        fontSize: number;
+        fontSize!: number;
       }
 
       class UserDto {
         @IsObject()
         @ValidateNested()
-        settings: SettingsDto;
+        settings!: SettingsDto;
       }
 
       const user = new UserDto();
@@ -447,15 +447,10 @@ describe('Object Property Decorators', () => {
     });
 
     it('should fail when object type check fails', () => {
-      class SettingsDto {
-        @IsString()
-        theme: string;
-      }
-
       class UserDto {
         @IsObject()
         @ValidateNested()
-        settings: any;
+        settings!: any;
       }
 
       const user = new UserDto();
@@ -468,37 +463,37 @@ describe('Object Property Decorators', () => {
     it('should validate complex nested structure', () => {
       class ContactDto {
         @IsString()
-        phone: string;
+        phone!: string;
 
         @IsString()
-        email: string;
+        email!: string;
       }
 
       class AddressDto {
         @IsString()
-        street: string;
+        street!: string;
 
         @IsString()
-        city: string;
+        city!: string;
       }
 
       class CompanyDto {
         @IsString()
-        name: string;
+        name!: string;
 
         @ValidateNested()
-        address: AddressDto;
+        address!: AddressDto;
 
         @ValidateNested()
-        contact: ContactDto;
+        contact!: ContactDto;
       }
 
       class UserDto {
         @IsString()
-        name: string;
+        name!: string;
 
         @ValidateNested()
-        company: CompanyDto;
+        company!: CompanyDto;
       }
 
       const user = new UserDto();
@@ -527,37 +522,37 @@ describe('Object Property Decorators', () => {
       class ContactDto {
         @IsString()
         @MinLength(10)
-        phone: string;
+        phone!: string;
 
         @IsString()
-        email: string;
+        email!: string;
       }
 
       class AddressDto {
         @IsString()
-        street: string;
+        street!: string;
 
         @IsString()
-        city: string;
+        city!: string;
       }
 
       class CompanyDto {
         @IsString()
-        name: string;
+        name!: string;
 
         @ValidateNested()
-        address: AddressDto;
+        address!: AddressDto;
 
         @ValidateNested()
-        contact: ContactDto;
+        contact!: ContactDto;
       }
 
       class UserDto {
         @IsString()
-        name: string;
+        name!: string;
 
         @ValidateNested()
-        company: CompanyDto;
+        company!: CompanyDto;
       }
 
       const user = new UserDto();
@@ -585,29 +580,29 @@ describe('Object Property Decorators', () => {
     it('should validate multiple nested objects at same level', () => {
       class AddressDto {
         @IsString()
-        street: string;
+        street!: string;
 
         @IsString()
-        city: string;
+        city!: string;
       }
 
       class PaymentDto {
         @IsString()
-        method: string;
+        method!: string;
 
         @IsString()
-        cardNumber: string;
+        cardNumber!: string;
       }
 
       class OrderDto {
         @ValidateNested()
-        shippingAddress: AddressDto;
+        shippingAddress!: AddressDto;
 
         @ValidateNested()
-        billingAddress: AddressDto;
+        billingAddress!: AddressDto;
 
         @ValidateNested()
-        payment: PaymentDto;
+        payment!: PaymentDto;
       }
 
       const order = new OrderDto();
@@ -636,27 +631,27 @@ describe('Object Property Decorators', () => {
       class AddressDto {
         @IsString()
         @MinLength(3)
-        street: string;
+        street!: string;
 
         @IsString()
-        city: string;
+        city!: string;
       }
 
       class PaymentDto {
         @IsString()
-        method: string;
+        method!: string;
 
         @IsString()
         @MinLength(10)
-        cardNumber: string;
+        cardNumber!: string;
       }
 
       class OrderDto {
         @ValidateNested()
-        shippingAddress: AddressDto;
+        shippingAddress!: AddressDto;
 
         @ValidateNested()
-        payment: PaymentDto;
+        payment!: PaymentDto;
       }
 
       const order = new OrderDto();

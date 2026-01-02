@@ -5,7 +5,9 @@
 
 import { object } from '@validators/object';
 
-import { createTypeDecorator } from '../../core/factory';
+import { createPropertyDecorator } from '../../core/factory';
+
+import type { ValidationOptions } from '#types/index';
 
 /**
  * Validates that the value is an object
@@ -21,6 +23,12 @@ import { createTypeDecorator } from '../../core/factory';
  * }
  * ```
  */
-export function IsObject(): PropertyDecorator {
-  return createTypeDecorator(() => object())();
+export function IsObject(options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((opts?: ValidationOptions) => {
+    const v = object();
+    if (opts?.message) {
+      v.withMessage(opts.message);
+    }
+    return v;
+  })(options);
 }

@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
+import { validateClassInstance } from '@/decorators/class';
 import { IsOptional, IsRequired } from '@/decorators/property/common';
-import { Validate, validateClassInstance } from '@/decorators/class';
 
 describe('Common Property Decorators', () => {
   describe('@IsRequired', () => {
     it('should pass when value is provided', () => {
       class TestDto {
         @IsRequired()
-        name: string;
+        name!: string;
       }
 
       const dto = new TestDto();
@@ -21,7 +21,7 @@ describe('Common Property Decorators', () => {
     it('should fail when value is undefined', () => {
       class TestDto {
         @IsRequired()
-        name: string;
+        name!: string;
       }
 
       const dto = new TestDto();
@@ -29,13 +29,13 @@ describe('Common Property Decorators', () => {
       const result = validateClassInstance(dto);
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].path).toEqual(['name']);
+      expect(result.errors[0]?.path).toEqual(['name']);
     });
 
     it('should fail when value is null', () => {
       class TestDto {
         @IsRequired()
-        name: string | null;
+        name!: string | null;
       }
 
       const dto = new TestDto();
@@ -49,7 +49,7 @@ describe('Common Property Decorators', () => {
     it('should accept custom error message', () => {
       class TestDto {
         @IsRequired({ message: 'Name is mandatory' })
-        name: string;
+        name!: string;
       }
 
       const dto = new TestDto();
@@ -62,10 +62,10 @@ describe('Common Property Decorators', () => {
     it('should work with multiple required fields', () => {
       class TestDto {
         @IsRequired()
-        name: string;
+        name!: string;
 
         @IsRequired()
-        email: string;
+        email!: string;
       }
 
       const dto = new TestDto();
@@ -75,13 +75,13 @@ describe('Common Property Decorators', () => {
       const result = validateClassInstance(dto);
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].path).toEqual(['email']);
+      expect(result.errors[0]?.path).toEqual(['email']);
     });
 
     it('should allow empty string', () => {
       class TestDto {
         @IsRequired()
-        name: string;
+        name!: string;
       }
 
       const dto = new TestDto();
@@ -94,7 +94,7 @@ describe('Common Property Decorators', () => {
     it('should allow zero as valid value', () => {
       class TestDto {
         @IsRequired()
-        age: number;
+        age!: number;
       }
 
       const dto = new TestDto();
@@ -107,7 +107,7 @@ describe('Common Property Decorators', () => {
     it('should allow false as valid value', () => {
       class TestDto {
         @IsRequired()
-        active: boolean;
+        active!: boolean;
       }
 
       const dto = new TestDto();
@@ -156,7 +156,7 @@ describe('Common Property Decorators', () => {
       const result = validateClassInstance(dto);
       expect(result.success).toBe(true);
       if (result.success) {
-        expect(result.data.name).toBeUndefined();
+        expect((result.data as any).name).toBeUndefined();
       }
     });
 
@@ -191,7 +191,7 @@ describe('Common Property Decorators', () => {
     it('should handle mix of required and optional fields', () => {
       class TestDto {
         @IsRequired()
-        name: string;
+        name!: string;
 
         @IsOptional()
         nickname?: string;
@@ -208,7 +208,7 @@ describe('Common Property Decorators', () => {
     it('should fail when required field is missing but optional is provided', () => {
       class TestDto {
         @IsRequired()
-        name: string;
+        name!: string;
 
         @IsOptional()
         nickname?: string;
@@ -221,7 +221,7 @@ describe('Common Property Decorators', () => {
       const result = validateClassInstance(dto);
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].path).toEqual(['name']);
+      expect(result.errors[0]?.path).toEqual(['name']);
     });
   });
 });

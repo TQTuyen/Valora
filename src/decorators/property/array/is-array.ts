@@ -5,22 +5,29 @@
 
 import { array } from '@validators/array';
 
-import { createTypeDecorator } from '../../core/factory';
+import { createPropertyDecorator } from '../../core/factory';
+
+import type { ValidationOptions } from '#types/index';
 
 /**
- * Validates that the value is an array
+ * Validates that value is an array
  *
  * @decorator
  *
  * @example
  * ```typescript
- * @Validate()
- * class Post {
+ * class Example {
  *   @IsArray()
- *   tags: string[];
+ *   items: any[];
  * }
  * ```
  */
-export function IsArray(): PropertyDecorator {
-  return createTypeDecorator(() => array())();
+export function IsArray(options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((opts?: ValidationOptions) => {
+    const v = array();
+    if (opts?.message) {
+      v.withMessage(opts.message);
+    }
+    return v;
+  })(options);
 }

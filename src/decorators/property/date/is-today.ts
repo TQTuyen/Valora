@@ -5,23 +5,24 @@
 
 import { date } from '@validators/date';
 
-import { createTypeDecorator } from '../../core/factory';
+import { createPropertyDecorator } from '../../core/factory';
+
+import type { ValidationOptions } from '#types/index';
 
 /**
- * Validates that date is today
+ * Validates that value is today
  *
  * @decorator
  *
  * @example
  * ```typescript
  * @Validate()
- * class Attendance {
- *   @IsDate()
+ * class Report {
  *   @IsToday()
- *   checkInDate: Date;
+ *   generatedAt: Date;
  * }
  * ```
  */
-export function IsToday(): PropertyDecorator {
-  return createTypeDecorator(() => date().today())();
+export function IsToday(options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((opts?: ValidationOptions) => date().today(opts))(options);
 }

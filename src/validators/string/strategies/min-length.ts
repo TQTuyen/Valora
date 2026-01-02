@@ -11,8 +11,14 @@ import type { ValidationContext, ValidationResult } from '#types/index';
 export class MinLengthStrategy extends BaseValidationStrategy<string, string> {
   readonly name = 'minLength';
 
-  constructor(private readonly min: number) {
+  constructor(
+    private readonly min: number,
+    message?: string,
+  ) {
     super();
+    if (message) {
+      this.withMessage(message);
+    }
   }
 
   validate(value: string, context: ValidationContext): ValidationResult<string> {

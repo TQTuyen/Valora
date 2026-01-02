@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { validateClassInstance } from '@/decorators/class';
 import {
   IsAfter,
   IsBefore,
@@ -14,14 +15,13 @@ import {
   MinAge,
   MinDate,
 } from '@/decorators/property/date';
-import { validateClassInstance } from '@/decorators/class';
 
 describe('Date Property Decorators', () => {
   describe('@IsDate', () => {
     it('should pass when value is a Date object', () => {
       class TestDto {
         @IsDate()
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -34,7 +34,7 @@ describe('Date Property Decorators', () => {
     it('should pass when value is a valid date', () => {
       class TestDto {
         @IsDate()
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -47,7 +47,7 @@ describe('Date Property Decorators', () => {
     it('should fail when value is not a Date object', () => {
       class TestDto {
         @IsDate()
-        date: any;
+        date!: any;
       }
 
       const dto = new TestDto();
@@ -56,13 +56,13 @@ describe('Date Property Decorators', () => {
       const result = validateClassInstance(dto);
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].path).toEqual(['date']);
+      expect(result.errors[0]?.path).toEqual(['date']);
     });
 
     it('should accept date created from timestamp', () => {
       class TestDto {
         @IsDate()
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -75,7 +75,7 @@ describe('Date Property Decorators', () => {
     it('should fail when value is an invalid Date', () => {
       class TestDto {
         @IsDate()
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -88,7 +88,7 @@ describe('Date Property Decorators', () => {
     it('should accept custom error message', () => {
       class TestDto {
         @IsDate({ message: 'Must be a valid date' })
-        date: any;
+        date!: any;
       }
 
       const dto = new TestDto();
@@ -104,7 +104,7 @@ describe('Date Property Decorators', () => {
     it('should pass when date is after minimum', () => {
       class TestDto {
         @MinDate(new Date('2024-01-01'))
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -117,7 +117,7 @@ describe('Date Property Decorators', () => {
     it('should pass when date equals minimum', () => {
       class TestDto {
         @MinDate(new Date('2024-01-01'))
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -130,7 +130,7 @@ describe('Date Property Decorators', () => {
     it('should fail when date is before minimum', () => {
       class TestDto {
         @MinDate(new Date('2024-01-01'))
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -144,7 +144,7 @@ describe('Date Property Decorators', () => {
     it('should work with string date argument', () => {
       class TestDto {
         @MinDate('2024-01-01')
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -159,7 +159,7 @@ describe('Date Property Decorators', () => {
     it('should pass when date is before maximum', () => {
       class TestDto {
         @MaxDate(new Date('2024-12-31'))
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -172,7 +172,7 @@ describe('Date Property Decorators', () => {
     it('should pass when date equals maximum', () => {
       class TestDto {
         @MaxDate(new Date('2024-12-31'))
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -185,7 +185,7 @@ describe('Date Property Decorators', () => {
     it('should fail when date is after maximum', () => {
       class TestDto {
         @MaxDate(new Date('2024-12-31'))
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -199,7 +199,7 @@ describe('Date Property Decorators', () => {
     it('should work with string date argument', () => {
       class TestDto {
         @MaxDate('2024-12-31')
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -214,7 +214,7 @@ describe('Date Property Decorators', () => {
     it('should pass when date is in the future', () => {
       class TestDto {
         @IsFuture()
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -229,7 +229,7 @@ describe('Date Property Decorators', () => {
     it('should fail when date is in the past', () => {
       class TestDto {
         @IsFuture()
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -245,7 +245,7 @@ describe('Date Property Decorators', () => {
     it('should fail when date is now', () => {
       class TestDto {
         @IsFuture()
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -262,7 +262,7 @@ describe('Date Property Decorators', () => {
     it('should pass when date is in the past', () => {
       class TestDto {
         @IsPast()
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -277,7 +277,7 @@ describe('Date Property Decorators', () => {
     it('should fail when date is in the future', () => {
       class TestDto {
         @IsPast()
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -293,7 +293,7 @@ describe('Date Property Decorators', () => {
     it('should pass when date is yesterday', () => {
       class TestDto {
         @IsPast()
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -310,7 +310,7 @@ describe('Date Property Decorators', () => {
     it('should pass when date is today', () => {
       class TestDto {
         @IsToday()
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -323,7 +323,7 @@ describe('Date Property Decorators', () => {
     it('should fail when date is yesterday', () => {
       class TestDto {
         @IsToday()
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -339,7 +339,7 @@ describe('Date Property Decorators', () => {
     it('should fail when date is tomorrow', () => {
       class TestDto {
         @IsToday()
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -354,7 +354,7 @@ describe('Date Property Decorators', () => {
     it('should pass for different times today', () => {
       class TestDto {
         @IsToday()
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -371,7 +371,7 @@ describe('Date Property Decorators', () => {
     it('should pass when date is after reference date', () => {
       class TestDto {
         @IsAfter(new Date('2024-01-01'))
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -384,7 +384,7 @@ describe('Date Property Decorators', () => {
     it('should fail when date equals reference date', () => {
       class TestDto {
         @IsAfter(new Date('2024-01-01'))
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -398,7 +398,7 @@ describe('Date Property Decorators', () => {
     it('should fail when date is before reference date', () => {
       class TestDto {
         @IsAfter(new Date('2024-01-01'))
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -411,7 +411,7 @@ describe('Date Property Decorators', () => {
     it('should work with string date argument', () => {
       class TestDto {
         @IsAfter('2024-01-01')
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -426,7 +426,7 @@ describe('Date Property Decorators', () => {
     it('should pass when date is before reference date', () => {
       class TestDto {
         @IsBefore(new Date('2024-12-31'))
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -439,7 +439,7 @@ describe('Date Property Decorators', () => {
     it('should fail when date equals reference date', () => {
       class TestDto {
         @IsBefore(new Date('2024-12-31'))
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -453,7 +453,7 @@ describe('Date Property Decorators', () => {
     it('should fail when date is after reference date', () => {
       class TestDto {
         @IsBefore(new Date('2024-12-31'))
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -466,7 +466,7 @@ describe('Date Property Decorators', () => {
     it('should work with string date argument', () => {
       class TestDto {
         @IsBefore('2024-12-31')
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -481,7 +481,7 @@ describe('Date Property Decorators', () => {
     it('should pass when date is Monday', () => {
       class TestDto {
         @IsWeekday()
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -496,7 +496,7 @@ describe('Date Property Decorators', () => {
     it('should pass when date is Friday', () => {
       class TestDto {
         @IsWeekday()
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -511,7 +511,7 @@ describe('Date Property Decorators', () => {
     it('should fail when date is Saturday', () => {
       class TestDto {
         @IsWeekday()
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -527,7 +527,7 @@ describe('Date Property Decorators', () => {
     it('should fail when date is Sunday', () => {
       class TestDto {
         @IsWeekday()
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -544,7 +544,7 @@ describe('Date Property Decorators', () => {
     it('should pass when date is Saturday', () => {
       class TestDto {
         @IsWeekend()
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -559,7 +559,7 @@ describe('Date Property Decorators', () => {
     it('should pass when date is Sunday', () => {
       class TestDto {
         @IsWeekend()
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -574,7 +574,7 @@ describe('Date Property Decorators', () => {
     it('should fail when date is Monday', () => {
       class TestDto {
         @IsWeekend()
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -590,7 +590,7 @@ describe('Date Property Decorators', () => {
     it('should fail when date is Friday', () => {
       class TestDto {
         @IsWeekend()
-        date: Date;
+        date!: Date;
       }
 
       const dto = new TestDto();
@@ -607,7 +607,7 @@ describe('Date Property Decorators', () => {
     it('should pass when age meets minimum', () => {
       class TestDto {
         @MinAge(18)
-        birthDate: Date;
+        birthDate!: Date;
       }
 
       const dto = new TestDto();
@@ -622,7 +622,7 @@ describe('Date Property Decorators', () => {
     it('should pass when age exactly equals minimum', () => {
       class TestDto {
         @MinAge(18)
-        birthDate: Date;
+        birthDate!: Date;
       }
 
       const dto = new TestDto();
@@ -637,7 +637,7 @@ describe('Date Property Decorators', () => {
     it('should fail when age is below minimum', () => {
       class TestDto {
         @MinAge(18)
-        birthDate: Date;
+        birthDate!: Date;
       }
 
       const dto = new TestDto();
@@ -653,7 +653,7 @@ describe('Date Property Decorators', () => {
     it('should accept custom error message', () => {
       class TestDto {
         @MinAge(18, { message: 'Must be at least 18 years old' })
-        birthDate: Date;
+        birthDate!: Date;
       }
 
       const dto = new TestDto();
@@ -672,7 +672,7 @@ describe('Date Property Decorators', () => {
     it('should pass when age is below maximum', () => {
       class TestDto {
         @MaxAge(65)
-        birthDate: Date;
+        birthDate!: Date;
       }
 
       const dto = new TestDto();
@@ -687,7 +687,7 @@ describe('Date Property Decorators', () => {
     it('should pass when age exactly equals maximum', () => {
       class TestDto {
         @MaxAge(65)
-        birthDate: Date;
+        birthDate!: Date;
       }
 
       const dto = new TestDto();
@@ -702,7 +702,7 @@ describe('Date Property Decorators', () => {
     it('should fail when age exceeds maximum', () => {
       class TestDto {
         @MaxAge(65)
-        birthDate: Date;
+        birthDate!: Date;
       }
 
       const dto = new TestDto();
@@ -722,7 +722,7 @@ describe('Date Property Decorators', () => {
         @IsDate()
         @IsFuture()
         @IsWeekday()
-        eventDate: Date;
+        eventDate!: Date;
       }
 
       const dto = new EventDto();
@@ -740,7 +740,7 @@ describe('Date Property Decorators', () => {
         @IsDate()
         @IsFuture()
         @IsWeekday()
-        eventDate: Date;
+        eventDate!: Date;
       }
 
       const dto = new EventDto();
@@ -761,7 +761,7 @@ describe('Date Property Decorators', () => {
         @IsPast()
         @MinAge(18)
         @MaxAge(100)
-        birthDate: Date;
+        birthDate!: Date;
       }
 
       const dto = new UserDto();
@@ -778,7 +778,7 @@ describe('Date Property Decorators', () => {
         @IsDate()
         @MinDate(new Date('2024-01-01'))
         @MaxDate(new Date('2024-12-31'))
-        date: Date;
+        date!: Date;
       }
 
       const dto = new PeriodDto();
@@ -793,7 +793,7 @@ describe('Date Property Decorators', () => {
         @IsDate()
         @MinDate(new Date('2024-01-01'))
         @MaxDate(new Date('2024-12-31'))
-        date: Date;
+        date!: Date;
       }
 
       const dto = new PeriodDto();
@@ -816,7 +816,7 @@ describe('Date Property Decorators', () => {
         @IsAfter(startDate)
         @IsBefore(endDate)
         @IsWeekday()
-        appointmentDate: Date;
+        appointmentDate!: Date;
       }
 
       const dto = new AppointmentDto();
