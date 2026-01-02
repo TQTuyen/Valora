@@ -7,25 +7,31 @@ import { number } from '@validators/number';
 
 import { createPropertyDecorator } from '../../core/factory';
 
+import type { ValidationOptions } from '#types/index';
+
 /**
- * Validates number is within range (inclusive)
+ * Validates that value is within the specified range
  *
- * @param min - Minimum value (inclusive)
- * @param max - Maximum value (inclusive)
+ * @param minimum - Minimum valid value
+ * @param maximum - Maximum valid value
+ * @param options - Validation options
  * @decorator
  *
  * @example
  * ```typescript
  * @Validate()
- * class Product {
- *   @IsNumber()
- *   @Range(0, 100)
- *   discountPercent: number;
+ * class User {
+ *   @Range(18, 65)
+ *   age: number;
  * }
  * ```
  */
-export function Range(min: number, max: number): PropertyDecorator {
-  return createPropertyDecorator((minimum: number, maximum: number) =>
-    number().range(minimum, maximum),
-  )(min, max);
+export function Range(
+  minimum: number,
+  maximum: number,
+  options?: ValidationOptions,
+): PropertyDecorator {
+  return createPropertyDecorator((min: number, max: number, opts?: ValidationOptions) =>
+    number().min(min).max(max, opts),
+  )(minimum, maximum, options);
 }

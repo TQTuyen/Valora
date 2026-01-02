@@ -7,10 +7,13 @@ import { string } from '@validators/string';
 
 import { createPropertyDecorator } from '../../core/factory';
 
+import type { ValidationOptions } from '#types/validators';
+
 /**
  * Validates minimum string length
  *
  * @param min - Minimum length
+ * @param options - Validation options
  * @decorator
  *
  * @example
@@ -23,6 +26,8 @@ import { createPropertyDecorator } from '../../core/factory';
  * }
  * ```
  */
-export function MinLength(min: number): PropertyDecorator {
-  return createPropertyDecorator((minLength: number) => string().minLength(minLength))(min);
+export function MinLength(min: number, options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((minLength: number, options?: ValidationOptions) =>
+    string().minLength(minLength, options),
+  )(min, options);
 }

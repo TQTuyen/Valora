@@ -7,22 +7,27 @@ import { array } from '@validators/array';
 
 import { createPropertyDecorator } from '../../core/factory';
 
+import type { ValidationOptions } from '#types/index';
+
 /**
- * Validates minimum array length
+ * Validates that array has at least the specified number of items
  *
- * @param min - Minimum number of items
+ * @param minSize - Minimum array size
+ * @param options - Validation options
  * @decorator
  *
  * @example
+ *
  * ```typescript
- * @Validate()
- * class Post {
- *   @IsArray()
- *   @ArrayMinSize(1)
- *   tags: string[];
+ * class Example {
+ *   @ArrayMinSize(3)
+ *   items: any[];
  * }
  * ```
  */
-export function ArrayMinSize(min: number): PropertyDecorator {
-  return createPropertyDecorator((minLength: number) => array().min(minLength))(min);
+export function ArrayMinSize(minSize: number, options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((min: number, opts?: ValidationOptions) => array().min(min, opts))(
+    minSize,
+    options,
+  );
 }

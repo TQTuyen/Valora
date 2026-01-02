@@ -7,22 +7,29 @@ import { date } from '@validators/date';
 
 import { createPropertyDecorator } from '../../core/factory';
 
+import type { ValidationOptions } from '#types/index';
+
 /**
- * Validates that date is before the given date (exclusive)
+ * Validates that date is before the given reference date
  *
- * @param beforeDate - Date must be before this
+ * @param referenceDate - Date must be before this
+ * @param options - Validation options
  * @decorator
  *
  * @example
  * ```typescript
  * @Validate()
  * class Event {
- *   @IsDate()
  *   @IsBefore(new Date('2025-12-31'))
  *   startDate: Date;
  * }
  * ```
  */
-export function IsBefore(beforeDate: Date | string): PropertyDecorator {
-  return createPropertyDecorator((d: Date | string) => date().before(d))(beforeDate);
+export function IsBefore(
+  referenceDate: Date | string,
+  options?: ValidationOptions,
+): PropertyDecorator {
+  return createPropertyDecorator((ref: Date | string, opts?: ValidationOptions) =>
+    date().before(ref, opts),
+  )(referenceDate, options);
 }

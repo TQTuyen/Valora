@@ -5,23 +5,24 @@
 
 import { number } from '@validators/number';
 
-import { createTypeDecorator } from '../../core/factory';
+import { createPropertyDecorator } from '../../core/factory';
+
+import type { ValidationOptions } from '#types/index';
 
 /**
- * Validates that number is negative (< 0)
+ * Validates that value is negative (< 0)
  *
  * @decorator
  *
  * @example
  * ```typescript
  * @Validate()
- * class Transaction {
- *   @IsNumber()
+ * class User {
  *   @IsNegative()
- *   debit: number;
+ *   age: number;
  * }
  * ```
  */
-export function IsNegative(): PropertyDecorator {
-  return createTypeDecorator(() => number().negative())();
+export function IsNegative(options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((opts?: ValidationOptions) => number().negative(opts))(options);
 }

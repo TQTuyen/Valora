@@ -76,3 +76,15 @@ export interface IAsyncValidator<TInput = unknown, TOutput = TInput> {
    */
   isPending(): boolean;
 }
+
+/**
+ * Common validation options for decorators
+ */
+export interface ValidationOptions {
+  /** Custom error message */
+  message?: string;
+  /** Groups to which this validation belongs */
+  groups?: string[];
+  /** Whether to validate always, even if previous validators failed */
+  always?: boolean;
+}

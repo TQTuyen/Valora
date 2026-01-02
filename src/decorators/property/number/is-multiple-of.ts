@@ -7,22 +7,26 @@ import { number } from '@validators/number';
 
 import { createPropertyDecorator } from '../../core/factory';
 
+import type { ValidationOptions } from '#types/index';
+
 /**
- * Validates that number is a multiple of the given factor
+ * Validates that value is a multiple of the given divisor
  *
- * @param factor - The number must be divisible by this factor
+ * @param divisor - Divisor value
+ * @param options - Validation options
  * @decorator
  *
  * @example
  * ```typescript
  * @Validate()
- * class Grid {
- *   @IsNumber()
- *   @IsMultipleOf(5)
- *   spacing: number; // Must be divisible by 5
+ * class User {
+ *   @IsMultipleOf(2)
+ *   age: number;
  * }
  * ```
  */
-export function IsMultipleOf(factor: number): PropertyDecorator {
-  return createPropertyDecorator((f: number) => number().multipleOf(f))(factor);
+export function IsMultipleOf(divisor: number, options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((d: number, opts?: ValidationOptions) =>
+    number().multipleOf(d, opts),
+  )(divisor, options);
 }

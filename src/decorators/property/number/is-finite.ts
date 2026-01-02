@@ -5,23 +5,24 @@
 
 import { number } from '@validators/number';
 
-import { createTypeDecorator } from '../../core/factory';
+import { createPropertyDecorator } from '../../core/factory';
+
+import type { ValidationOptions } from '#types/index';
 
 /**
- * Validates that number is finite (not Infinity or -Infinity)
+ * Validates that value is a finite number
  *
  * @decorator
  *
  * @example
  * ```typescript
  * @Validate()
- * class Calculation {
- *   @IsNumber()
+ * class User {
  *   @IsFinite()
- *   result: number;
+ *   age: number;
  * }
  * ```
  */
-export function IsFinite(): PropertyDecorator {
-  return createTypeDecorator(() => number().finite())();
+export function IsFinite(options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((opts?: ValidationOptions) => number().finite(opts))(options);
 }

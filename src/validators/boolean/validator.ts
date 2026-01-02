@@ -45,8 +45,8 @@ export class BooleanValidator extends BaseValidator<unknown, boolean> {
   }
 
   /** Must be true */
-  isTrue(): this {
-    return this.addStrategy(new IsTrueStrategy());
+  isTrue(options?: { message?: string }): this {
+    return this.addStrategy(new IsTrueStrategy(options?.message));
   }
 
   /** Alias for isTrue */
@@ -55,8 +55,8 @@ export class BooleanValidator extends BaseValidator<unknown, boolean> {
   }
 
   /** Must be false */
-  isFalse(): this {
-    return this.addStrategy(new IsFalseStrategy());
+  isFalse(options?: { message?: string }): this {
+    return this.addStrategy(new IsFalseStrategy(options?.message));
   }
 
   /** Alias for isFalse */

@@ -17,7 +17,12 @@ import {
   UniqueArrayStrategy,
 } from './strategies';
 
-import type { IValidator, ValidationContext, ValidationResult } from '#types/index';
+import type {
+  IValidator,
+  ValidationContext,
+  ValidationOptions,
+  ValidationResult,
+} from '#types/index';
 
 /**
  * Array validator with fluent API
@@ -87,8 +92,10 @@ export class ArrayValidator<T = unknown, U = T> extends BaseValidator<unknown, U
   // -------------------------------------------------------------------------
 
   /** Minimum array length */
-  min(minLength: number): this {
-    return this.addStrategy(new MinLengthArrayStrategy(minLength) as never);
+  min(minLength: number, options?: ValidationOptions): this {
+    const strategy = new MinLengthArrayStrategy(minLength);
+    if (options?.message) strategy.withMessage(options.message);
+    return this.addStrategy(strategy as never);
   }
 
   /** Alias for min */
@@ -97,8 +104,10 @@ export class ArrayValidator<T = unknown, U = T> extends BaseValidator<unknown, U
   }
 
   /** Maximum array length */
-  max(maxLength: number): this {
-    return this.addStrategy(new MaxLengthArrayStrategy(maxLength) as never);
+  max(maxLength: number, options?: ValidationOptions): this {
+    const strategy = new MaxLengthArrayStrategy(maxLength);
+    if (options?.message) strategy.withMessage(options.message);
+    return this.addStrategy(strategy as never);
   }
 
   /** Alias for max */
@@ -107,8 +116,10 @@ export class ArrayValidator<T = unknown, U = T> extends BaseValidator<unknown, U
   }
 
   /** Exact array length */
-  length(exactLength: number): this {
-    return this.addStrategy(new ExactLengthArrayStrategy(exactLength) as never);
+  length(exactLength: number, options?: ValidationOptions): this {
+    const strategy = new ExactLengthArrayStrategy(exactLength);
+    if (options?.message) strategy.withMessage(options.message);
+    return this.addStrategy(strategy as never);
   }
 
   /** Length must be in range */
@@ -126,8 +137,10 @@ export class ArrayValidator<T = unknown, U = T> extends BaseValidator<unknown, U
   // -------------------------------------------------------------------------
 
   /** Array must not be empty */
-  nonEmpty(): this {
-    return this.addStrategy(new NonEmptyArrayStrategy() as never);
+  nonEmpty(options?: ValidationOptions): this {
+    const strategy = new NonEmptyArrayStrategy();
+    if (options?.message) strategy.withMessage(options.message);
+    return this.addStrategy(strategy as never);
   }
 
   /** Alias for nonEmpty */
@@ -136,8 +149,10 @@ export class ArrayValidator<T = unknown, U = T> extends BaseValidator<unknown, U
   }
 
   /** All items must be unique */
-  unique(): this {
-    return this.addStrategy(new UniqueArrayStrategy() as never);
+  unique(options?: ValidationOptions): this {
+    const strategy = new UniqueArrayStrategy();
+    if (options?.message) strategy.withMessage(options.message);
+    return this.addStrategy(strategy as never);
   }
 
   /** Alias for unique */

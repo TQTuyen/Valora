@@ -5,7 +5,9 @@
 
 import { boolean } from '@validators/boolean';
 
-import { createTypeDecorator } from '../../core/factory';
+import { createPropertyDecorator } from '../../core/factory';
+
+import type { ValidationOptions } from '#types/index';
 
 /**
  * Validates that value is true
@@ -22,6 +24,6 @@ import { createTypeDecorator } from '../../core/factory';
  * }
  * ```
  */
-export function IsTrue(): PropertyDecorator {
-  return createTypeDecorator(() => boolean().isTrue())();
+export function IsTrue(options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((opts?: ValidationOptions) => boolean().isTrue(opts))(options);
 }

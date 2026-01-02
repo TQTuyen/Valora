@@ -5,22 +5,30 @@
 
 import { number } from '@validators/number';
 
-import { createTypeDecorator } from '../../core/factory';
+import { createPropertyDecorator } from '../../core/factory';
+
+import type { ValidationOptions } from '#types/index';
 
 /**
- * Validates that the value is a number
+ * Validates that value is a number
  *
  * @decorator
  *
  * @example
  * ```typescript
  * @Validate()
- * class Product {
+ * class User {
  *   @IsNumber()
- *   price: number;
+ *   age: number;
  * }
  * ```
  */
-export function IsNumber(): PropertyDecorator {
-  return createTypeDecorator(() => number())();
+export function IsNumber(options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((opts?: ValidationOptions) => {
+    const v = number();
+    if (opts?.message) {
+      v.withMessage(opts.message);
+    }
+    return v;
+  })(options);
 }

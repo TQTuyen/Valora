@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
-import { IsBoolean, IsFalse, IsTrue } from '@/decorators/property/boolean';
 import { validateClassInstance } from '@/decorators/class';
+import { IsBoolean, IsFalse, IsTrue } from '@/decorators/property/boolean';
 
 describe('Boolean Property Decorators', () => {
   describe('@IsBoolean', () => {
     it('should pass when value is true', () => {
       class TestDto {
         @IsBoolean()
-        value: boolean;
+        value!: boolean;
       }
 
       const dto = new TestDto();
@@ -21,7 +21,7 @@ describe('Boolean Property Decorators', () => {
     it('should pass when value is false', () => {
       class TestDto {
         @IsBoolean()
-        value: boolean;
+        value!: boolean;
       }
 
       const dto = new TestDto();
@@ -34,7 +34,7 @@ describe('Boolean Property Decorators', () => {
     it('should fail when value is not a boolean', () => {
       class TestDto {
         @IsBoolean()
-        value: any;
+        value!: any;
       }
 
       const dto = new TestDto();
@@ -43,13 +43,13 @@ describe('Boolean Property Decorators', () => {
       const result = validateClassInstance(dto);
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].path).toEqual(['value']);
+      expect(result.errors[0]?.path).toEqual(['value']);
     });
 
     it('should fail when value is 1', () => {
       class TestDto {
         @IsBoolean()
-        value: any;
+        value!: any;
       }
 
       const dto = new TestDto();
@@ -62,7 +62,7 @@ describe('Boolean Property Decorators', () => {
     it('should fail when value is 0', () => {
       class TestDto {
         @IsBoolean()
-        value: any;
+        value!: any;
       }
 
       const dto = new TestDto();
@@ -75,7 +75,7 @@ describe('Boolean Property Decorators', () => {
     it('should fail when value is "true" string', () => {
       class TestDto {
         @IsBoolean()
-        value: any;
+        value!: any;
       }
 
       const dto = new TestDto();
@@ -88,7 +88,7 @@ describe('Boolean Property Decorators', () => {
     it('should fail when value is "false" string', () => {
       class TestDto {
         @IsBoolean()
-        value: any;
+        value!: any;
       }
 
       const dto = new TestDto();
@@ -101,7 +101,7 @@ describe('Boolean Property Decorators', () => {
     it('should fail when value is null', () => {
       class TestDto {
         @IsBoolean()
-        value: any;
+        value!: any;
       }
 
       const dto = new TestDto();
@@ -114,7 +114,7 @@ describe('Boolean Property Decorators', () => {
     it('should fail when value is undefined', () => {
       class TestDto {
         @IsBoolean()
-        value: any;
+        value!: any;
       }
 
       const dto = new TestDto();
@@ -127,7 +127,7 @@ describe('Boolean Property Decorators', () => {
     it('should accept custom error message', () => {
       class TestDto {
         @IsBoolean({ message: 'Value must be a boolean' })
-        value: any;
+        value!: any;
       }
 
       const dto = new TestDto();
@@ -143,7 +143,7 @@ describe('Boolean Property Decorators', () => {
     it('should pass when value is true', () => {
       class TestDto {
         @IsTrue()
-        value: boolean;
+        value!: boolean;
       }
 
       const dto = new TestDto();
@@ -156,7 +156,7 @@ describe('Boolean Property Decorators', () => {
     it('should fail when value is false', () => {
       class TestDto {
         @IsTrue()
-        value: boolean;
+        value!: boolean;
       }
 
       const dto = new TestDto();
@@ -165,13 +165,13 @@ describe('Boolean Property Decorators', () => {
       const result = validateClassInstance(dto);
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].path).toEqual(['value']);
+      expect(result.errors[0]?.path).toEqual(['value']);
     });
 
     it('should fail when value is 1', () => {
       class TestDto {
         @IsTrue()
-        value: any;
+        value!: any;
       }
 
       const dto = new TestDto();
@@ -184,7 +184,7 @@ describe('Boolean Property Decorators', () => {
     it('should fail when value is "true" string', () => {
       class TestDto {
         @IsTrue()
-        value: any;
+        value!: any;
       }
 
       const dto = new TestDto();
@@ -197,7 +197,7 @@ describe('Boolean Property Decorators', () => {
     it('should fail when value is null', () => {
       class TestDto {
         @IsTrue()
-        value: any;
+        value!: any;
       }
 
       const dto = new TestDto();
@@ -210,7 +210,7 @@ describe('Boolean Property Decorators', () => {
     it('should accept custom error message', () => {
       class TestDto {
         @IsTrue({ message: 'Value must be true' })
-        value: boolean;
+        value!: boolean;
       }
 
       const dto = new TestDto();
@@ -226,7 +226,7 @@ describe('Boolean Property Decorators', () => {
     it('should pass when value is false', () => {
       class TestDto {
         @IsFalse()
-        value: boolean;
+        value!: boolean;
       }
 
       const dto = new TestDto();
@@ -239,7 +239,7 @@ describe('Boolean Property Decorators', () => {
     it('should fail when value is true', () => {
       class TestDto {
         @IsFalse()
-        value: boolean;
+        value!: boolean;
       }
 
       const dto = new TestDto();
@@ -248,13 +248,13 @@ describe('Boolean Property Decorators', () => {
       const result = validateClassInstance(dto);
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].path).toEqual(['value']);
+      expect(result.errors[0]?.path).toEqual(['value']);
     });
 
     it('should fail when value is 0', () => {
       class TestDto {
         @IsFalse()
-        value: any;
+        value!: any;
       }
 
       const dto = new TestDto();
@@ -267,7 +267,7 @@ describe('Boolean Property Decorators', () => {
     it('should fail when value is "false" string', () => {
       class TestDto {
         @IsFalse()
-        value: any;
+        value!: any;
       }
 
       const dto = new TestDto();
@@ -280,7 +280,7 @@ describe('Boolean Property Decorators', () => {
     it('should fail when value is null', () => {
       class TestDto {
         @IsFalse()
-        value: any;
+        value!: any;
       }
 
       const dto = new TestDto();
@@ -293,7 +293,7 @@ describe('Boolean Property Decorators', () => {
     it('should accept custom error message', () => {
       class TestDto {
         @IsFalse({ message: 'Value must be false' })
-        value: boolean;
+        value!: boolean;
       }
 
       const dto = new TestDto();
@@ -310,7 +310,7 @@ describe('Boolean Property Decorators', () => {
       class TermsDto {
         @IsBoolean()
         @IsTrue()
-        acceptedTerms: boolean;
+        acceptedTerms!: boolean;
       }
 
       const dto = new TermsDto();
@@ -324,7 +324,7 @@ describe('Boolean Property Decorators', () => {
       class TermsDto {
         @IsBoolean()
         @IsTrue()
-        acceptedTerms: boolean;
+        acceptedTerms!: boolean;
       }
 
       const dto = new TermsDto();
@@ -339,7 +339,7 @@ describe('Boolean Property Decorators', () => {
       class FeatureDto {
         @IsBoolean()
         @IsFalse()
-        isDisabled: boolean;
+        isDisabled!: boolean;
       }
 
       const dto = new FeatureDto();
@@ -353,7 +353,7 @@ describe('Boolean Property Decorators', () => {
       class FeatureDto {
         @IsBoolean()
         @IsFalse()
-        isDisabled: boolean;
+        isDisabled!: boolean;
       }
 
       const dto = new FeatureDto();
@@ -366,14 +366,14 @@ describe('Boolean Property Decorators', () => {
     it('should validate multiple boolean fields', () => {
       class SettingsDto {
         @IsBoolean()
-        darkMode: boolean;
+        darkMode!: boolean;
 
         @IsBoolean()
         @IsTrue()
-        acceptedTerms: boolean;
+        acceptedTerms!: boolean;
 
         @IsBoolean()
-        notifications: boolean;
+        notifications!: boolean;
       }
 
       const dto = new SettingsDto();
@@ -388,14 +388,14 @@ describe('Boolean Property Decorators', () => {
     it('should fail when one required boolean is not true', () => {
       class SettingsDto {
         @IsBoolean()
-        darkMode: boolean;
+        darkMode!: boolean;
 
         @IsBoolean()
         @IsTrue()
-        acceptedTerms: boolean;
+        acceptedTerms!: boolean;
 
         @IsBoolean()
-        notifications: boolean;
+        notifications!: boolean;
       }
 
       const dto = new SettingsDto();
@@ -406,21 +406,21 @@ describe('Boolean Property Decorators', () => {
       const result = validateClassInstance(dto);
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].path).toEqual(['acceptedTerms']);
+      expect(result.errors[0]?.path).toEqual(['acceptedTerms']);
     });
 
     it('should validate consent form', () => {
       class ConsentDto {
         @IsBoolean()
         @IsTrue()
-        agreeToTerms: boolean;
+        agreeToTerms!: boolean;
 
         @IsBoolean()
         @IsTrue()
-        agreeToPrivacy: boolean;
+        agreeToPrivacy!: boolean;
 
         @IsBoolean()
-        marketingEmails: boolean; // Optional, can be true or false
+        marketingEmails!: boolean; // Optional, can be true or false
       }
 
       const dto = new ConsentDto();
@@ -436,14 +436,14 @@ describe('Boolean Property Decorators', () => {
       class ConsentDto {
         @IsBoolean()
         @IsTrue()
-        agreeToTerms: boolean;
+        agreeToTerms!: boolean;
 
         @IsBoolean()
         @IsTrue()
-        agreeToPrivacy: boolean;
+        agreeToPrivacy!: boolean;
 
         @IsBoolean()
-        marketingEmails: boolean;
+        marketingEmails!: boolean;
       }
 
       const dto = new ConsentDto();
@@ -454,7 +454,7 @@ describe('Boolean Property Decorators', () => {
       const result = validateClassInstance(dto);
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].path).toEqual(['agreeToPrivacy']);
+      expect(result.errors[0]?.path).toEqual(['agreeToPrivacy']);
     });
   });
 });

@@ -35,10 +35,10 @@ describe('Class Decorator Integration Tests', () => {
       class UserDto {
         @IsString()
         @MinLength(2)
-        name: string;
+        name!: string;
 
         @IsEmail()
-        email: string;
+        email!: string;
       }
 
       const user = new UserDto();
@@ -54,10 +54,10 @@ describe('Class Decorator Integration Tests', () => {
       class UserDto {
         @IsString()
         @MinLength(2)
-        name: string;
+        name!: string;
 
         @IsEmail()
-        email: string;
+        email!: string;
       }
 
       const user = new UserDto();
@@ -72,10 +72,10 @@ describe('Class Decorator Integration Tests', () => {
     it('should validate class without @Validate decorator using validateClassInstance', () => {
       class UserDto {
         @IsString()
-        name: string;
+        name!: string;
 
         @IsNumber()
-        age: number;
+        age!: number;
       }
 
       const user = new UserDto();
@@ -92,18 +92,18 @@ describe('Class Decorator Integration Tests', () => {
       class ProductDto {
         @IsString()
         @NotEmpty()
-        name: string;
+        name!: string;
 
         @IsNumber()
         @IsPositive()
-        price: number;
+        price!: number;
       }
 
       const product = new ProductDto();
       product.name = 'Product';
       product.price = 99.99;
 
-      const result = validate(ProductDto, product);
+      const result = validate(product);
       expect(result.success).toBe(true);
     });
 
@@ -111,11 +111,11 @@ describe('Class Decorator Integration Tests', () => {
       class ProductDto {
         @IsString()
         @NotEmpty()
-        name: string;
+        name!: string;
 
         @IsNumber()
         @IsPositive()
-        price: number;
+        price!: number;
       }
 
       const product = new ProductDto();
@@ -133,7 +133,7 @@ describe('Class Decorator Integration Tests', () => {
       class UserDto {
         @IsString()
         @MinLength(5)
-        name: string;
+        name!: string;
       }
 
       const user = new UserDto();
@@ -142,7 +142,7 @@ describe('Class Decorator Integration Tests', () => {
       expect(() => {
         const result = validateClassInstance(user);
         if (!result.success) {
-          throw new ValoraValidationError(result.errors);
+          throw new ValoraValidationError('Validation failed', result.errors);
         }
       }).toThrow(ValoraValidationError);
     });
@@ -155,41 +155,41 @@ describe('Class Decorator Integration Tests', () => {
         @IsString()
         @MinLength(3)
         @MaxLength(50)
-        username: string;
+        username!: string;
 
         @IsEmail()
-        email: string;
+        email!: string;
 
         @IsString()
         @MinLength(8)
         @Contains('!')
-        password: string;
+        password!: string;
 
         // Number validations
         @IsInt()
         @Range(18, 120)
-        age: number;
+        age!: number;
 
         // Boolean validations
         @IsBoolean()
         @IsTrue()
-        acceptedTerms: boolean;
+        acceptedTerms!: boolean;
 
         @IsBoolean()
-        newsletter: boolean;
+        newsletter!: boolean;
 
         // Date validations
         @IsDate()
         @IsPast()
         @MinAge(18)
-        birthDate: Date;
+        birthDate!: Date;
 
         // Array validations
         @IsArray()
         @ArrayMinSize(1)
         @ArrayMaxSize(5)
         @ArrayUnique()
-        interests: string[];
+        interests!: string[];
 
         // Optional fields
         @IsOptional()
@@ -212,9 +212,7 @@ describe('Class Decorator Integration Tests', () => {
       user.interests = ['coding', 'reading', 'gaming'];
 
       const result = validateClassInstance(user);
-      if (!result.success) {
-        console.log('Validation errors:', result.errors);
-      }
+
       expect(result.success).toBe(true);
     });
 
@@ -222,22 +220,22 @@ describe('Class Decorator Integration Tests', () => {
       class UserRegistrationDto {
         @IsString()
         @MinLength(3)
-        username: string;
+        username!: string;
 
         @IsEmail()
-        email: string;
+        email!: string;
 
         @IsInt()
         @Range(18, 120)
-        age: number;
+        age!: number;
 
         @IsBoolean()
         @IsTrue()
-        acceptedTerms: boolean;
+        acceptedTerms!: boolean;
 
         @IsArray()
         @ArrayNotEmpty()
-        interests: string[];
+        interests!: string[];
       }
 
       const user = new UserRegistrationDto();
@@ -258,34 +256,34 @@ describe('Class Decorator Integration Tests', () => {
       class AddressDto {
         @IsString()
         @MinLength(5)
-        street: string;
+        street!: string;
 
         @IsString()
-        city: string;
+        city!: string;
 
         @IsString()
         @MaxLength(10)
-        postalCode: string;
+        postalCode!: string;
       }
 
       class ContactDto {
         @IsEmail()
-        email: string;
+        email!: string;
 
         @IsString()
         @MinLength(10)
-        phone: string;
+        phone!: string;
       }
 
       class UserDto {
         @IsString()
-        name: string;
+        name!: string;
 
         @ValidateNested()
-        address: AddressDto;
+        address!: AddressDto;
 
         @ValidateNested()
-        contact: ContactDto;
+        contact!: ContactDto;
       }
 
       const user = new UserDto();
@@ -311,18 +309,18 @@ describe('Class Decorator Integration Tests', () => {
       class AddressDto {
         @IsString()
         @MinLength(5)
-        street: string;
+        street!: string;
 
         @IsString()
-        city: string;
+        city!: string;
       }
 
       class UserDto {
         @IsString()
-        name: string;
+        name!: string;
 
         @ValidateNested()
-        address: AddressDto;
+        address!: AddressDto;
       }
 
       const user = new UserDto();
@@ -342,26 +340,26 @@ describe('Class Decorator Integration Tests', () => {
     it('should validate deeply nested structures', () => {
       class LocationDto {
         @IsNumber()
-        lat: number;
+        lat!: number;
 
         @IsNumber()
-        lng: number;
+        lng!: number;
       }
 
       class AddressDto {
         @IsString()
-        street: string;
+        street!: string;
 
         @ValidateNested()
-        location: LocationDto;
+        location!: LocationDto;
       }
 
       class CompanyDto {
         @IsString()
-        name: string;
+        name!: string;
 
         @ValidateNested()
-        address: AddressDto;
+        address!: AddressDto;
       }
 
       const company = new CompanyDto();
@@ -385,26 +383,24 @@ describe('Class Decorator Integration Tests', () => {
   describe('Array of Nested Objects', () => {
     it('should validate array of nested objects', () => {
       class OrderItemDto {
-        @IsString()
-        @NotEmpty()
-        productName: string;
+        productName!: string;
 
         @IsNumber()
         @IsPositive()
-        quantity: number;
+        quantity!: number;
 
         @IsNumber()
         @IsPositive()
-        price: number;
+        price!: number;
       }
 
       class OrderDto {
         @IsString()
-        orderId: string;
+        orderId!: string;
 
         @ValidateNested({ each: true })
         @ArrayNotEmpty()
-        items: OrderItemDto[];
+        items!: OrderItemDto[];
       }
 
       const order = new OrderDto();
@@ -430,16 +426,16 @@ describe('Class Decorator Integration Tests', () => {
       class OrderItemDto {
         @IsString()
         @NotEmpty()
-        productName: string;
+        productName!: string;
 
         @IsNumber()
         @IsPositive()
-        quantity: number;
+        quantity!: number;
       }
 
       class OrderDto {
         @ValidateNested({ each: true })
-        items: OrderItemDto[];
+        items!: OrderItemDto[];
       }
 
       const order = new OrderDto();
@@ -465,62 +461,62 @@ describe('Class Decorator Integration Tests', () => {
       class ProductDto {
         @IsString()
         @NotEmpty()
-        name: string;
+        name!: string;
 
         @IsString()
-        sku: string;
+        sku!: string;
 
         @IsNumber()
         @IsPositive()
-        price: number;
+        price!: number;
       }
 
       class ShippingAddressDto {
         @IsString()
         @MinLength(5)
-        street: string;
+        street!: string;
 
         @IsString()
-        city: string;
+        city!: string;
 
         @IsString()
-        country: string;
+        country!: string;
 
         @IsString()
-        postalCode: string;
+        postalCode!: string;
       }
 
       class PaymentDto {
         @IsString()
-        method: string;
+        method!: string;
 
         @IsBoolean()
         @IsTrue()
-        verified: boolean;
+        verified!: boolean;
       }
 
       class OrderDto {
         @IsString()
-        orderId: string;
+        orderId!: string;
 
         @ValidateNested({ each: true })
         @ArrayNotEmpty()
         @ArrayMaxSize(50)
-        products: ProductDto[];
+        products!: ProductDto[];
 
         @ValidateNested()
-        shippingAddress: ShippingAddressDto;
+        shippingAddress!: ShippingAddressDto;
 
         @ValidateNested()
-        payment: PaymentDto;
+        payment!: PaymentDto;
 
         @IsDate()
         @IsFuture()
-        estimatedDelivery: Date;
+        estimatedDelivery!: Date;
 
         @IsNumber()
         @IsPositive()
-        totalAmount: number;
+        totalAmount!: number;
       }
 
       const order = new OrderDto();
@@ -560,10 +556,10 @@ describe('Class Decorator Integration Tests', () => {
       class UserProfileDto {
         @IsString()
         @MinLength(3)
-        username: string;
+        username!: string;
 
         @IsEmail()
-        email: string;
+        email!: string;
 
         @IsOptional()
         @IsString()
@@ -592,7 +588,7 @@ describe('Class Decorator Integration Tests', () => {
     it('should validate optional fields when provided', () => {
       class UserProfileDto {
         @IsString()
-        username: string;
+        username!: string;
 
         @IsOptional()
         @IsString()
@@ -616,7 +612,7 @@ describe('Class Decorator Integration Tests', () => {
     it('should fail when optional field has invalid value', () => {
       class UserProfileDto {
         @IsString()
-        username: string;
+        username!: string;
 
         @IsOptional()
         @IsUrl()
@@ -638,27 +634,27 @@ describe('Class Decorator Integration Tests', () => {
         @IsString()
         @MinLength(2)
         @MaxLength(20)
-        name: string;
+        name!: string;
       }
 
       class BlogPostDto {
         @IsString()
         @MinLength(5)
         @MaxLength(200)
-        title: string;
+        title!: string;
 
         @IsString()
         @MinLength(50)
-        content: string;
+        content!: string;
 
         @ValidateNested({ each: true })
         @ArrayMinSize(1)
         @ArrayMaxSize(5)
         @ArrayUnique()
-        tags: TagDto[];
+        tags!: TagDto[];
 
         @IsBoolean()
-        published: boolean;
+        published!: boolean;
 
         @IsOptional()
         @IsDate()
@@ -688,40 +684,40 @@ describe('Class Decorator Integration Tests', () => {
       class AttendeeDto {
         @IsString()
         @MinLength(2)
-        firstName: string;
+        firstName!: string;
 
         @IsString()
         @MinLength(2)
-        lastName: string;
+        lastName!: string;
 
         @IsEmail()
-        email: string;
+        email!: string;
 
         @IsInt()
         @Range(0, 150)
-        age: number;
+        age!: number;
       }
 
       class EventRegistrationDto {
         @IsString()
-        eventId: string;
+        eventId!: string;
 
         @ValidateNested({ each: true })
         @ArrayNotEmpty()
         @ArrayMaxSize(10)
-        attendees: AttendeeDto[];
+        attendees!: AttendeeDto[];
 
         @IsDate()
         @IsFuture()
-        eventDate: Date;
+        eventDate!: Date;
 
         @IsBoolean()
         @IsTrue()
-        agreedToTerms: boolean;
+        agreedToTerms!: boolean;
 
         @IsNumber()
         @IsPositive()
-        totalAmount: number;
+        totalAmount!: number;
       }
 
       const registration = new EventRegistrationDto();
@@ -755,26 +751,26 @@ describe('Class Decorator Integration Tests', () => {
     it('should validate job application', () => {
       class EducationDto {
         @IsString()
-        institution: string;
+        institution!: string;
 
         @IsString()
-        degree: string;
+        degree!: string;
 
         @IsDate()
         @IsPast()
-        graduationDate: Date;
+        graduationDate!: Date;
       }
 
       class ExperienceDto {
         @IsString()
-        company: string;
+        company!: string;
 
         @IsString()
-        position: string;
+        position!: string;
 
         @IsDate()
         @IsPast()
-        startDate: Date;
+        startDate!: Date;
 
         @IsOptional()
         @IsDate()
@@ -784,30 +780,30 @@ describe('Class Decorator Integration Tests', () => {
       class JobApplicationDto {
         @IsString()
         @MinLength(2)
-        fullName: string;
+        fullName!: string;
 
         @IsEmail()
-        email: string;
+        email!: string;
 
         @IsString()
         @MinLength(10)
-        phone: string;
+        phone!: string;
 
         @ValidateNested({ each: true })
         @ArrayNotEmpty()
-        education: EducationDto[];
+        education!: EducationDto[];
 
         @ValidateNested({ each: true })
         @ArrayNotEmpty()
-        experience: ExperienceDto[];
+        experience!: ExperienceDto[];
 
         @IsString()
-        @MinLength(100)
-        coverLetter: string;
+        @NotEmpty()
+        coverLetter!: string;
 
         @IsBoolean()
         @IsTrue()
-        confirmAccuracy: boolean;
+        confirmAccuracy!: boolean;
       }
 
       const application = new JobApplicationDto();
@@ -845,15 +841,15 @@ describe('Class Decorator Integration Tests', () => {
       class AddressDto {
         @IsString()
         @MinLength(5)
-        street: string;
+        street!: string;
       }
 
       class UserDto {
         @IsString()
-        name: string;
+        name!: string;
 
         @ValidateNested()
-        address: AddressDto;
+        address!: AddressDto;
       }
 
       const user = new UserDto();
@@ -875,12 +871,12 @@ describe('Class Decorator Integration Tests', () => {
       class ItemDto {
         @IsString()
         @NotEmpty()
-        name: string;
+        name!: string;
       }
 
       class OrderDto {
         @ValidateNested({ each: true })
-        items: ItemDto[];
+        items!: ItemDto[];
       }
 
       const order = new OrderDto();

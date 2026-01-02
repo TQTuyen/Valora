@@ -7,22 +7,26 @@ import { array } from '@validators/array';
 
 import { createPropertyDecorator } from '../../core/factory';
 
+import type { ValidationOptions } from '#types/index';
+
 /**
- * Validates exact array length
+ * Validates that array has the exact specified number of items
  *
- * @param length - Exact number of items required
+ * @param exactSize - Exact array size
+ * @param options - Validation options
  * @decorator
  *
  * @example
+ *
  * ```typescript
- * @Validate()
- * class Coordinate {
- *   @IsArray()
- *   @ArrayLength(2)
- *   point: number[]; // [x, y]
+ * class Example {
+ *   @ArrayLength(3)
+ *   items: any[];
  * }
  * ```
  */
-export function ArrayLength(length: number): PropertyDecorator {
-  return createPropertyDecorator((len: number) => array().length(len))(length);
+export function ArrayLength(exactSize: number, options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((len: number, opts?: ValidationOptions) =>
+    array().length(len, opts),
+  )(exactSize, options);
 }

@@ -16,6 +16,7 @@ export type {
   IAsyncValidator,
   IValidationStrategy,
   IValidator,
+  ValidationOptions,
 } from './validators';
 
 // Pattern Types (Chain of Responsibility, Observer, Factory)

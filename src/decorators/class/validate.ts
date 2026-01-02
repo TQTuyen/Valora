@@ -167,7 +167,7 @@ export function validateClassInstance(instance: object): ValidationResult<object
       data: instance, // For cross-field validation
     };
 
-    let result: ValidationResult<any>;
+    let result!: ValidationResult<any>;
 
     // Check if property is optional and undefined (applies to both nested and regular)
     const hasOptional = propMeta.validators.some((v: any) => v._type === 'optional');

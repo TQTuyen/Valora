@@ -5,23 +5,24 @@
 
 import { number } from '@validators/number';
 
-import { createTypeDecorator } from '../../core/factory';
+import { createPropertyDecorator } from '../../core/factory';
+
+import type { ValidationOptions } from '#types/index';
 
 /**
- * Validates that number is positive (> 0)
+ * Validates that value is positive (> 0)
  *
  * @decorator
  *
  * @example
  * ```typescript
  * @Validate()
- * class Product {
- *   @IsNumber()
+ * class User {
  *   @IsPositive()
- *   price: number;
+ *   age: number;
  * }
  * ```
  */
-export function IsPositive(): PropertyDecorator {
-  return createTypeDecorator(() => number().positive())();
+export function IsPositive(options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((opts?: ValidationOptions) => number().positive(opts))(options);
 }

@@ -5,24 +5,24 @@
 
 import { number } from '@validators/number';
 
-import { createTypeDecorator } from '../../core/factory';
+import { createPropertyDecorator } from '../../core/factory';
+
+import type { ValidationOptions } from '#types/index';
 
 /**
- * Validates that number is a safe integer
- * (between Number.MIN_SAFE_INTEGER and Number.MAX_SAFE_INTEGER)
+ * Validates that value is a safe integer
  *
  * @decorator
  *
  * @example
  * ```typescript
  * @Validate()
- * class Counter {
- *   @IsNumber()
+ * class User {
  *   @IsSafeInt()
- *   count: number;
+ *   age: number;
  * }
  * ```
  */
-export function IsSafeInt(): PropertyDecorator {
-  return createTypeDecorator(() => number().safeInteger())();
+export function IsSafeInt(options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((opts?: ValidationOptions) => number().safe(opts))(options);
 }

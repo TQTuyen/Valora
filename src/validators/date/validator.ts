@@ -19,7 +19,7 @@ import {
   MinDateStrategy,
 } from './strategies';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /**
  * Date validator with fluent API
@@ -80,15 +80,19 @@ export class DateValidator extends BaseValidator<unknown, Date> {
   // -------------------------------------------------------------------------
 
   /** Minimum date (inclusive) */
-  min(minDate: Date | string): this {
+  min(minDate: Date | string, options?: ValidationOptions): this {
     const date = minDate instanceof Date ? minDate : new Date(minDate);
-    return this.addStrategy(new MinDateStrategy(date));
+    const strategy = new MinDateStrategy(date);
+    if (options?.message) strategy.withMessage(options.message);
+    return this.addStrategy(strategy);
   }
 
   /** Maximum date (inclusive) */
-  max(maxDate: Date | string): this {
+  max(maxDate: Date | string, options?: ValidationOptions): this {
     const date = maxDate instanceof Date ? maxDate : new Date(maxDate);
-    return this.addStrategy(new MaxDateStrategy(date));
+    const strategy = new MaxDateStrategy(date);
+    if (options?.message) strategy.withMessage(options.message);
+    return this.addStrategy(strategy);
   }
 
   /** Date must be within range (inclusive) */
@@ -106,25 +110,29 @@ export class DateValidator extends BaseValidator<unknown, Date> {
   // -------------------------------------------------------------------------
 
   /** Must be before the given date (exclusive) */
-  before(date: Date | string): this {
+  before(date: Date | string, options?: ValidationOptions): this {
     const d = date instanceof Date ? date : new Date(date);
-    return this.addStrategy(new IsBeforeStrategy(d));
+    const strategy = new IsBeforeStrategy(d);
+    if (options?.message) strategy.withMessage(options.message);
+    return this.addStrategy(strategy);
   }
 
   /** Alias for before */
-  isBefore(date: Date | string): this {
-    return this.before(date);
+  isBefore(date: Date | string, options?: ValidationOptions): this {
+    return this.before(date, options);
   }
 
   /** Must be after the given date (exclusive) */
-  after(date: Date | string): this {
+  after(date: Date | string, options?: ValidationOptions): this {
     const d = date instanceof Date ? date : new Date(date);
-    return this.addStrategy(new IsAfterStrategy(d));
+    const strategy = new IsAfterStrategy(d);
+    if (options?.message) strategy.withMessage(options.message);
+    return this.addStrategy(strategy);
   }
 
   /** Alias for after */
-  isAfter(date: Date | string): this {
-    return this.after(date);
+  isAfter(date: Date | string, options?: ValidationOptions): this {
+    return this.after(date, options);
   }
 
   // -------------------------------------------------------------------------
@@ -132,8 +140,10 @@ export class DateValidator extends BaseValidator<unknown, Date> {
   // -------------------------------------------------------------------------
 
   /** Must be in the past */
-  past(): this {
-    return this.addStrategy(new IsPastStrategy());
+  past(options?: ValidationOptions): this {
+    const strategy = new IsPastStrategy();
+    if (options?.message) strategy.withMessage(options.message);
+    return this.addStrategy(strategy);
   }
 
   /** Alias for past */
@@ -142,8 +152,10 @@ export class DateValidator extends BaseValidator<unknown, Date> {
   }
 
   /** Must be in the future */
-  future(): this {
-    return this.addStrategy(new IsFutureStrategy());
+  future(options?: ValidationOptions): this {
+    const strategy = new IsFutureStrategy();
+    if (options?.message) strategy.withMessage(options.message);
+    return this.addStrategy(strategy);
   }
 
   /** Alias for future */
@@ -152,8 +164,10 @@ export class DateValidator extends BaseValidator<unknown, Date> {
   }
 
   /** Must be today */
-  today(): this {
-    return this.addStrategy(new IsTodayStrategy());
+  today(options?: ValidationOptions): this {
+    const strategy = new IsTodayStrategy();
+    if (options?.message) strategy.withMessage(options.message);
+    return this.addStrategy(strategy);
   }
 
   /** Alias for today */
@@ -166,8 +180,10 @@ export class DateValidator extends BaseValidator<unknown, Date> {
   // -------------------------------------------------------------------------
 
   /** Must be a weekday (Monday-Friday) */
-  weekday(): this {
-    return this.addStrategy(new IsWeekdayStrategy());
+  weekday(options?: ValidationOptions): this {
+    const strategy = new IsWeekdayStrategy();
+    if (options?.message) strategy.withMessage(options.message);
+    return this.addStrategy(strategy);
   }
 
   /** Alias for weekday */
@@ -176,8 +192,10 @@ export class DateValidator extends BaseValidator<unknown, Date> {
   }
 
   /** Must be a weekend (Saturday-Sunday) */
-  weekend(): this {
-    return this.addStrategy(new IsWeekendStrategy());
+  weekend(options?: ValidationOptions): this {
+    const strategy = new IsWeekendStrategy();
+    if (options?.message) strategy.withMessage(options.message);
+    return this.addStrategy(strategy);
   }
 
   /** Alias for weekend */
@@ -190,13 +208,17 @@ export class DateValidator extends BaseValidator<unknown, Date> {
   // -------------------------------------------------------------------------
 
   /** Minimum age in years (for birthdate validation) */
-  minAge(years: number): this {
-    return this.addStrategy(new MinAgeStrategy(years));
+  minAge(years: number, options?: ValidationOptions): this {
+    const strategy = new MinAgeStrategy(years);
+    if (options?.message) strategy.withMessage(options.message);
+    return this.addStrategy(strategy);
   }
 
   /** Maximum age in years (for birthdate validation) */
-  maxAge(years: number): this {
-    return this.addStrategy(new MaxAgeStrategy(years));
+  maxAge(years: number, options?: ValidationOptions): this {
+    const strategy = new MaxAgeStrategy(years);
+    if (options?.message) strategy.withMessage(options.message);
+    return this.addStrategy(strategy);
   }
 
   /** Age must be within range (for birthdate validation) */
