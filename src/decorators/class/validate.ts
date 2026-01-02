@@ -14,7 +14,11 @@
 
 import { createFailureResult, createSuccessResult } from '@utils/index';
 
-import { getCombinedValidator, getPropertyMetadata } from '../core/metadata';
+import {
+  getCombinedValidator,
+  getPropertyMetadata,
+  propertyValidatorsStorage,
+} from '../core/metadata';
 
 import type { PropertyValidatorMetadata } from '../core/metadata';
 import type { ValidationContext, ValidationError, ValidationResult } from '#types/index';
@@ -105,6 +109,13 @@ export function Validate(
       }
     };
 
+    // Copy metadata from original prototype to new prototype
+    // This ensures validation works when @Validate wraps the class
+    const originalMetadata = propertyValidatorsStorage.get(constructor.prototype);
+    if (originalMetadata) {
+      propertyValidatorsStorage.set(newConstructor.prototype, originalMetadata);
+    }
+
     // Preserve original class name for debugging
     Object.defineProperty(newConstructor, 'name', {
       value: constructor.name,
@@ -158,16 +169,31 @@ export function validateClassInstance(instance: object): ValidationResult<object
 
     let result: ValidationResult<any>;
 
+    // Check if property is optional and undefined (applies to both nested and regular)
+    const hasOptional = propMeta.validators.some((v: any) => v._type === 'optional');
+    if (hasOptional && value === undefined) {
+      // Skip validation for optional undefined fields
+      continue;
+    }
+
+    // Run regular validators first (even for nested properties)
+    if (propMeta.validators.length > 0) {
+      const validator = getCombinedValidator(propMeta);
+      result = validator.validate(value, context);
+
+      // If regular validation fails, don't proceed to nested validation
+      if (!result.success) {
+        errors.push(...result.errors);
+        continue;
+      }
+    }
+
+    // Then handle nested validation if applicable
     if (propMeta.isNested) {
-      // Handle nested validation
       result = validateNestedProperty(value, propMeta, context);
     } else {
-      // Regular validation with chained validators
-      if (propMeta.validators.length > 0) {
-        const validator = getCombinedValidator(propMeta);
-        result = validator.validate(value, context);
-      } else {
-        // No validators, skip
+      // If not nested and no validators, skip
+      if (propMeta.validators.length === 0) {
         continue;
       }
     }
