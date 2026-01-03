@@ -5,14 +5,20 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** Maximum date strategy */
 export class MaxDateStrategy extends BaseValidationStrategy<Date, Date> {
   readonly name = 'maxDate';
 
-  constructor(private readonly maxDate: Date) {
+  constructor(
+    private readonly maxDate: Date,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: Date, context: ValidationContext): ValidationResult<Date> {

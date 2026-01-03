@@ -20,7 +20,7 @@ import {
 } from './strategies';
 
 import type { FieldRef } from './strategies';
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /**
  * Create a field reference for cross-field validation
@@ -67,33 +67,33 @@ export class ComparisonValidator<T> extends BaseValidator<T, T> {
   // -------------------------------------------------------------------------
 
   /** Must equal a value or field */
-  equalTo(value: T | FieldRef): this {
-    return this.addStrategy(new EqualToStrategy(value) as never);
+  equalTo(value: T | FieldRef, options?: ValidationOptions): this {
+    return this.addStrategy(new EqualToStrategy(value, options) as never);
   }
 
   /** Alias for equalTo */
-  equals(value: T | FieldRef): this {
-    return this.equalTo(value);
+  equals(value: T | FieldRef, options?: ValidationOptions): this {
+    return this.equalTo(value, options);
   }
 
   /** Alias for equalTo */
-  eq(value: T | FieldRef): this {
-    return this.equalTo(value);
+  eq(value: T | FieldRef, options?: ValidationOptions): this {
+    return this.equalTo(value, options);
   }
 
   /** Must not equal a value or field */
-  notEqualTo(value: T | FieldRef): this {
-    return this.addStrategy(new NotEqualToStrategy(value) as never);
+  notEqualTo(value: T | FieldRef, options?: ValidationOptions): this {
+    return this.addStrategy(new NotEqualToStrategy(value, options) as never);
   }
 
   /** Alias for notEqualTo */
-  notEquals(value: T | FieldRef): this {
-    return this.notEqualTo(value);
+  notEquals(value: T | FieldRef, options?: ValidationOptions): this {
+    return this.notEqualTo(value, options);
   }
 
   /** Alias for notEqualTo */
-  neq(value: T | FieldRef): this {
-    return this.notEqualTo(value);
+  neq(value: T | FieldRef, options?: ValidationOptions): this {
+    return this.notEqualTo(value, options);
   }
 
   // -------------------------------------------------------------------------
@@ -101,55 +101,64 @@ export class ComparisonValidator<T> extends BaseValidator<T, T> {
   // -------------------------------------------------------------------------
 
   /** Must be greater than a value or field */
-  greaterThan(value: (T & (number | Date)) | FieldRef): this {
-    return this.addStrategy(new GreaterThanStrategy(value as number | Date | FieldRef) as never);
+  greaterThan(value: (T & (number | Date)) | FieldRef, options?: ValidationOptions): this {
+    return this.addStrategy(
+      new GreaterThanStrategy(value as number | Date | FieldRef, options) as never,
+    );
   }
 
   /** Alias for greaterThan */
-  gt(value: (T & (number | Date)) | FieldRef): this {
-    return this.greaterThan(value);
+  gt(value: (T & (number | Date)) | FieldRef, options?: ValidationOptions): this {
+    return this.greaterThan(value, options);
   }
 
   /** Must be greater than or equal to a value or field */
-  greaterThanOrEqual(value: (T & (number | Date)) | FieldRef): this {
+  greaterThanOrEqual(value: (T & (number | Date)) | FieldRef, options?: ValidationOptions): this {
     return this.addStrategy(
-      new GreaterThanOrEqualStrategy(value as number | Date | FieldRef) as never,
+      new GreaterThanOrEqualStrategy(value as number | Date | FieldRef, options) as never,
     );
   }
 
   /** Alias for greaterThanOrEqual */
-  gte(value: (T & (number | Date)) | FieldRef): this {
-    return this.greaterThanOrEqual(value);
+  gte(value: (T & (number | Date)) | FieldRef, options?: ValidationOptions): this {
+    return this.greaterThanOrEqual(value, options);
   }
 
   /** Must be less than a value or field */
-  lessThan(value: (T & (number | Date)) | FieldRef): this {
-    return this.addStrategy(new LessThanStrategy(value as number | Date | FieldRef) as never);
+  lessThan(value: (T & (number | Date)) | FieldRef, options?: ValidationOptions): this {
+    return this.addStrategy(
+      new LessThanStrategy(value as number | Date | FieldRef, options) as never,
+    );
   }
 
   /** Alias for lessThan */
-  lt(value: (T & (number | Date)) | FieldRef): this {
-    return this.lessThan(value);
+  lt(value: (T & (number | Date)) | FieldRef, options?: ValidationOptions): this {
+    return this.lessThan(value, options);
   }
 
   /** Must be less than or equal to a value or field */
-  lessThanOrEqual(value: (T & (number | Date)) | FieldRef): this {
+  lessThanOrEqual(value: (T & (number | Date)) | FieldRef, options?: ValidationOptions): this {
     return this.addStrategy(
-      new LessThanOrEqualStrategy(value as number | Date | FieldRef) as never,
+      new LessThanOrEqualStrategy(value as number | Date | FieldRef, options) as never,
     );
   }
 
   /** Alias for lessThanOrEqual */
-  lte(value: (T & (number | Date)) | FieldRef): this {
-    return this.lessThanOrEqual(value);
+  lte(value: (T & (number | Date)) | FieldRef, options?: ValidationOptions): this {
+    return this.lessThanOrEqual(value, options);
   }
 
   /** Must be between min and max (inclusive) */
-  between(min: (T & (number | Date)) | FieldRef, max: (T & (number | Date)) | FieldRef): this {
+  between(
+    min: (T & (number | Date)) | FieldRef,
+    max: (T & (number | Date)) | FieldRef,
+    options?: ValidationOptions,
+  ): this {
     return this.addStrategy(
       new BetweenStrategy(
         min as number | Date | FieldRef,
         max as number | Date | FieldRef,
+        options,
       ) as never,
     );
   }
@@ -159,28 +168,28 @@ export class ComparisonValidator<T> extends BaseValidator<T, T> {
   // -------------------------------------------------------------------------
 
   /** Must be one of the allowed values */
-  oneOf(values: T[]): this {
-    return this.addStrategy(new OneOfValueStrategy(values) as never);
+  oneOf(values: T[], options?: ValidationOptions): this {
+    return this.addStrategy(new OneOfValueStrategy(values, options) as never);
   }
 
   /** Alias for oneOf */
-  in(values: T[]): this {
-    return this.oneOf(values);
+  in(values: T[], options?: ValidationOptions): this {
+    return this.oneOf(values, options);
   }
 
   /** Alias for oneOf */
-  enum(values: T[]): this {
-    return this.oneOf(values);
+  enum(values: T[], options?: ValidationOptions): this {
+    return this.oneOf(values, options);
   }
 
   /** Must not be one of the forbidden values */
-  notOneOf(values: T[]): this {
-    return this.addStrategy(new NotOneOfStrategy(values) as never);
+  notOneOf(values: T[], options?: ValidationOptions): this {
+    return this.addStrategy(new NotOneOfStrategy(values, options) as never);
   }
 
   /** Alias for notOneOf */
-  notIn(values: T[]): this {
-    return this.notOneOf(values);
+  notIn(values: T[], options?: ValidationOptions): this {
+    return this.notOneOf(values, options);
   }
 
   // -------------------------------------------------------------------------
@@ -188,23 +197,23 @@ export class ComparisonValidator<T> extends BaseValidator<T, T> {
   // -------------------------------------------------------------------------
 
   /** Must be same as another field */
-  sameAs(fieldPath: string): this {
-    return this.addStrategy(new SameAsStrategy(fieldPath) as never);
+  sameAs(fieldPath: string, options?: ValidationOptions): this {
+    return this.addStrategy(new SameAsStrategy(fieldPath, options) as never);
   }
 
   /** Alias for sameAs */
-  matches(fieldPath: string): this {
-    return this.sameAs(fieldPath);
+  matches(fieldPath: string, options?: ValidationOptions): this {
+    return this.sameAs(fieldPath, options);
   }
 
   /** Must be different from another field */
-  differentFrom(fieldPath: string): this {
-    return this.addStrategy(new DifferentFromStrategy(fieldPath) as never);
+  differentFrom(fieldPath: string, options?: ValidationOptions): this {
+    return this.addStrategy(new DifferentFromStrategy(fieldPath, options) as never);
   }
 
   /** Alias for differentFrom */
-  notSameAs(fieldPath: string): this {
-    return this.differentFrom(fieldPath);
+  notSameAs(fieldPath: string, options?: ValidationOptions): this {
+    return this.differentFrom(fieldPath, options);
   }
 }
 
@@ -219,18 +228,24 @@ export function compare<T>(): ComparisonValidator<T> {
 /**
  * Create a literal/constant validator - value must exactly equal the specified literal
  * @param value - The literal value that must match
+ * @param options - Validation options
  */
-export function literal<T extends string | number | boolean>(value: T): ComparisonValidator<T> {
-  return new ComparisonValidator<T>().equalTo(value);
+export function literal<T extends string | number | boolean>(
+  value: T,
+  options?: ValidationOptions,
+): ComparisonValidator<T> {
+  return new ComparisonValidator<T>().equalTo(value, options);
 }
 
 /**
  * Create an enum validator from an object's values
  * @param enumObj - Enum object or record
+ * @param options - Validation options
  */
 export function nativeEnum<T extends Record<string, string | number>>(
   enumObj: T,
+  options?: ValidationOptions,
 ): ComparisonValidator<T[keyof T]> {
   const values = Object.values(enumObj) as T[keyof T][];
-  return new ComparisonValidator<T[keyof T]>().oneOf(values);
+  return new ComparisonValidator<T[keyof T]>().oneOf(values, options);
 }

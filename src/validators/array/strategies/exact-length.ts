@@ -5,7 +5,7 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /**
  * Exact length strategy
@@ -13,8 +13,14 @@ import type { ValidationContext, ValidationResult } from '#types/index';
 export class ExactLengthArrayStrategy<T> extends BaseValidationStrategy<T[], T[]> {
   readonly name = 'length';
 
-  constructor(private readonly exactLength: number) {
+  constructor(
+    private readonly exactLength: number,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: T[], context: ValidationContext): ValidationResult<T[]> {

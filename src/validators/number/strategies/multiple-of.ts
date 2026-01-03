@@ -5,14 +5,20 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** Multiple of strategy */
 export class MultipleOfStrategy extends BaseValidationStrategy<number, number> {
   readonly name = 'multipleOf';
 
-  constructor(private readonly factor: number) {
+  constructor(
+    private readonly factor: number,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: number, context: ValidationContext): ValidationResult<number> {

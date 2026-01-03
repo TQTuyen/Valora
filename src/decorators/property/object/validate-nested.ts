@@ -6,10 +6,12 @@
 
 import { markNested } from '../../core/metadata';
 
+import type { ValidationOptions } from '#types/index';
+
 /**
  * Options for @ValidateNested() decorator
  */
-export interface ValidateNestedOptions {
+export interface ValidateNestedOptions extends ValidationOptions {
   /**
    * If true, validates each item in an array
    * If false, validates a single nested object
@@ -53,7 +55,7 @@ export interface ValidateNestedOptions {
  */
 export function ValidateNested(options: ValidateNestedOptions = {}): PropertyDecorator {
   return (target: object, propertyKey: string | symbol): void => {
-    const { each = false } = options;
+    const { each = false, ...validationOptions } = options;
 
     // Type getter - currently not used by validation logic
     // but kept for potential future use (e.g., with emitDecoratorMetadata)
@@ -61,6 +63,6 @@ export function ValidateNested(options: ValidateNestedOptions = {}): PropertyDec
       return undefined;
     };
 
-    markNested(target, propertyKey, typeGetter, each);
+    markNested(target, propertyKey, typeGetter, each, validationOptions);
   };
 }

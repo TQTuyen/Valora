@@ -6,11 +6,18 @@
 import { BaseValidationStrategy } from '@core/index';
 import { patterns } from '@utils/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** UUID validation strategy */
 export class UuidStrategy extends BaseValidationStrategy<string, string> {
   readonly name = 'uuid';
+
+  constructor(options?: ValidationOptions) {
+    super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
+  }
 
   validate(value: string, context: ValidationContext): ValidationResult<string> {
     if (!patterns.uuid.test(value)) {

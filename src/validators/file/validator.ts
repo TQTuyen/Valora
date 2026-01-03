@@ -16,7 +16,12 @@ import {
 } from './strategies';
 
 import type { DimensionConstraints, ImageFile, ValidatableFile } from './strategies';
-import type { IAsyncValidator, ValidationContext, ValidationResult } from '#types/index';
+import type {
+  IAsyncValidator,
+  ValidationContext,
+  ValidationOptions,
+  ValidationResult,
+} from '#types/index';
 
 /**
  * File validator for validating uploaded files
@@ -41,41 +46,49 @@ export class FileValidator
   /**
    * Validate file MIME type
    * @param allowedTypes - Array of MIME types or RegExp pattern
+   * @param options - Optional validation options
    */
-  mimeType(allowedTypes: string[] | RegExp): this {
-    return this.addStrategy(new MimeTypeStrategy(allowedTypes));
+  mimeType(allowedTypes: string[] | RegExp, options?: ValidationOptions): this {
+    return this.addStrategy(new MimeTypeStrategy(allowedTypes, options));
   }
 
   /**
    * Validate file extension
    * @param allowedExtensions - Array of allowed extensions (with or without dots)
+   * @param options - Optional validation options
    */
-  extension(allowedExtensions: string[]): this {
-    return this.addStrategy(new FileExtensionStrategy(allowedExtensions));
+  extension(allowedExtensions: string[], options?: ValidationOptions): this {
+    return this.addStrategy(new FileExtensionStrategy(allowedExtensions, options));
   }
 
   /**
    * Validate minimum file size
    * @param minSize - Minimum size in bytes
+   * @param options - Optional validation options
    */
-  minSize(minSize: number): this {
-    return this.addStrategy(new MinFileSizeStrategy(minSize));
+  minSize(minSize: number, options?: ValidationOptions): this {
+    return this.addStrategy(new MinFileSizeStrategy(minSize, options));
   }
 
   /**
    * Validate maximum file size
    * @param maxSize - Maximum size in bytes
+   * @param options - Optional validation options
    */
-  maxSize(maxSize: number): this {
-    return this.addStrategy(new MaxFileSizeStrategy(maxSize));
+  maxSize(maxSize: number, options?: ValidationOptions): this {
+    return this.addStrategy(new MaxFileSizeStrategy(maxSize, options));
   }
 
   /**
    * Validate image dimensions (async)
    * @param constraints - Dimension constraints
+   * @param options - Optional validation options
    */
-  imageDimensions(constraints: DimensionConstraints): this & IAsyncValidator<ImageFile, ImageFile> {
-    return this.addStrategy(new ImageDimensionsStrategy(constraints)) as this &
+  imageDimensions(
+    constraints: DimensionConstraints,
+    options?: ValidationOptions,
+  ): this & IAsyncValidator<ImageFile, ImageFile> {
+    return this.addStrategy(new ImageDimensionsStrategy(constraints, options)) as this &
       IAsyncValidator<ImageFile, ImageFile>;
   }
 

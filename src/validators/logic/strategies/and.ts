@@ -5,14 +5,25 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { IValidator, ValidationContext, ValidationResult } from '#types/index';
+import type {
+  IValidator,
+  ValidationContext,
+  ValidationOptions,
+  ValidationResult,
+} from '#types/index';
 
 /** AND combinator - all validators must pass */
 export class AndStrategy<T, U> extends BaseValidationStrategy<T, U> {
   readonly name = 'and';
 
-  constructor(private readonly validators: IValidator<T, U>[]) {
+  constructor(
+    private readonly validators: IValidator<T, U>[],
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: T, context: ValidationContext): ValidationResult<U> {
@@ -22,6 +33,9 @@ export class AndStrategy<T, U> extends BaseValidationStrategy<T, U> {
       const validationResult = validator.validate(result as unknown as T, context);
 
       if (!validationResult.success) {
+        if (this.customMessage) {
+          return this.failure('logic.and', context);
+        }
         return validationResult;
       }
 
