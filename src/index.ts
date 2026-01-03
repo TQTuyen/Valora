@@ -172,7 +172,7 @@ export * from './decorators/property/index';
 // Plugins
 // -------------------------------------------------------------------------
 // i18n Plugin
-export { configureI18n, getI18n, type I18nConfig, I18nPlugin, setI18n } from './plugins/i18n/index';
+export { configureI18n, getI18n, type I18nConfig,I18nPlugin, setI18n } from './plugins/i18n/index';
 
 // Transform Plugin
 export {
@@ -192,6 +192,7 @@ export {
   sequence,
   stringTransforms,
   tap,
+  transform,
   TransformPlugin,
   when as whenTransform,
 } from './plugins/transform/index';
@@ -239,8 +240,10 @@ export {
   type ValidatorMap,
 } from './adapters/index';
 
-// Note: Vanilla adapter will be exported once implementation is complete
-// export { VanillaAdapter, createVanillaAdapter } from './adapters/index';
+// -------------------------------------------------------------------------
+// Vanilla Adapter
+// -------------------------------------------------------------------------
+export { createVanillaAdapter, VanillaAdapter } from './adapters/index';
 
 // -------------------------------------------------------------------------
 // Additional Core Types (from types/index)
