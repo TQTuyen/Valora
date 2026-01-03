@@ -326,8 +326,8 @@
  */
 
 import { ref, computed, onMounted } from 'vue';
-import { useFormValidation, useFieldValidation } from 'valora/adapters/vue';
-import { string, number } from 'valora/validators';
+import { useFormValidation, useFieldValidation } from '@tqtos/valora/adapters/vue';
+import { string, number } from '@tqtos/valora/validators';
 import './ComprehensiveDemo.css';
 
 // ============================================================================
@@ -360,31 +360,32 @@ interface Toast {
 
 const registrationSchema = {
   username: string()
-    .required()
-    .minLength(3, { message: 'Username must have at least 3 characters.' })
-    .maxLength(20)
-    .pattern(/^[a-z0-9_]+$/, 'Only lowercase letters, numbers, and underscores.')
-    .custom((value: string) => /^[a-z]/.test(value), 'Must start with a lowercase.'),
+    .required({ message: 'Username is required' })
+    .minLength(3, { message: 'Username must have at least 3 characters' })
+    .maxLength(20, { message: 'Username must be a maximum of 20 characters' })
+    .pattern(/^[a-z0-9_]+$/, {
+      message: 'Only lowercase letters, numbers, and underscores',
+    })
+    .custom((value) => /^[a-z]/.test(value), 'Must start with a lowercase letter'),
 
   password: string()
-    .required()
+    .required({ message: 'Password is required' })
     .minLength(8, { message: 'Password must be at least 8 characters' })
-    .custom((value: string) => /[A-Z]/.test(value), 'Must contain uppercase letter')
-    .custom((value: string) => /[a-z]/.test(value), 'Must contain lowercase letter')
-    .custom((value: string) => /[0-9]/.test(value), 'Must contain a number')
-    .custom(
-      (value: string) => /[!@#$%^&*(),.?":{}|<>]/.test(value),
-      'Must contain special character',
-    ),
+    .custom((value) => /[A-Z]/.test(value), 'Must contain uppercase letter')
+    .custom((value) => /[a-z]/.test(value), 'Must contain lowercase letter')
+    .custom((value) => /[0-9]/.test(value), 'Must contain a number')
+    .custom((value) => /[!@#$%^&*(),.?":{}|<>]/.test(value), 'Must contain special character'),
 
-  email: string().required().email(),
+  email: string()
+    .required({ message: 'Email is required' })
+    .email({ message: 'Invalid email format' }),
 
   phoneNumber: string()
-    .required()
-    .numeric()
-    .length(10)
-    .pattern(/^0\d{9}$/, 'Must start with 0')
-    .custom((value: string) => {
+    .required({ message: 'Phone number is required' })
+    .numeric({ message: 'Must contain only numbers' })
+    .length(10, { message: 'Phone number must be 10 digits' })
+    .pattern(/^0\d{9}$/, { message: 'Must start with 0' })
+    .custom((value) => {
       const prefixes = [
         '086',
         '096',
@@ -419,7 +420,7 @@ const registrationSchema = {
     }, 'Invalid Vietnamese phone number'),
 
   age: number()
-    .required()
+    .required({ message: 'Age is required' })
     .integer({ message: 'Age must be an integer' })
     .min(18, { message: 'Must be at least 18 years old' })
     .max(100, { message: 'Age must not exceed 100' }),
