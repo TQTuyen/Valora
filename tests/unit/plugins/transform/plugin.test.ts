@@ -13,6 +13,7 @@ describe('TransformPlugin', () => {
   let plugin: TransformPlugin;
 
   beforeEach(() => {
+    "@typescript-eslint/eslint
     plugin = new TransformPlugin({ loadBuiltIns: false });
   });
 
