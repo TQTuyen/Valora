@@ -162,7 +162,7 @@
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue';
 import { useFormValidation, useFieldValidation } from 'valora/adapters/vue';
-import { string, number } from '@validators/index';
+import { string, number } from 'valora/validators';
 import './ComprehensiveDemo.css';
 
 interface ComprehensiveForm {
@@ -176,42 +176,42 @@ interface ComprehensiveForm {
 
 const validationSchema = {
   username: string()
-    .required('Username is required')                                   
-    .minLength(3, 'Username must have at least 3 characters.')                    
-    .maxLength(20, 'Username must be a maximum of 20 characters.')                   
-    .pattern(/^[a-z0-9_]+$/, 'Only lowercase letters, numbers, and underscores.') 
-    .custom(                                                              
-      (value) => /^[a-z]/.test(value),
+    .required()
+    .minLength(3, { message: 'Username must have at least 3 characters.' })
+    .maxLength(20)
+    .pattern(/^[a-z0-9_]+$/, 'Only lowercase letters, numbers, and underscores.')
+    .custom(
+      (value: string) => /^[a-z]/.test(value),
       'Must start with a lowercase.'
     ),
 
   password: string()
-    .required('Password is required')                             
-    .minLength(8, 'Password must be at least 8 characters')            
-    .custom((value) => /[A-Z]/.test(value), 'Must contain uppercase letter')    
-    .custom((value) => /[a-z]/.test(value), 'Must contain lowercase letter') 
-    .custom((value) => /[0-9]/.test(value), 'Must contain a number')     
-    .custom(                                                     
-      (value) => /[!@#$%^&*(),.?":{}|<>]/.test(value),
+    .required()
+    .minLength(8, { message: 'Password must be at least 8 characters' })
+    .custom((value: string) => /[A-Z]/.test(value), 'Must contain uppercase letter')
+    .custom((value: string) => /[a-z]/.test(value), 'Must contain lowercase letter')
+    .custom((value: string) => /[0-9]/.test(value), 'Must contain a number')
+    .custom(
+      (value: string) => /[!@#$%^&*(),.?":{}|<>]/.test(value),
       'Must contain special character'
     ),
 
   // Email
   email: string()
-    .required('Email is required')
-    .email('Invalid email format'),
+    .required()
+    .email(),
 
   // Phone Number
   phoneNumber: string()
-    .required('Phone number is required')                                   
-    .numeric('Must contain only numbers')                                          
-    .length(10, 'Phone number must be 10 digits')                            
-    .pattern(/^0\d{9}$/, 'Must start with 0')                            
-    .custom(                                                                   
-      (value) => {
-        const prefixes = ['086', '096', '097', '098', '032', '033', '034', '035', '036', '037', '038', '039', 
-                         '088', '091', '094', '083', '084', '085', '081', '082',                              
-                         '089', '090', '093', '070', '079', '077', '076', '078'];                             
+    .required()
+    .numeric()
+    .length(10)
+    .pattern(/^0\d{9}$/, 'Must start with 0')
+    .custom(
+      (value: string) => {
+        const prefixes = ['086', '096', '097', '098', '032', '033', '034', '035', '036', '037', '038', '039',
+                         '088', '091', '094', '083', '084', '085', '081', '082',
+                         '089', '090', '093', '070', '079', '077', '076', '078'];
         return prefixes.some(prefix => value.startsWith(prefix));
       },
       'Invalid Vietnamese phone number'
@@ -219,10 +219,10 @@ const validationSchema = {
 
   // Age
   age: number()
-    .required('Age is required')             
-    .integer('Age must be an integer')      
-    .min(18, 'Must be at least 18 years old')       
-    .max(100, 'Age must not exceed 100'),      
+    .required()
+    .integer({ message: 'Age must be an integer' })
+    .min(18, { message: 'Must be at least 18 years old' })
+    .max(100, { message: 'Age must not exceed 100' }),
 };
 
 // Form validation hook

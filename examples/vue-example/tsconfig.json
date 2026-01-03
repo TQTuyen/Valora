@@ -18,18 +18,7 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-
-    /* Path mapping */
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"],
-      "valora": ["../../src/index.ts"],
-      "@notification/*": ["../../src/notification/*"],
-      "@validators/*": ["../../src/validators/*"],
-      "@adapters/*": ["../../src/adapters/*"],
-      "#types/*": ["../../src/types/*"]
-    }
+    "noFallthroughCasesInSwitch": true
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
   "references": [{ "path": "./tsconfig.node.json" }]
