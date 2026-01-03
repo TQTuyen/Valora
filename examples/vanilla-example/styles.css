@@ -164,6 +164,11 @@ textarea {
     font-weight: 500;
 }
 
+.hint.success-hint {
+    color: var(--success-color);
+    font-weight: 500;
+}
+
 /* Checkbox Group */
 .checkbox-group {
     display: flex;
