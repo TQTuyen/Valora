@@ -6,22 +6,16 @@ Complete example demonstrating Valora's **VanillaAdapter** for progressive enhan
 
 ### Core Validation Features
 
+### Core Validation Features
+
 - ✅ Real-time validation on input/blur
 - ✅ Multiple validation rules per field (min/max length, patterns, ranges)
 - ✅ Custom error messages
 - ✅ Error display with accessibility (ARIA attributes)
 - ✅ Form submission handling
 - ✅ Form reset functionality
-
-### Advanced Features
-
-- 🔄 **Transform Plugin** - Automatic data transformation (trim, toLowerCase, toUpperCase)
-- 🎯 **Field Subscriptions** - React to field state changes
-- 📊 **Form State Management** - Track form validity, touched, dirty states
-- 💬 **Character Counter** - Real-time character count for textarea
-- 🔐 **Password Strength Indicator** - Dynamic hints based on validation
-- 🎨 **Custom UI Updates** - Submit button state, hint messages
-- 🎭 **Multiple Forms** - Demonstrate different use cases
+- ✅ Field state subscriptions
+- ✅ Two different form types
 
 ## 🚀 Running the Example
 
@@ -100,24 +94,9 @@ import { transform } from '../../src/plugins/transform';
 import { trim, toLowerCase } from '../../src/plugins/transform/transforms/string';
 
 const adapter = createVanillaAdapter({
-  // Basic validation
-  name: string().required({ message: 'Name is required' }).minLength(2),
-
-  // With transform plugin
-  email: transform(string().required().email(), trim(), toLowerCase()),
-
-  // Complex validation
-  password: string()
-    .required()
-    .minLength(8)
-    .matches(/[A-Z]/, { message: 'Must contain uppercase' })
-    .matches(/[0-9]/, { message: 'Must contain number' }),
-
-  // Number with range
-  age: number().optional().min(18).max(120).integer(),
-
-  // Boolean validation
-  terms: boolean().required().isTrue({ message: 'You must agree' }),
+  name: v.string().minLength(2),
+  email: v.string().email(),
+  // ... more fields
 });
 ```
 
@@ -257,31 +236,7 @@ console.log('Email touched?', emailState.touched);
 - [Validators Guide](../../docs/validators-guide.md)
 - [Advanced Usage](../../docs/advanced-usage.md)
 
-## 🎨 Transform Plugin
-
-The transform plugin allows you to automatically transform user input before validation:
-
-```typescript
-import { transform } from '../../src/plugins/transform';
-import { trim, toLowerCase, toUpperCase } from '../../src/plugins/transform/transforms/string';
-
-// Email: trim whitespace and convert to lowercase
-email: transform(string().required().email(), trim(), toLowerCase());
-
-// Name: trim whitespace
-name: transform(string().required().minLength(2), trim());
-```
-
-**Available string transforms:**
-
-- `trim()` - Remove leading/trailing whitespace
-- `toLowerCase()` - Convert to lowercase
-- `toUpperCase()` - Convert to uppercase
-- `capitalize()` - Capitalize first letter
-- `slugify()` - Convert to URL-friendly slug
-- And many more...
-
-## 💡 Tips & Best Practices
+## 💡 Tips
 
 1. **Progressive Enhancement**: Forms work without JS, validation enhances UX
 2. **Accessibility**: ARIA attributes are automatically added for screen readers
@@ -298,66 +253,23 @@ name: transform(string().required().minLength(2), trim());
 
 ### Errors not displaying?
 
-**Check that:**
+Check that:
 
-- Form element has `id` attribute
-- Input elements have `name` attributes that match validator keys exactly
-- CSS classes for errors are included in `styles.css`
-- Browser console shows no JavaScript errors
-
-**Debug with:**
-
-```javascript
-console.log(adapter.getFormState());
-console.log(adapter.getFieldState('email'));
-```
+- Form has `id` attribute
+- Inputs have `name` attributes matching validator keys
+- CSS classes are included
 
 ### Validation not triggering?
 
-**Ensure:**
+Ensure:
 
-- Adapter is bound to form before user interaction
-- `validateOnChange` or `validateOnBlur` are enabled (true by default)
-- Field names match validator keys exactly
-- Browser console shows no errors during initialization
-
-**Test manually:**
-
-```javascript
-adapter.validateField('email');
-adapter.validateAll();
-```
-
-### Transforms not working?
-
-**Verify:**
-
-- Import transform plugin correctly
-- Transform is wrapped around the validator
-- Check console logs to see transformed values
-
-**Example:**
-
-```typescript
-// ✅ Correct
-email: transform(string().email(), trim(), toLowerCase());
-
-// ❌ Incorrect
-email: string().email().transform(trim()); // Wrong API
-```
-
-### Submit button stays disabled?
-
-**This is intentional!** The submit button is disabled when:
-
-- Form has been touched (`state.touched === true`)
-- AND form is invalid (`state.isValid === false`)
-
-This prevents submission of invalid data. Remove this behavior by modifying the subscription in `app.ts`.
+- Adapter is bound to form before interaction
+- `validateOnChange`/`validateOnBlur` are enabled
+- Browser console shows no errors
 
 ### Cleanup not working?
 
-**Make sure to:**
+Make sure to:
 
 - Call the cleanup function returned by `bindForm()`
 - Call `adapter.destroy()` when completely done with the form
