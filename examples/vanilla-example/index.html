@@ -92,7 +92,9 @@
 
                     <div class="form-group">
                         <label for="message">Message *</label>
-                        <textarea id="message" name="message" rows="5" placeholder="Your message here..."></textarea>
+                        <textarea id="message" name="message" rows="5" placeholder="Your message here..."
+                            aria-describedby="message-hint"></textarea>
+                        <small id="message-hint" class="hint">10-500 characters required</small>
                     </div>
 
                     <div class="form-actions">
@@ -122,7 +124,7 @@
     </div>
 
     <!-- Load the example script -->
-    <script type="module" src="app.js"></script>
+    <script type="module" src="app.ts"></script>
 </body>
 
 </html>
