@@ -172,7 +172,7 @@ export * from './decorators/property/index';
 // Plugins
 // -------------------------------------------------------------------------
 // i18n Plugin
-export { configureI18n, getI18n, type I18nConfig, I18nPlugin, setI18n } from './plugins/i18n/index';
+export { configureI18n, getI18n, type I18nConfig,I18nPlugin, setI18n } from './plugins/i18n/index';
 
 // Transform Plugin
 export {
