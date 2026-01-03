@@ -221,6 +221,8 @@ describe('Transform Composers', () => {
     });
 
     afterEach(() => {
+      vi.clearAllTimers();
+      vi.useRealTimers();
       vi.restoreAllMocks();
     });
 
@@ -266,7 +268,7 @@ describe('Transform Composers', () => {
     it('should handle zero delay', async (): Promise<void> => {
       const transform = debounce((s: string) => s, 0);
       const promise = transform('test');
-      vi.advanceTimersByTime(0);
+      vi.runAllTimers();
       await promise;
     });
 
