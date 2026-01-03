@@ -239,8 +239,10 @@ export {
   type ValidatorMap,
 } from './adapters/index';
 
-// Note: Vanilla adapter will be exported once implementation is complete
-// export { VanillaAdapter, createVanillaAdapter } from './adapters/index';
+// -------------------------------------------------------------------------
+// Vanilla Adapter
+// -------------------------------------------------------------------------
+export { createVanillaAdapter, VanillaAdapter } from './adapters/index';
 
 // -------------------------------------------------------------------------
 // Additional Core Types (from types/index)

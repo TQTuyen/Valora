@@ -35,6 +35,7 @@ export {
   MessageDecorator,
   NullableDecorator,
   OptionalDecorator,
+  PreprocessDecorator,
   TransformDecorator,
   ValidatorDecorator,
 } from './decorator/index';

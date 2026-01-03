@@ -33,6 +33,9 @@ export type {
 export type { TransformConfig } from './config';
 export { DEFAULT_TRANSFORM_CONFIG, mergeConfig } from './config';
 
+// Helper
+export { transform } from './helper';
+
 // Plugin class
 export { createTransformPlugin, TransformPlugin } from './plugin';
 
