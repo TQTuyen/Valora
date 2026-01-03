@@ -2,9 +2,9 @@
  * File Validator Tests
  */
 
+import { file, FILE_SIZE_UNITS, MIME_TYPES } from '@validators/file';
 import { describe, expect, it } from 'vitest';
 
-import { file, FILE_SIZE_UNITS, MIME_TYPES } from '@validators/file';
 import { createContext, expectFailure, expectSuccess } from '../../helpers/test-utils';
 
 import type { ImageFile } from '@validators/file';

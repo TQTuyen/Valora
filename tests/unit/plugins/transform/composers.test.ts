@@ -37,8 +37,8 @@ describe('Transform Composers', () => {
       expect(transform('test')).toBe('test');
     });
 
-    it('should return the single function when only one provided', () => {
-      const fn = (s: string) => s.toUpperCase();
+    it('should return the single function when only one provided', (): void => {
+      const fn = (s: string): string => s.toUpperCase();
       const transform = pipe(fn);
 
       expect(transform).toBe(fn);
@@ -90,8 +90,8 @@ describe('Transform Composers', () => {
       expect(transform('test')).toBe('test');
     });
 
-    it('should return the single function when only one provided', () => {
-      const fn = (s: string) => s.toUpperCase();
+    it('should return the single function when only one provided', (): void => {
+      const fn = (s: string): string => s.toUpperCase();
       const transform = compose(fn);
 
       expect(transform).toBe(fn);
@@ -244,7 +244,7 @@ describe('Transform Composers', () => {
       expect(result).toBe('TEST');
     });
 
-    it('should return a promise', async () => {
+    it('should return a promise', (): void => {
       const transform = debounce((s: string) => s.toUpperCase(), 100);
 
       const promise = transform('hello');
@@ -263,7 +263,14 @@ describe('Transform Composers', () => {
       expect(result).toBe('HELLO');
     });
 
-    it('should reset timer on new calls', async () => {
+    it('should handle zero delay', async (): Promise<void> => {
+      const transform = debounce((s: string) => s, 0);
+      const promise = transform('test');
+      vi.advanceTimersByTime(0);
+      await promise;
+    });
+
+    it('should reset timer on new calls', async (): Promise<void> => {
       let callCount = 0;
       const transform = debounce((s: string) => {
         callCount++;

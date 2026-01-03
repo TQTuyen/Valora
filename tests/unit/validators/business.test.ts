@@ -2,9 +2,9 @@
  * Business Validator Tests
  */
 
+import { business, CreditCardType, slugify } from '@validators/business';
 import { describe, expect, it } from 'vitest';
 
-import { business, CreditCardType, slugify } from '@validators/business';
 import { createContext, expectFailure, expectSuccess } from '../../helpers/test-utils';
 
 describe('Business Validator', () => {
