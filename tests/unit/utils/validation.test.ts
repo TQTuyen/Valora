@@ -2,8 +2,6 @@
  * Validation Utilities Tests
  */
 
-import { describe, expect, it } from 'vitest';
-
 import {
   createError,
   createFailureResult,
@@ -11,6 +9,7 @@ import {
   mergeResults,
   prefixErrors,
 } from '@utils/validation';
+import { describe, expect, it } from 'vitest';
 
 describe('Validation Utilities', () => {
   describe('createSuccessResult', () => {
