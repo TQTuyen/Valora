@@ -9,6 +9,7 @@ import {
   MessageDecorator,
   NullableDecorator,
   OptionalDecorator,
+  PreprocessDecorator,
   StrategyHandler,
   TransformDecorator,
   ValidationPipeline,
@@ -19,7 +20,12 @@ import { createError, createFailureResult, createSuccessResult, measure } from '
 import { CustomStrategy, RequiredStrategy } from './strategies/index';
 
 import type { ValidationContext, ValidationResult } from '#types/results';
-import type { IAsyncValidationStrategy, IValidationStrategy, IValidator } from '#types/validators';
+import type {
+  IAsyncValidationStrategy,
+  IValidationStrategy,
+  IValidator,
+  ValidationOptions,
+} from '#types/validators';
 
 /**
  * Abstract base class for all validators
@@ -127,6 +133,15 @@ export abstract class BaseValidator<TInput = unknown, TOutput = TInput> implemen
   }
 
   /**
+   * Preprocess the input value before validation
+   * @param fn - Preprocessing function
+   * @returns New validator that accepts the pre-processed input
+   */
+  preprocess<NewInput>(fn: (value: NewInput) => TInput): IValidator<NewInput, TOutput> {
+    return new PreprocessDecorator(this as unknown as IValidator<TInput, TOutput>, fn);
+  }
+
+  /**
    * Add a custom validation message
    * @param message - Custom error message
    * @returns New validator with custom message
@@ -137,11 +152,12 @@ export abstract class BaseValidator<TInput = unknown, TOutput = TInput> implemen
 
   /**
    * Mark this field as required
+   * @param options - Validation options (message, etc.)
    * @returns This validator for chaining
    */
-  required(): this {
+  required(options?: ValidationOptions): this {
     this.isRequired = true;
-    return this.addStrategy(new RequiredStrategy<TOutput>());
+    return this.addStrategy(new RequiredStrategy<TOutput>(options));
   }
 
   /**
