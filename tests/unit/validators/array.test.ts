@@ -2,11 +2,11 @@
  * Array Validator Tests
  */
 
-import { describe, expect, it } from 'vitest';
-
 import { array } from '@validators/array';
 import { number } from '@validators/number';
 import { string } from '@validators/string';
+import { describe, expect, it } from 'vitest';
+
 import { createContext, expectFailure, expectSuccess } from '../../helpers/test-utils';
 
 describe('Array Validator', () => {

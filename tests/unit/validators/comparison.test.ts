@@ -2,9 +2,9 @@
  * Comparison Validator Tests
  */
 
+import { compare, literal, nativeEnum, ref } from '@validators/comparison';
 import { describe, it } from 'vitest';
 
-import { compare, literal, nativeEnum, ref } from '@validators/comparison';
 import { createContext, expectFailure, expectSuccess } from '../../helpers/test-utils';
 
 describe('Comparison Validator', () => {

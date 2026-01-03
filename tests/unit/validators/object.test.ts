@@ -2,12 +2,12 @@
  * Object Validator Tests
  */
 
+import { boolean } from '@validators/boolean';
+import { number } from '@validators/number';
+import { object } from '@validators/object';
+import { string } from '@validators/string';
 import { describe, expect, it } from 'vitest';
 
-import { object } from '@validators/object';
-import { number } from '@validators/number';
-import { string } from '@validators/string';
-import { boolean } from '@validators/boolean';
 import { createContext, expectFailure, expectSuccess } from '../../helpers/test-utils';
 
 describe('Object Validator', () => {
@@ -315,7 +315,7 @@ describe('Object Validator', () => {
       const validator = object({
         name: string(),
         age: number(),
-      }).transform((obj) => `${obj.name} is ${obj.age} years old`);
+      }).transform((obj) => `${obj.name} is ${obj.age.toString()} years old`);
 
       const result = validator.validate({ name: 'John', age: 30 }, ctx);
 

@@ -2,7 +2,6 @@
  * Base Adapter Tests
  */
 
-import { BaseFrameworkAdapter } from '@adapters/base-adapter';
 import {
   canSubmit,
   formatErrors,
@@ -11,6 +10,7 @@ import {
   hasFieldErrors,
   shouldShowErrors,
 } from '@adapters/adapter-utils';
+import { BaseFrameworkAdapter } from '@adapters/base-adapter';
 import { number } from '@validators/number';
 import { string } from '@validators/string';
 import { describe, expect, it } from 'vitest';

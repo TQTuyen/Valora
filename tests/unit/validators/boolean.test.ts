@@ -2,9 +2,9 @@
  * Boolean Validator Tests
  */
 
+import { boolean } from '@validators/boolean';
 import { describe, it } from 'vitest';
 
-import { boolean } from '@validators/boolean';
 import { createContext, expectFailure, expectSuccess } from '../../helpers/test-utils';
 
 describe('Boolean Validator', () => {
