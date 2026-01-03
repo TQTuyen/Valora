@@ -1,17 +1,25 @@
 # Valora Vanilla JS Example
 
-Complete example demonstrating Valora's **VanillaAdapter** for progressive enhancement of HTML forms.
+Complete example demonstrating Valora's **VanillaAdapter** for progressive enhancement of HTML forms with comprehensive framework features.
 
 ## 📋 Features Demonstrated
 
+### Core Validation Features
 - ✅ Real-time validation on input/blur
-- ✅ Multiple validation rules per field
+- ✅ Multiple validation rules per field (min/max length, patterns, ranges)
 - ✅ Custom error messages
-- ✅ Error display with accessibility (ARIA)
+- ✅ Error display with accessibility (ARIA attributes)
 - ✅ Form submission handling
 - ✅ Form reset functionality
-- ✅ Field state subscriptions
-- ✅ Two different form types
+
+### Advanced Features
+- 🔄 **Transform Plugin** - Automatic data transformation (trim, toLowerCase, toUpperCase)
+- 🎯 **Field Subscriptions** - React to field state changes
+- 📊 **Form State Management** - Track form validity, touched, dirty states
+- 💬 **Character Counter** - Real-time character count for textarea
+- 🔐 **Password Strength Indicator** - Dynamic hints based on validation
+- 🎨 **Custom UI Updates** - Submit button state, hint messages
+- 🎭 **Multiple Forms** - Demonstrate different use cases
 
 ## 🚀 Running the Example
 
@@ -47,9 +55,9 @@ Open `index.html` directly in your browser (may have CORS issues with ES modules
 
 ```
 vanilla-example/
-├── index.html          # HTML forms with semantic markup
-├── app.js              # JavaScript validation logic
-├── styles.css          # Styling for forms and errors
+├── index.html          # HTML forms with semantic markup and ARIA
+├── app.ts              # TypeScript validation logic with framework features
+├── styles.css          # Styling for forms, errors, and hints
 └── README.md           # This file
 ```
 
@@ -57,36 +65,69 @@ vanilla-example/
 
 ### 1. Registration Form
 
-Validates:
+Demonstrates complex validation with transforms:
 
-- **Name**: Minimum 2 characters
-- **Email**: Valid email format
-- **Password**: 8+ chars with uppercase, lowercase, and number
-- **Age**: Optional, must be 18+
-- **Website**: Optional, must be valid URL
-- **Terms**: Must be checked
+- **Name**: 2-50 chars, letters/spaces only, auto-trimmed
+- **Email**: Valid email format, auto-trimmed & lowercased
+- **Password**: 8-100 chars with uppercase, lowercase, number, and special character
+- **Age**: Optional, 18-120, must be integer
+- **Website**: Optional, valid URL, auto-trimmed
+- **Terms**: Must be checked (boolean validation)
+
+**Features showcased**: Transform plugin, pattern matching, range validation, optional fields
 
 ### 2. Contact Form
 
-Validates:
+Demonstrates string transformations and character counting:
 
-- **Name**: Minimum 2 characters
-- **Email**: Valid email format
-- **Subject**: Minimum 5 characters
-- **Message**: 10-500 characters
+- **Name**: 2-100 chars, auto-trimmed
+- **Email**: Valid email format, auto-trimmed & lowercased
+- **Subject**: 5-100 chars, auto-trimmed
+- **Message**: 10-500 chars with real-time character counter
+
+**Features showcased**: String transforms, character limits, reactive UI updates
 
 ## 🔧 Key Concepts
 
-### Creating an Adapter
+### Creating an Adapter with Validators
 
-```javascript
-import { createVanillaAdapter } from '@tqtos/valora/adapters/vanilla';
-import { v } from '@tqtos/valora';
+```typescript
+import { createVanillaAdapter } from '../../src/adapters/vanilla';
+import { string, number, boolean } from '../../src/validators';
+import { transform } from '../../src/plugins/transform';
+import { trim, toLowerCase } from '../../src/plugins/transform/transforms/string';
 
 const adapter = createVanillaAdapter({
-  name: v.string().minLength(2),
-  email: v.string().email(),
-  // ... more fields
+  // Basic validation
+  name: string()
+    .required({ message: 'Name is required' })
+    .minLength(2),
+
+  // With transform plugin
+  email: transform(
+    string().required().email(),
+    trim(),
+    toLowerCase()
+  ),
+
+  // Complex validation
+  password: string()
+    .required()
+    .minLength(8)
+    .matches(/[A-Z]/, { message: 'Must contain uppercase' })
+    .matches(/[0-9]/, { message: 'Must contain number' }),
+
+  // Number with range
+  age: number()
+    .optional()
+    .min(18)
+    .max(120)
+    .integer(),
+
+  // Boolean validation
+  terms: boolean()
+    .required()
+    .isTrue({ message: 'You must agree' }),
 });
 ```
 
@@ -107,15 +148,40 @@ const cleanup = adapter.bindForm({
 
 ### Subscribing to State Changes
 
-```javascript
-// Watch entire form
+```typescript
+// Watch entire form state
 adapter.subscribeToForm((state) => {
-  console.log('Form is valid:', state.isValid);
+  console.log('Form state:', {
+    isValid: state.isValid,
+    validating: state.validating,
+    touched: state.touched,
+    dirty: state.dirty,
+    errorCount: state.errors.length,
+  });
+
+  // Update UI based on form state
+  const submitBtn = form.querySelector('button[type="submit"]');
+  submitBtn.disabled = state.touched && !state.isValid;
 });
 
-// Watch specific field
-adapter.subscribeToField('email', (fieldState) => {
-  console.log('Email errors:', fieldState.errors);
+// Watch specific field for custom behavior
+adapter.subscribeToField('password', (fieldState) => {
+  const hint = document.getElementById('password-hint');
+
+  if (fieldState.touched && fieldState.errors.length > 0) {
+    hint.textContent = fieldState.errors[0].message;
+    hint.classList.add('error-hint');
+  } else if (fieldState.touched && fieldState.errors.length === 0) {
+    hint.textContent = '✓ Strong password!';
+    hint.classList.add('success-hint');
+  }
+});
+
+// Character counter example
+adapter.subscribeToField('message', (fieldState) => {
+  const currentLength = fieldState.value?.length || 0;
+  const remaining = 500 - currentLength;
+  hint.textContent = `${currentLength}/500 characters (${remaining} remaining)`;
 });
 ```
 
@@ -201,35 +267,134 @@ console.log('Email touched?', emailState.touched);
 - [Validators Guide](../../docs/validators-guide.md)
 - [Advanced Usage](../../docs/advanced-usage.md)
 
-## 💡 Tips
+## 🎨 Transform Plugin
+
+The transform plugin allows you to automatically transform user input before validation:
+
+```typescript
+import { transform } from '../../src/plugins/transform';
+import { trim, toLowerCase, toUpperCase } from '../../src/plugins/transform/transforms/string';
+
+// Email: trim whitespace and convert to lowercase
+email: transform(
+  string().required().email(),
+  trim(),
+  toLowerCase()
+)
+
+// Name: trim whitespace
+name: transform(
+  string().required().minLength(2),
+  trim()
+)
+```
+
+**Available string transforms:**
+- `trim()` - Remove leading/trailing whitespace
+- `toLowerCase()` - Convert to lowercase
+- `toUpperCase()` - Convert to uppercase
+- `capitalize()` - Capitalize first letter
+- `slugify()` - Convert to URL-friendly slug
+- And many more...
+
+## 💡 Tips & Best Practices
 
 1. **Progressive Enhancement**: Forms work without JS, validation enhances UX
-2. **Accessibility**: Always included with ARIA attributes
-3. **Performance**: Only validates when needed (blur/change/submit)
+2. **Accessibility**: ARIA attributes are automatically added for screen readers
+3. **Performance**: Validation only runs when needed (blur/change/submit)
 4. **Flexibility**: Customize error display, placement, and styling
-5. **Type Safety**: Use TypeScript for better DX
+5. **Type Safety**: Use TypeScript for better developer experience
+6. **Transform First**: Apply transforms before validation for cleaner data
+7. **Clear Messages**: Provide specific, helpful error messages
+8. **Optional Fields**: Use `.optional()` for fields that aren't required
+9. **Subscribe Wisely**: Use field subscriptions for custom UI updates
+10. **Cleanup**: Always call cleanup functions to prevent memory leaks
 
 ## 🐛 Troubleshooting
 
 ### Errors not displaying?
 
-Check that:
+**Check that:**
+- Form element has `id` attribute
+- Input elements have `name` attributes that match validator keys exactly
+- CSS classes for errors are included in `styles.css`
+- Browser console shows no JavaScript errors
 
-- Form has `id` attribute
-- Inputs have `name` attributes matching validator keys
-- CSS classes are included
+**Debug with:**
+```javascript
+console.log(adapter.getFormState());
+console.log(adapter.getFieldState('email'));
+```
 
 ### Validation not triggering?
 
-Ensure:
+**Ensure:**
+- Adapter is bound to form before user interaction
+- `validateOnChange` or `validateOnBlur` are enabled (true by default)
+- Field names match validator keys exactly
+- Browser console shows no errors during initialization
 
-- Adapter is bound to form before interaction
-- `validateOnChange`/`validateOnBlur` are enabled
-- Browser console shows no errors
+**Test manually:**
+```javascript
+adapter.validateField('email');
+adapter.validateAll();
+```
+
+### Transforms not working?
+
+**Verify:**
+- Import transform plugin correctly
+- Transform is wrapped around the validator
+- Check console logs to see transformed values
+
+**Example:**
+```typescript
+// ✅ Correct
+email: transform(string().email(), trim(), toLowerCase())
+
+// ❌ Incorrect
+email: string().email().transform(trim()) // Wrong API
+```
+
+### Submit button stays disabled?
+
+**This is intentional!** The submit button is disabled when:
+- Form has been touched (`state.touched === true`)
+- AND form is invalid (`state.isValid === false`)
+
+This prevents submission of invalid data. Remove this behavior by modifying the subscription in `app.ts`.
 
 ### Cleanup not working?
 
-Make sure to:
-
+**Make sure to:**
 - Call the cleanup function returned by `bindForm()`
-- Call `adapter.destroy()` when completely done
+- Call `adapter.destroy()` when completely done with the form
+- Clean up on page unload or component unmount
+
+```typescript
+const cleanup = adapter.bindForm({ form });
+
+// Later...
+cleanup(); // Remove event listeners
+adapter.destroy(); // Complete cleanup
+```
+
+## 🎓 Learning Resources
+
+- **Framework Documentation**: Check `../../docs/` for comprehensive guides
+- **API Reference**: See validators, adapters, and plugin APIs
+- **Source Code**: Explore `../../src/` to understand implementation
+- **Tests**: Look at `../../tests/` for more usage examples
+
+## 🤝 Contributing
+
+Found an issue or want to improve this example? Contributions are welcome!
+
+1. Fork the repository
+2. Make your changes
+3. Test thoroughly
+4. Submit a pull request
+
+## 📄 License
+
+This example is part of the Valora project and follows the same license.
