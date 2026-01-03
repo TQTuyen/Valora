@@ -5,14 +5,25 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { IValidator, ValidationContext, ValidationResult } from '#types/index';
+import type {
+  IValidator,
+  ValidationContext,
+  ValidationOptions,
+  ValidationResult,
+} from '#types/index';
 
 /** NOT combinator - validator must fail */
 export class NotStrategy<T> extends BaseValidationStrategy<T, T> {
   readonly name = 'not';
 
-  constructor(private readonly validator: IValidator<T, unknown>) {
+  constructor(
+    private readonly validator: IValidator<T, unknown>,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: T, context: ValidationContext): ValidationResult<T> {

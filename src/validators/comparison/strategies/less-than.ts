@@ -8,14 +8,20 @@ import { BaseValidationStrategy } from '@core/index';
 import { getRefValue, isFieldRef } from './helpers';
 
 import type { FieldRef } from './helpers';
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** Less than value or field strategy */
 export class LessThanStrategy<T extends number | Date> extends BaseValidationStrategy<T, T> {
   readonly name = 'lessThan';
 
-  constructor(private readonly compareValue: T | FieldRef) {
+  constructor(
+    private readonly compareValue: T | FieldRef,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: T, context: ValidationContext): ValidationResult<T> {

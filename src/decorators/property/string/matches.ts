@@ -5,7 +5,9 @@
 
 import { string } from '@validators/string';
 
-import { createPropertyDecorator } from '../../core/factory';
+import { createTypeDecorator } from '../../core/factory';
+
+import type { ValidationOptions } from '#types/index';
 
 /**
  * Validates string against a regex pattern
@@ -24,9 +26,9 @@ import { createPropertyDecorator } from '../../core/factory';
  * }
  * ```
  */
-export function Matches(pattern: RegExp, message?: string): PropertyDecorator {
-  return createPropertyDecorator((regex: RegExp, msg?: string) => string().matches(regex, msg))(
-    pattern,
-    message,
-  );
+export function Matches(pattern: RegExp, options?: string | ValidationOptions): PropertyDecorator {
+  return createTypeDecorator(() => {
+    const opts = typeof options === 'string' ? { message: options } : options;
+    return string().matches(pattern, opts);
+  })();
 }

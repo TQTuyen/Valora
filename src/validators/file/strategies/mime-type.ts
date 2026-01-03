@@ -5,7 +5,7 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /**
  * File interface
@@ -24,8 +24,14 @@ export interface ValidatableFile {
 export class MimeTypeStrategy extends BaseValidationStrategy<ValidatableFile, ValidatableFile> {
   readonly name = 'mimeType';
 
-  constructor(private readonly allowedTypes: string[] | RegExp) {
+  constructor(
+    private readonly allowedTypes: string[] | RegExp,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: ValidatableFile, context: ValidationContext): ValidationResult<ValidatableFile> {

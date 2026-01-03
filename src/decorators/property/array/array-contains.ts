@@ -7,6 +7,8 @@ import { array } from '@validators/array';
 
 import { createPropertyDecorator } from '../../core/factory';
 
+import type { ValidationOptions } from '#types/index';
+
 /**
  * Validates that array contains a specific value
  *
@@ -23,6 +25,8 @@ import { createPropertyDecorator } from '../../core/factory';
  * }
  * ```
  */
-export function ArrayContains(value: unknown): PropertyDecorator {
-  return createPropertyDecorator((val: unknown) => array().contains(val))(value);
+export function ArrayContains(value: unknown, options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((val: unknown, opts?: ValidationOptions) =>
+    array().contains(val, opts),
+  )(value, options);
 }

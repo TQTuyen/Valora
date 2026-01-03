@@ -6,7 +6,7 @@
 import { BaseValidationStrategy } from '@core/index';
 
 import type { ObjectSchema } from './types';
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** Strict object validation - no extra keys allowed */
 export class StrictStrategy<T extends Record<string, unknown>> extends BaseValidationStrategy<
@@ -15,8 +15,14 @@ export class StrictStrategy<T extends Record<string, unknown>> extends BaseValid
 > {
   readonly name = 'strict';
 
-  constructor(private readonly schema: ObjectSchema<T>) {
+  constructor(
+    private readonly schema: ObjectSchema<T>,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: Record<string, unknown>, context: ValidationContext): ValidationResult<T> {

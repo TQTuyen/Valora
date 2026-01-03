@@ -10,7 +10,7 @@
 
 import { and } from '@validators/logic';
 
-import type { IValidator } from '#types/index';
+import type { IValidator, ValidationOptions } from '#types/index';
 
 /**
  * Metadata for a single property's validators
@@ -23,9 +23,11 @@ export interface PropertyValidatorMetadata {
   /** Whether this property requires nested validation */
   isNested?: boolean;
   /** Function to get the constructor for nested type */
-  nestedType?: () => any;
+  nestedType?: (() => any) | undefined;
   /** Whether the property is an array of nested objects */
   isArray?: boolean;
+  /** Validation options (e.g. custom message) */
+  options?: ValidationOptions | undefined;
 }
 
 /**
@@ -103,6 +105,7 @@ export function markNested(
   propertyKey: string | symbol,
   typeGetter: () => any,
   isArray = false,
+  options?: ValidationOptions,
 ): void {
   const metadata = propertyValidatorsStorage.get(target) ?? [];
 
@@ -112,6 +115,7 @@ export function markNested(
     existing.isNested = true;
     existing.nestedType = typeGetter;
     existing.isArray = isArray;
+    existing.options = options;
   } else {
     metadata.push({
       propertyKey,
@@ -119,6 +123,7 @@ export function markNested(
       isNested: true,
       nestedType: typeGetter,
       isArray,
+      options,
     });
   }
 

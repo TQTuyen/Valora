@@ -7,7 +7,7 @@ import { BaseValidator } from '@validators/common/index';
 
 import { IsFalseStrategy, IsTrueStrategy } from './strategies';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /**
  * Boolean validator with fluent API
@@ -45,23 +45,23 @@ export class BooleanValidator extends BaseValidator<unknown, boolean> {
   }
 
   /** Must be true */
-  isTrue(options?: { message?: string }): this {
-    return this.addStrategy(new IsTrueStrategy(options?.message));
+  isTrue(options?: ValidationOptions): this {
+    return this.addStrategy(new IsTrueStrategy(options));
   }
 
   /** Alias for isTrue */
-  true(): this {
-    return this.isTrue();
+  true(options?: ValidationOptions): this {
+    return this.isTrue(options);
   }
 
   /** Must be false */
-  isFalse(options?: { message?: string }): this {
-    return this.addStrategy(new IsFalseStrategy(options?.message));
+  isFalse(options?: ValidationOptions): this {
+    return this.addStrategy(new IsFalseStrategy(options));
   }
 
   /** Alias for isFalse */
-  false(): this {
-    return this.isFalse();
+  false(options?: ValidationOptions): this {
+    return this.isFalse(options);
   }
 }
 

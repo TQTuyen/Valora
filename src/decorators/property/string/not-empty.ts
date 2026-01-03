@@ -7,6 +7,8 @@ import { string } from '@validators/string';
 
 import { createTypeDecorator } from '../../core/factory';
 
+import type { ValidationOptions } from '#types/index';
+
 /**
  * Validates that string is not empty or whitespace only
  *
@@ -22,6 +24,6 @@ import { createTypeDecorator } from '../../core/factory';
  * }
  * ```
  */
-export function NotEmpty(): PropertyDecorator {
-  return createTypeDecorator(() => string().notEmpty())();
+export function NotEmpty(options?: ValidationOptions): PropertyDecorator {
+  return createTypeDecorator(() => string().notEmpty(options))();
 }

@@ -5,7 +5,7 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /**
  * Maximum length strategy
@@ -13,8 +13,14 @@ import type { ValidationContext, ValidationResult } from '#types/index';
 export class MaxLengthArrayStrategy<T> extends BaseValidationStrategy<T[], T[]> {
   readonly name = 'maxLength';
 
-  constructor(private readonly maxLength: number) {
+  constructor(
+    private readonly maxLength: number,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: T[], context: ValidationContext): ValidationResult<T[]> {

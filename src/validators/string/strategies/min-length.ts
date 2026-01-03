@@ -5,7 +5,7 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** Minimum length strategy */
 export class MinLengthStrategy extends BaseValidationStrategy<string, string> {
@@ -13,11 +13,11 @@ export class MinLengthStrategy extends BaseValidationStrategy<string, string> {
 
   constructor(
     private readonly min: number,
-    message?: string,
+    options?: ValidationOptions,
   ) {
     super();
-    if (message) {
-      this.withMessage(message);
+    if (options?.message) {
+      this.withMessage(options.message);
     }
   }
 

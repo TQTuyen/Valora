@@ -5,7 +5,12 @@
 
 import { LogicValidator } from './validator';
 
-import type { IValidator, ValidationContext, ValidationResult } from '#types/index';
+import type {
+  IValidator,
+  ValidationContext,
+  ValidationOptions,
+  ValidationResult,
+} from '#types/index';
 
 /**
  * Optional validator - value can be undefined
@@ -13,6 +18,7 @@ import type { IValidator, ValidationContext, ValidationResult } from '#types/ind
  */
 export function optional<T, U>(
   validator: IValidator<NonNullable<T>, U>,
+  _options?: ValidationOptions,
 ): LogicValidator<T | undefined, U | undefined> {
   const logicValidator = new LogicValidator<T | undefined, U | undefined>();
 
@@ -42,6 +48,7 @@ export function optional<T, U>(
  */
 export function nullable<T, U>(
   validator: IValidator<NonNullable<T>, U>,
+  _options?: ValidationOptions,
 ): LogicValidator<T | null, U | null> {
   const logicValidator = new LogicValidator<T | null, U | null>();
 
@@ -67,6 +74,7 @@ export function nullable<T, U>(
  */
 export function nullish<T, U>(
   validator: IValidator<NonNullable<T>, U>,
+  _options?: ValidationOptions,
 ): LogicValidator<T | null | undefined, U | null | undefined> {
   const logicValidator = new LogicValidator<T | null | undefined, U | null | undefined>();
 

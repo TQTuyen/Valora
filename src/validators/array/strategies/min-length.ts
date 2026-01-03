@@ -5,7 +5,7 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /**
  * Minimum length strategy
@@ -13,8 +13,14 @@ import type { ValidationContext, ValidationResult } from '#types/index';
 export class MinLengthArrayStrategy<T> extends BaseValidationStrategy<T[], T[]> {
   readonly name = 'minLength';
 
-  constructor(private readonly minLength: number) {
+  constructor(
+    private readonly minLength: number,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: T[], context: ValidationContext): ValidationResult<T[]> {

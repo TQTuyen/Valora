@@ -7,7 +7,7 @@ import { createLogicValidator } from './helpers';
 import { IfThenElseStrategy } from './strategies';
 import { LogicValidator } from './validator';
 
-import type { IValidator } from '#types/index';
+import type { IValidator, ValidationOptions } from '#types/index';
 
 /**
  * IF-THEN-ELSE conditional validator
@@ -19,10 +19,11 @@ export function ifThenElse<T, U>(
   condition: IValidator<T, unknown>,
   thenValidator: IValidator<T, U>,
   elseValidator?: IValidator<T, U>,
+  options?: ValidationOptions,
 ): LogicValidator<T, U> {
   return createLogicValidator(
     LogicValidator<T, U>,
-    new IfThenElseStrategy(condition, thenValidator, elseValidator),
+    new IfThenElseStrategy(condition, thenValidator, elseValidator, options),
   );
 }
 
@@ -31,6 +32,7 @@ export function when<T, U>(
   condition: IValidator<T, unknown>,
   thenValidator: IValidator<T, U>,
   elseValidator?: IValidator<T, U>,
+  options?: ValidationOptions,
 ): LogicValidator<T, U> {
-  return ifThenElse(condition, thenValidator, elseValidator);
+  return ifThenElse(condition, thenValidator, elseValidator, options);
 }

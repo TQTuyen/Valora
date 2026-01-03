@@ -7,6 +7,8 @@ import { string } from '@validators/string';
 
 import { createTypeDecorator } from '../../core/factory';
 
+import type { ValidationOptions } from '#types/index';
+
 /**
  * Validates that the value is a valid email address
  *
@@ -21,6 +23,6 @@ import { createTypeDecorator } from '../../core/factory';
  * }
  * ```
  */
-export function IsEmail(): PropertyDecorator {
-  return createTypeDecorator(() => string().email())();
+export function IsEmail(options?: ValidationOptions): PropertyDecorator {
+  return createTypeDecorator(() => string().email(options))();
 }

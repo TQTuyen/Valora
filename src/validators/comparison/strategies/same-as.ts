@@ -8,14 +8,20 @@ import { BaseValidationStrategy } from '@core/index';
 import { getRefValue } from './helpers';
 
 import type { FieldRef } from './helpers';
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** Same as field strategy (alias for equalTo with field ref) */
 export class SameAsStrategy<T> extends BaseValidationStrategy<T, T> {
   readonly name = 'sameAs';
 
-  constructor(private readonly fieldPath: string) {
+  constructor(
+    private readonly fieldPath: string,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: T, context: ValidationContext): ValidationResult<T> {

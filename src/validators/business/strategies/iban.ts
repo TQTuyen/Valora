@@ -5,7 +5,7 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /**
  * IBAN length by country code
@@ -93,8 +93,14 @@ const IBAN_LENGTHS: Record<string, number> = {
 export class IBANStrategy extends BaseValidationStrategy<string, string> {
   readonly name = 'iban';
 
-  constructor(private readonly allowedCountries?: string[]) {
+  constructor(
+    private readonly allowedCountries?: string[],
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: string, context: ValidationContext): ValidationResult<string> {

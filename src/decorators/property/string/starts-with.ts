@@ -7,6 +7,8 @@ import { string } from '@validators/string';
 
 import { createPropertyDecorator } from '../../core/factory';
 
+import type { ValidationOptions } from '#types/index';
+
 /**
  * Validates that string starts with a specific prefix
  *
@@ -23,6 +25,8 @@ import { createPropertyDecorator } from '../../core/factory';
  * }
  * ```
  */
-export function StartsWith(prefix: string): PropertyDecorator {
-  return createPropertyDecorator((pre: string) => string().startsWith(pre))(prefix);
+export function StartsWith(prefix: string, options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((pre: string, options?: ValidationOptions) =>
+    string().startsWith(pre, options),
+  )(prefix, options);
 }

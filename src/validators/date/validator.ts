@@ -82,27 +82,23 @@ export class DateValidator extends BaseValidator<unknown, Date> {
   /** Minimum date (inclusive) */
   min(minDate: Date | string, options?: ValidationOptions): this {
     const date = minDate instanceof Date ? minDate : new Date(minDate);
-    const strategy = new MinDateStrategy(date);
-    if (options?.message) strategy.withMessage(options.message);
-    return this.addStrategy(strategy);
+    return this.addStrategy(new MinDateStrategy(date, options));
   }
 
   /** Maximum date (inclusive) */
   max(maxDate: Date | string, options?: ValidationOptions): this {
     const date = maxDate instanceof Date ? maxDate : new Date(maxDate);
-    const strategy = new MaxDateStrategy(date);
-    if (options?.message) strategy.withMessage(options.message);
-    return this.addStrategy(strategy);
+    return this.addStrategy(new MaxDateStrategy(date, options));
   }
 
   /** Date must be within range (inclusive) */
-  range(minDate: Date | string, maxDate: Date | string): this {
-    return this.min(minDate).max(maxDate);
+  range(minDate: Date | string, maxDate: Date | string, options?: ValidationOptions): this {
+    return this.min(minDate, options).max(maxDate, options);
   }
 
   /** Alias for range */
-  between(minDate: Date | string, maxDate: Date | string): this {
-    return this.range(minDate, maxDate);
+  between(minDate: Date | string, maxDate: Date | string, options?: ValidationOptions): this {
+    return this.range(minDate, maxDate, options);
   }
 
   // -------------------------------------------------------------------------
@@ -112,9 +108,7 @@ export class DateValidator extends BaseValidator<unknown, Date> {
   /** Must be before the given date (exclusive) */
   before(date: Date | string, options?: ValidationOptions): this {
     const d = date instanceof Date ? date : new Date(date);
-    const strategy = new IsBeforeStrategy(d);
-    if (options?.message) strategy.withMessage(options.message);
-    return this.addStrategy(strategy);
+    return this.addStrategy(new IsBeforeStrategy(d, options));
   }
 
   /** Alias for before */
@@ -125,9 +119,7 @@ export class DateValidator extends BaseValidator<unknown, Date> {
   /** Must be after the given date (exclusive) */
   after(date: Date | string, options?: ValidationOptions): this {
     const d = date instanceof Date ? date : new Date(date);
-    const strategy = new IsAfterStrategy(d);
-    if (options?.message) strategy.withMessage(options.message);
-    return this.addStrategy(strategy);
+    return this.addStrategy(new IsAfterStrategy(d, options));
   }
 
   /** Alias for after */
@@ -141,38 +133,32 @@ export class DateValidator extends BaseValidator<unknown, Date> {
 
   /** Must be in the past */
   past(options?: ValidationOptions): this {
-    const strategy = new IsPastStrategy();
-    if (options?.message) strategy.withMessage(options.message);
-    return this.addStrategy(strategy);
+    return this.addStrategy(new IsPastStrategy(options));
   }
 
   /** Alias for past */
-  isPast(): this {
-    return this.past();
+  isPast(options?: ValidationOptions): this {
+    return this.past(options);
   }
 
   /** Must be in the future */
   future(options?: ValidationOptions): this {
-    const strategy = new IsFutureStrategy();
-    if (options?.message) strategy.withMessage(options.message);
-    return this.addStrategy(strategy);
+    return this.addStrategy(new IsFutureStrategy(options));
   }
 
   /** Alias for future */
-  isFuture(): this {
-    return this.future();
+  isFuture(options?: ValidationOptions): this {
+    return this.future(options);
   }
 
   /** Must be today */
   today(options?: ValidationOptions): this {
-    const strategy = new IsTodayStrategy();
-    if (options?.message) strategy.withMessage(options.message);
-    return this.addStrategy(strategy);
+    return this.addStrategy(new IsTodayStrategy(options));
   }
 
   /** Alias for today */
-  isToday(): this {
-    return this.today();
+  isToday(options?: ValidationOptions): this {
+    return this.today(options);
   }
 
   // -------------------------------------------------------------------------
@@ -181,26 +167,22 @@ export class DateValidator extends BaseValidator<unknown, Date> {
 
   /** Must be a weekday (Monday-Friday) */
   weekday(options?: ValidationOptions): this {
-    const strategy = new IsWeekdayStrategy();
-    if (options?.message) strategy.withMessage(options.message);
-    return this.addStrategy(strategy);
+    return this.addStrategy(new IsWeekdayStrategy(options));
   }
 
   /** Alias for weekday */
-  isWeekday(): this {
-    return this.weekday();
+  isWeekday(options?: ValidationOptions): this {
+    return this.weekday(options);
   }
 
   /** Must be a weekend (Saturday-Sunday) */
   weekend(options?: ValidationOptions): this {
-    const strategy = new IsWeekendStrategy();
-    if (options?.message) strategy.withMessage(options.message);
-    return this.addStrategy(strategy);
+    return this.addStrategy(new IsWeekendStrategy(options));
   }
 
   /** Alias for weekend */
-  isWeekend(): this {
-    return this.weekend();
+  isWeekend(options?: ValidationOptions): this {
+    return this.weekend(options);
   }
 
   // -------------------------------------------------------------------------
@@ -209,21 +191,17 @@ export class DateValidator extends BaseValidator<unknown, Date> {
 
   /** Minimum age in years (for birthdate validation) */
   minAge(years: number, options?: ValidationOptions): this {
-    const strategy = new MinAgeStrategy(years);
-    if (options?.message) strategy.withMessage(options.message);
-    return this.addStrategy(strategy);
+    return this.addStrategy(new MinAgeStrategy(years, options));
   }
 
   /** Maximum age in years (for birthdate validation) */
   maxAge(years: number, options?: ValidationOptions): this {
-    const strategy = new MaxAgeStrategy(years);
-    if (options?.message) strategy.withMessage(options.message);
-    return this.addStrategy(strategy);
+    return this.addStrategy(new MaxAgeStrategy(years, options));
   }
 
   /** Age must be within range (for birthdate validation) */
-  ageRange(minYears: number, maxYears: number): this {
-    return this.minAge(minYears).maxAge(maxYears);
+  ageRange(minYears: number, maxYears: number, options?: ValidationOptions): this {
+    return this.minAge(minYears, options).maxAge(maxYears, options);
   }
 }
 
