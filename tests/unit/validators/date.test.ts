@@ -2,9 +2,9 @@
  * Date Validator Tests
  */
 
+import { date } from '@validators/date';
 import { describe, expect, it } from 'vitest';
 
-import { date } from '@validators/date';
 import { createContext, expectFailure, expectSuccess } from '../../helpers/test-utils';
 
 describe('Date Validator', () => {

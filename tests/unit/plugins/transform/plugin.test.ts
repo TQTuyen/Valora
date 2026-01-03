@@ -45,6 +45,7 @@ describe('TransformPlugin', () => {
       const instance = new TransformPlugin({
         loadBuiltIns: false,
         customTransforms: {
+          // eslint-disable-next-line @typescript-eslint/naming-convention
           'test.custom': {
             transform: customTransform,
             meta: { name: 'test.custom', category: 'test' },
