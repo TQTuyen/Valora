@@ -5,14 +5,20 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** Maximum age validation strategy */
 export class MaxAgeStrategy extends BaseValidationStrategy<Date, Date> {
   readonly name = 'maxAge';
 
-  constructor(private readonly maxYears: number) {
+  constructor(
+    private readonly maxYears: number,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: Date, context: ValidationContext): ValidationResult<Date> {

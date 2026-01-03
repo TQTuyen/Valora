@@ -63,26 +63,22 @@ export class NumberValidator extends BaseValidator<unknown, number> {
 
   /** Minimum value (inclusive) */
   min(minimum: number, options?: ValidationOptions): this {
-    const strategy = new MinStrategy(minimum);
-    if (options?.message) strategy.withMessage(options.message);
-    return this.addStrategy(strategy);
+    return this.addStrategy(new MinStrategy(minimum, options));
   }
 
   /** Maximum value (inclusive) */
   max(maximum: number, options?: ValidationOptions): this {
-    const strategy = new MaxStrategy(maximum);
-    if (options?.message) strategy.withMessage(options.message);
-    return this.addStrategy(strategy);
+    return this.addStrategy(new MaxStrategy(maximum, options));
   }
 
   /** Value must be within range (inclusive) */
-  range(min: number, max: number): this {
-    return this.min(min).max(max);
+  range(min: number, max: number, options?: ValidationOptions): this {
+    return this.min(min, options).max(max, options);
   }
 
   /** Alias for range */
-  between(min: number, max: number): this {
-    return this.range(min, max);
+  between(min: number, max: number, options?: ValidationOptions): this {
+    return this.range(min, max, options);
   }
 
   // -------------------------------------------------------------------------
@@ -91,33 +87,27 @@ export class NumberValidator extends BaseValidator<unknown, number> {
 
   /** Must be an integer */
   integer(options?: ValidationOptions): this {
-    const strategy = new IntegerStrategy();
-    if (options?.message) strategy.withMessage(options.message);
-    return this.addStrategy(strategy);
+    return this.addStrategy(new IntegerStrategy(options));
   }
 
   /** Alias for integer */
-  int(): this {
-    return this.integer();
+  int(options?: ValidationOptions): this {
+    return this.integer(options);
   }
 
   /** Must be a finite number */
   finite(options?: ValidationOptions): this {
-    const strategy = new FiniteStrategy();
-    if (options?.message) strategy.withMessage(options.message);
-    return this.addStrategy(strategy);
+    return this.addStrategy(new FiniteStrategy(options));
   }
 
   /** Must be a safe integer */
   safe(options?: ValidationOptions): this {
-    const strategy = new SafeIntegerStrategy();
-    if (options?.message) strategy.withMessage(options.message);
-    return this.addStrategy(strategy);
+    return this.addStrategy(new SafeIntegerStrategy(options));
   }
 
   /** Alias for safe */
-  safeInteger(): this {
-    return this.safe();
+  safeInteger(options?: ValidationOptions): this {
+    return this.safe(options);
   }
 
   // -------------------------------------------------------------------------
@@ -126,36 +116,32 @@ export class NumberValidator extends BaseValidator<unknown, number> {
 
   /** Must be positive (> 0) */
   positive(options?: ValidationOptions): this {
-    const strategy = new PositiveStrategy();
-    if (options?.message) strategy.withMessage(options.message);
-    return this.addStrategy(strategy);
+    return this.addStrategy(new PositiveStrategy(options));
   }
 
   /** Must be negative (< 0) */
   negative(options?: ValidationOptions): this {
-    const strategy = new NegativeStrategy();
-    if (options?.message) strategy.withMessage(options.message);
-    return this.addStrategy(strategy);
+    return this.addStrategy(new NegativeStrategy(options));
   }
 
   /** Must be non-negative (>= 0) */
-  nonNegative(): this {
-    return this.addStrategy(new NonNegativeStrategy());
+  nonNegative(options?: ValidationOptions): this {
+    return this.addStrategy(new NonNegativeStrategy(options));
   }
 
   /** Alias for nonNegative */
-  nonnegative(): this {
-    return this.nonNegative();
+  nonnegative(options?: ValidationOptions): this {
+    return this.nonNegative(options);
   }
 
   /** Must be non-positive (<= 0) */
-  nonPositive(): this {
-    return this.addStrategy(new NonPositiveStrategy());
+  nonPositive(options?: ValidationOptions): this {
+    return this.addStrategy(new NonPositiveStrategy(options));
   }
 
   /** Alias for nonPositive */
-  nonpositive(): this {
-    return this.nonPositive();
+  nonpositive(options?: ValidationOptions): this {
+    return this.nonPositive(options);
   }
 
   // -------------------------------------------------------------------------
@@ -164,14 +150,12 @@ export class NumberValidator extends BaseValidator<unknown, number> {
 
   /** Must be a multiple of the given factor */
   multipleOf(factor: number, options?: ValidationOptions): this {
-    const strategy = new MultipleOfStrategy(factor);
-    if (options?.message) strategy.withMessage(options.message);
-    return this.addStrategy(strategy);
+    return this.addStrategy(new MultipleOfStrategy(factor, options));
   }
 
   /** Alias for multipleOf */
-  step(factor: number): this {
-    return this.multipleOf(factor);
+  step(factor: number, options?: ValidationOptions): this {
+    return this.multipleOf(factor, options);
   }
 }
 

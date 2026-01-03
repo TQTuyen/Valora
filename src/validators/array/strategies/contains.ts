@@ -5,7 +5,7 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /**
  * Contains value strategy
@@ -13,8 +13,14 @@ import type { ValidationContext, ValidationResult } from '#types/index';
 export class ContainsStrategy<T> extends BaseValidationStrategy<T[], T[]> {
   readonly name = 'contains';
 
-  constructor(private readonly searchValue: T) {
+  constructor(
+    private readonly searchValue: T,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: T[], context: ValidationContext): ValidationResult<T[]> {

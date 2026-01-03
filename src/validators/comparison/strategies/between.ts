@@ -8,7 +8,7 @@ import { BaseValidationStrategy } from '@core/index';
 import { getRefValue, isFieldRef } from './helpers';
 
 import type { FieldRef } from './helpers';
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** Between range strategy (inclusive) */
 export class BetweenStrategy<T extends number | Date> extends BaseValidationStrategy<T, T> {
@@ -17,8 +17,12 @@ export class BetweenStrategy<T extends number | Date> extends BaseValidationStra
   constructor(
     private readonly minValue: T | FieldRef,
     private readonly maxValue: T | FieldRef,
+    options?: ValidationOptions,
   ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: T, context: ValidationContext): ValidationResult<T> {

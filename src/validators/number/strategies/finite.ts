@@ -5,11 +5,18 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** Finite number strategy */
 export class FiniteStrategy extends BaseValidationStrategy<number, number> {
   readonly name = 'finite';
+
+  constructor(options?: ValidationOptions) {
+    super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
+  }
 
   validate(value: number, context: ValidationContext): ValidationResult<number> {
     if (!Number.isFinite(value)) {

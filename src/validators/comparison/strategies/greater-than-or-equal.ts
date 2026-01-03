@@ -8,7 +8,7 @@ import { BaseValidationStrategy } from '@core/index';
 import { getRefValue, isFieldRef } from './helpers';
 
 import type { FieldRef } from './helpers';
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** Greater than or equal strategy */
 export class GreaterThanOrEqualStrategy<T extends number | Date> extends BaseValidationStrategy<
@@ -17,8 +17,14 @@ export class GreaterThanOrEqualStrategy<T extends number | Date> extends BaseVal
 > {
   readonly name = 'greaterThanOrEqual';
 
-  constructor(private readonly compareValue: T | FieldRef) {
+  constructor(
+    private readonly compareValue: T | FieldRef,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: T, context: ValidationContext): ValidationResult<T> {

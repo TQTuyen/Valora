@@ -93,43 +93,37 @@ export class ArrayValidator<T = unknown, U = T> extends BaseValidator<unknown, U
 
   /** Minimum array length */
   min(minLength: number, options?: ValidationOptions): this {
-    const strategy = new MinLengthArrayStrategy(minLength);
-    if (options?.message) strategy.withMessage(options.message);
-    return this.addStrategy(strategy as never);
+    return this.addStrategy(new MinLengthArrayStrategy(minLength, options) as never);
   }
 
   /** Alias for min */
-  minLength(minLength: number): this {
-    return this.min(minLength);
+  minLength(minLength: number, options?: ValidationOptions): this {
+    return this.min(minLength, options);
   }
 
   /** Maximum array length */
   max(maxLength: number, options?: ValidationOptions): this {
-    const strategy = new MaxLengthArrayStrategy(maxLength);
-    if (options?.message) strategy.withMessage(options.message);
-    return this.addStrategy(strategy as never);
+    return this.addStrategy(new MaxLengthArrayStrategy(maxLength, options) as never);
   }
 
   /** Alias for max */
-  maxLength(maxLength: number): this {
-    return this.max(maxLength);
+  maxLength(maxLength: number, options?: ValidationOptions): this {
+    return this.max(maxLength, options);
   }
 
   /** Exact array length */
   length(exactLength: number, options?: ValidationOptions): this {
-    const strategy = new ExactLengthArrayStrategy(exactLength);
-    if (options?.message) strategy.withMessage(options.message);
-    return this.addStrategy(strategy as never);
+    return this.addStrategy(new ExactLengthArrayStrategy(exactLength, options) as never);
   }
 
   /** Length must be in range */
-  range(minLength: number, maxLength: number): this {
-    return this.min(minLength).max(maxLength);
+  range(minLength: number, maxLength: number, options?: ValidationOptions): this {
+    return this.min(minLength, options).max(maxLength, options);
   }
 
   /** Alias for range */
-  between(minLength: number, maxLength: number): this {
-    return this.range(minLength, maxLength);
+  between(minLength: number, maxLength: number, options?: ValidationOptions): this {
+    return this.range(minLength, maxLength, options);
   }
 
   // -------------------------------------------------------------------------
@@ -138,36 +132,32 @@ export class ArrayValidator<T = unknown, U = T> extends BaseValidator<unknown, U
 
   /** Array must not be empty */
   nonEmpty(options?: ValidationOptions): this {
-    const strategy = new NonEmptyArrayStrategy();
-    if (options?.message) strategy.withMessage(options.message);
-    return this.addStrategy(strategy as never);
+    return this.addStrategy(new NonEmptyArrayStrategy(options) as never);
   }
 
   /** Alias for nonEmpty */
-  notEmpty(): this {
-    return this.nonEmpty();
+  notEmpty(options?: ValidationOptions): this {
+    return this.nonEmpty(options);
   }
 
   /** All items must be unique */
   unique(options?: ValidationOptions): this {
-    const strategy = new UniqueArrayStrategy();
-    if (options?.message) strategy.withMessage(options.message);
-    return this.addStrategy(strategy as never);
+    return this.addStrategy(new UniqueArrayStrategy(options) as never);
   }
 
   /** Alias for unique */
-  distinct(): this {
-    return this.unique();
+  distinct(options?: ValidationOptions): this {
+    return this.unique(options);
   }
 
   /** Array must contain a specific value */
-  contains(value: U): this {
-    return this.addStrategy(new ContainsStrategy(value) as never);
+  contains(value: U, options?: ValidationOptions): this {
+    return this.addStrategy(new ContainsStrategy(value, options) as never);
   }
 
   /** Alias for contains */
-  includes(value: U): this {
-    return this.contains(value);
+  includes(value: U, options?: ValidationOptions): this {
+    return this.contains(value, options);
   }
 
   // -------------------------------------------------------------------------
@@ -175,18 +165,18 @@ export class ArrayValidator<T = unknown, U = T> extends BaseValidator<unknown, U
   // -------------------------------------------------------------------------
 
   /** Every item must satisfy the predicate */
-  every(predicate: (item: U, index: number) => boolean): this {
-    return this.addStrategy(new EveryStrategy(predicate) as never);
+  every(predicate: (item: U, index: number) => boolean, options?: ValidationOptions): this {
+    return this.addStrategy(new EveryStrategy(predicate, options) as never);
   }
 
   /** At least one item must satisfy the predicate */
-  some(predicate: (item: U, index: number) => boolean): this {
-    return this.addStrategy(new SomeStrategy(predicate) as never);
+  some(predicate: (item: U, index: number) => boolean, options?: ValidationOptions): this {
+    return this.addStrategy(new SomeStrategy(predicate, options) as never);
   }
 
   /** None of the items should satisfy the predicate */
-  none(predicate: (item: U, index: number) => boolean): this {
-    return this.every((item, index) => !predicate(item, index));
+  none(predicate: (item: U, index: number) => boolean, options?: ValidationOptions): this {
+    return this.every((item, index) => !predicate(item, index), options);
   }
 }
 

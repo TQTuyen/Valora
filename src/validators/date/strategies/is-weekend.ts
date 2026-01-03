@@ -5,11 +5,18 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** Must be a weekend strategy */
 export class IsWeekendStrategy extends BaseValidationStrategy<Date, Date> {
   readonly name = 'isWeekend';
+
+  constructor(options?: ValidationOptions) {
+    super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
+  }
 
   validate(value: Date, context: ValidationContext): ValidationResult<Date> {
     const day = value.getDay();

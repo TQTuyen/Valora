@@ -5,7 +5,12 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { IValidator, ValidationContext, ValidationResult } from '#types/index';
+import type {
+  IValidator,
+  ValidationContext,
+  ValidationOptions,
+  ValidationResult,
+} from '#types/index';
 
 /**
  * Item validator strategy - validates each item with a validator
@@ -13,8 +18,14 @@ import type { IValidator, ValidationContext, ValidationResult } from '#types/ind
 export class ItemValidatorStrategy<T, U> extends BaseValidationStrategy<T[], U[]> {
   readonly name = 'items';
 
-  constructor(private readonly itemValidator: IValidator<T, U>) {
+  constructor(
+    private readonly itemValidator: IValidator<T, U>,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: T[], context: ValidationContext): ValidationResult<U[]> {
