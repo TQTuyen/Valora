@@ -2,8 +2,8 @@
  * Logic Validator Tests
  */
 
-import { describe, it } from 'vitest';
-
+import { boolean } from '@validators/boolean';
+import { compare } from '@validators/comparison';
 import {
   allOf,
   and,
@@ -20,10 +20,10 @@ import {
   xor,
 } from '@validators/logic';
 import { number } from '@validators/number';
-import { string } from '@validators/string';
-import { boolean } from '@validators/boolean';
 import { object } from '@validators/object';
-import { compare } from '@validators/comparison';
+import { string } from '@validators/string';
+import { describe, it } from 'vitest';
+
 import { createContext, expectFailure, expectSuccess } from '../../helpers/test-utils';
 
 describe('Logic Validator', () => {

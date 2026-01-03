@@ -12,11 +12,14 @@ describe('Async Validator', () => {
 
   describe('Basic Async Validation', () => {
     it('should validate with async function', async () => {
-      const validator = asyncValidator(async (value: string) => ({
-        success: true,
-        data: value.toUpperCase(),
-        errors: [],
-      }));
+      const validator = asyncValidator(async (value: string) => {
+        await Promise.resolve();
+        return {
+          success: true,
+          data: value.toUpperCase(),
+          errors: [],
+        };
+      });
 
       const result = await validator.validateAsync('hello', ctx);
 
@@ -24,18 +27,21 @@ describe('Async Validator', () => {
     });
 
     it('should fail with async function', async () => {
-      const validator = asyncValidator(async () => ({
-        success: false,
-        data: undefined,
-        errors: [
-          {
-            code: 'custom.error',
-            message: 'Validation failed',
-            path: [],
-            field: '',
-          },
-        ],
-      }));
+      const validator = asyncValidator(async () => {
+        await Promise.resolve();
+        return {
+          success: false,
+          data: undefined,
+          errors: [
+            {
+              code: 'custom.error',
+              message: 'Validation failed',
+              path: [],
+              field: '',
+            },
+          ],
+        };
+      });
 
       const result = await validator.validateAsync('test', ctx);
 
@@ -43,7 +49,7 @@ describe('Async Validator', () => {
     });
 
     it('should handle async errors', async () => {
-      const validator = asyncValidator(async () => {
+      const validator = asyncValidator(() => {
         throw new Error('Async error');
       });
 
@@ -108,6 +114,7 @@ describe('Async Validator', () => {
       let callCount = 0;
       const validator = asyncValidator(async (value: string) => {
         callCount++;
+        await Promise.resolve();
         return {
           success: true,
           data: value,
@@ -140,6 +147,7 @@ describe('Async Validator', () => {
         if (attemptCount < 3) {
           throw new Error('Temporary failure');
         }
+        await Promise.resolve();
         return {
           success: true,
           data: value,
@@ -156,7 +164,7 @@ describe('Async Validator', () => {
     it('should fail after max retry attempts', async () => {
       let attemptCount = 0;
 
-      const validator = asyncValidator(async () => {
+      const validator = asyncValidator(() => {
         attemptCount++;
         throw new Error('Persistent failure');
       }).retry(3);
@@ -221,7 +229,7 @@ describe('Async Validator', () => {
         };
       });
 
-      validator.validateAsync('test', ctx);
+      void validator.validateAsync('test', ctx);
 
       await validator.waitForCompletion();
 
@@ -255,6 +263,7 @@ describe('Async Validator', () => {
         if (attemptCount < 2) {
           throw new Error('Retry me');
         }
+        await Promise.resolve();
         return {
           success: true,
           data: value,
