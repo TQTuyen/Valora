@@ -246,7 +246,7 @@ describe('Transform Composers', () => {
       expect(result).toBe('TEST');
     });
 
-    it('should return a promise', (): void => {
+    it('should return a promise', async () => {
       const transform = debounce((s: string) => s.toUpperCase(), 100);
 
       const promise = transform('hello');
