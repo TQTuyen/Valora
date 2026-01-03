@@ -3,9 +3,11 @@
  * @module decorators/property/array/array-not-empty
  */
 
+// eslint-disable-next-line simple-import-sort/imports
 import { array } from '@validators/array';
 
-import { createTypeDecorator } from '../../core/factory';
+import { createPropertyDecorator } from '../../core/factory';
+import type { ValidationOptions } from '#types/index';
 
 /**
  * Validates that array is not empty
@@ -13,15 +15,14 @@ import { createTypeDecorator } from '../../core/factory';
  * @decorator
  *
  * @example
+ *
  * ```typescript
- * @Validate()
- * class Post {
- *   @IsArray()
+ * class Example {
  *   @ArrayNotEmpty()
- *   tags: string[];
+ *   items: any[];
  * }
  * ```
  */
-export function ArrayNotEmpty(): PropertyDecorator {
-  return createTypeDecorator(() => array().notEmpty())();
+export function ArrayNotEmpty(options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((opts?: ValidationOptions) => array().nonEmpty(opts))(options);
 }

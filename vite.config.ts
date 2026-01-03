@@ -21,6 +21,9 @@ export default defineConfig({
         // Core
         'core/index': resolve(__dirname, 'src/core/index.ts'),
 
+        // Decorators
+        'decorators/index': resolve(__dirname, 'src/decorators/index.ts'),
+
         // Notification
         'notification/index': resolve(__dirname, 'src/notification/index.ts'),
 
@@ -86,6 +89,7 @@ export default defineConfig({
     alias: {
       '@': resolve(__dirname, 'src'),
       '@core': resolve(__dirname, 'src/core'),
+      '@decorators': resolve(__dirname, 'src/decorators'),
       '@validators': resolve(__dirname, 'src/validators'),
       '@notification': resolve(__dirname, 'src/notification'),
       '@adapters': resolve(__dirname, 'src/adapters'),

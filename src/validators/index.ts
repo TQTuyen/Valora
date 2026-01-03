@@ -174,7 +174,14 @@ export {
 // Async Validators
 // -------------------------------------------------------------------------
 export type { AsyncValidationFn, RetryConfig } from './async/index';
-export { async, AsyncValidator } from './async/index';
+export {
+  async,
+  AsyncStrategy,
+  AsyncValidator,
+  DebounceStrategy,
+  RetryStrategy,
+  TimeoutStrategy,
+} from './async/index';
 
 // -------------------------------------------------------------------------
 // Business Validators

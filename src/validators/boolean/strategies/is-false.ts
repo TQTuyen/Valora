@@ -13,6 +13,13 @@ import type { ValidationContext, ValidationResult } from '#types/index';
 export class IsFalseStrategy extends BaseValidationStrategy<boolean, boolean> {
   readonly name = 'isFalse';
 
+  constructor(message?: string) {
+    super();
+    if (message) {
+      this.withMessage(message);
+    }
+  }
+
   validate(value: boolean, context: ValidationContext): ValidationResult<boolean> {
     if (value) {
       return this.failure('boolean.isFalse', context);

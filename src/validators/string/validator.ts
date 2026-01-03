@@ -86,8 +86,8 @@ export class StringValidator extends BaseValidator<unknown, string> {
   // -------------------------------------------------------------------------
 
   /** Minimum string length */
-  minLength(min: number): this {
-    return this.addStrategy(new MinLengthStrategy(min));
+  minLength(min: number, options?: { message?: string }): this {
+    return this.addStrategy(new MinLengthStrategy(min, options?.message));
   }
 
   /** Alias for minLength */

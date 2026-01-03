@@ -5,10 +5,12 @@
 
 import { date } from '@validators/date';
 
-import { createTypeDecorator } from '../../core/factory';
+import { createPropertyDecorator } from '../../core/factory';
+
+import type { ValidationOptions } from '#types/index';
 
 /**
- * Validates that date is in the past
+ * Validates that value is in the past
  *
  * @decorator
  *
@@ -16,12 +18,11 @@ import { createTypeDecorator } from '../../core/factory';
  * ```typescript
  * @Validate()
  * class User {
- *   @IsDate()
  *   @IsPast()
  *   birthDate: Date;
  * }
  * ```
  */
-export function IsPast(): PropertyDecorator {
-  return createTypeDecorator(() => date().past())();
+export function IsPast(options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((opts?: ValidationOptions) => date().past(opts))(options);
 }
