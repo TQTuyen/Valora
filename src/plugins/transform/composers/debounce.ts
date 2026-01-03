@@ -26,6 +26,7 @@ export function debounce<T, U>(
   delayMs: number,
 ): Transformer<T, Promise<U>> {
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
+  let pendingResolves: ((value: U) => void)[] = [];
 
   return async (value: T) => {
     return new Promise<U>((resolve) => {
@@ -33,8 +34,14 @@ export function debounce<T, U>(
         clearTimeout(timeoutId);
       }
 
+      pendingResolves.push(resolve);
+
       timeoutId = setTimeout(() => {
-        resolve(transform(value));
+        const result = transform(value);
+        pendingResolves.forEach((res) => {
+          res(result);
+        });
+        pendingResolves = [];
         timeoutId = null;
       }, delayMs);
     });
