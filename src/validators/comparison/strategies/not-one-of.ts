@@ -5,14 +5,20 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** Not one of strategy */
 export class NotOneOfStrategy<T> extends BaseValidationStrategy<T, T> {
   readonly name = 'notOneOf';
 
-  constructor(private readonly forbiddenValues: T[]) {
+  constructor(
+    private readonly forbiddenValues: T[],
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: T, context: ValidationContext): ValidationResult<T> {

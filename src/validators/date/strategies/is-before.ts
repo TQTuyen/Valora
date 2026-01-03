@@ -5,14 +5,20 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** Must be before date strategy */
 export class IsBeforeStrategy extends BaseValidationStrategy<Date, Date> {
   readonly name = 'isBefore';
 
-  constructor(private readonly beforeDate: Date) {
+  constructor(
+    private readonly beforeDate: Date,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: Date, context: ValidationContext): ValidationResult<Date> {

@@ -5,14 +5,20 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** Maximum length strategy */
 export class MaxLengthStrategy extends BaseValidationStrategy<string, string> {
   readonly name = 'maxLength';
 
-  constructor(private readonly max: number) {
+  constructor(
+    private readonly max: number,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: string, context: ValidationContext): ValidationResult<string> {

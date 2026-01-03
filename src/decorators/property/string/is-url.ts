@@ -7,6 +7,8 @@ import { string } from '@validators/string';
 
 import { createTypeDecorator } from '../../core/factory';
 
+import type { ValidationOptions } from '#types/index';
+
 /**
  * Validates that the value is a URL
  *
@@ -21,6 +23,6 @@ import { createTypeDecorator } from '../../core/factory';
  * }
  * ```
  */
-export function IsUrl(): PropertyDecorator {
-  return createTypeDecorator(() => string().url())();
+export function IsUrl(options?: ValidationOptions): PropertyDecorator {
+  return createTypeDecorator(() => string().url(options))();
 }

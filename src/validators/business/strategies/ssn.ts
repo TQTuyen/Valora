@@ -5,7 +5,7 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /**
  * SSN validation strategy
@@ -15,6 +15,13 @@ import type { ValidationContext, ValidationResult } from '#types/index';
  */
 export class SSNStrategy extends BaseValidationStrategy<string, string> {
   readonly name = 'ssn';
+
+  constructor(options?: ValidationOptions) {
+    super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
+  }
 
   validate(value: string, context: ValidationContext): ValidationResult<string> {
     // Remove hyphens

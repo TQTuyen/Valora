@@ -7,6 +7,8 @@ import { string } from '@validators/string';
 
 import { createPropertyDecorator } from '../../core/factory';
 
+import type { ValidationOptions } from '#types/index';
+
 /**
  * Validates exact string length
  *
@@ -23,6 +25,8 @@ import { createPropertyDecorator } from '../../core/factory';
  * }
  * ```
  */
-export function Length(len: number): PropertyDecorator {
-  return createPropertyDecorator((length: number) => string().length(length))(len);
+export function Length(len: number, options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((length: number, options?: ValidationOptions) =>
+    string().length(length, options),
+  )(len, options);
 }

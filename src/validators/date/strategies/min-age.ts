@@ -5,14 +5,20 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** Age validation strategy */
 export class MinAgeStrategy extends BaseValidationStrategy<Date, Date> {
   readonly name = 'minAge';
 
-  constructor(private readonly minYears: number) {
+  constructor(
+    private readonly minYears: number,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: Date, context: ValidationContext): ValidationResult<Date> {

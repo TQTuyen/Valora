@@ -5,7 +5,7 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** Maximum number of keys strategy */
 export class MaxKeysStrategy extends BaseValidationStrategy<
@@ -14,8 +14,14 @@ export class MaxKeysStrategy extends BaseValidationStrategy<
 > {
   readonly name = 'maxKeys';
 
-  constructor(private readonly maxKeys: number) {
+  constructor(
+    private readonly maxKeys: number,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(

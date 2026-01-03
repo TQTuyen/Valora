@@ -7,6 +7,8 @@ import { string } from '@validators/string';
 
 import { createTypeDecorator } from '../../core/factory';
 
+import type { ValidationOptions } from '#types/index';
+
 /**
  * Validates that the value is a string
  *
@@ -21,6 +23,10 @@ import { createTypeDecorator } from '../../core/factory';
  * }
  * ```
  */
-export function IsString(): PropertyDecorator {
-  return createTypeDecorator(() => string())();
+export function IsString(options?: ValidationOptions): PropertyDecorator {
+  return createTypeDecorator(() => {
+    const v = string();
+    if (options?.message) v.withMessage(options.message);
+    return v;
+  })();
 }

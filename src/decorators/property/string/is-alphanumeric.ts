@@ -7,6 +7,8 @@ import { string } from '@validators/string';
 
 import { createTypeDecorator } from '../../core/factory';
 
+import type { ValidationOptions } from '#types/index';
+
 /**
  * Validates that string contains only letters and numbers
  *
@@ -22,6 +24,6 @@ import { createTypeDecorator } from '../../core/factory';
  * }
  * ```
  */
-export function IsAlphanumeric(): PropertyDecorator {
-  return createTypeDecorator(() => string().alphanumeric())();
+export function IsAlphanumeric(options?: ValidationOptions): PropertyDecorator {
+  return createTypeDecorator(() => string().alphanumeric(options))();
 }

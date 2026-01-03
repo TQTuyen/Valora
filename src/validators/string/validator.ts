@@ -24,7 +24,7 @@ import {
   UuidStrategy,
 } from './strategies';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /**
  * String validator with fluent API
@@ -67,18 +67,18 @@ export class StringValidator extends BaseValidator<unknown, string> {
   // -------------------------------------------------------------------------
 
   /** Validate as email address */
-  email(): this {
-    return this.addStrategy(new EmailStrategy());
+  email(options?: ValidationOptions): this {
+    return this.addStrategy(new EmailStrategy(options));
   }
 
   /** Validate as URL */
-  url(): this {
-    return this.addStrategy(new UrlStrategy());
+  url(options?: ValidationOptions): this {
+    return this.addStrategy(new UrlStrategy(options));
   }
 
   /** Validate as UUID v4 */
-  uuid(): this {
-    return this.addStrategy(new UuidStrategy());
+  uuid(options?: ValidationOptions): this {
+    return this.addStrategy(new UuidStrategy(options));
   }
 
   // -------------------------------------------------------------------------
@@ -86,28 +86,28 @@ export class StringValidator extends BaseValidator<unknown, string> {
   // -------------------------------------------------------------------------
 
   /** Minimum string length */
-  minLength(min: number, options?: { message?: string }): this {
-    return this.addStrategy(new MinLengthStrategy(min, options?.message));
+  minLength(min: number, options?: ValidationOptions): this {
+    return this.addStrategy(new MinLengthStrategy(min, options));
   }
 
   /** Alias for minLength */
-  min(min: number): this {
-    return this.minLength(min);
+  min(min: number, options?: ValidationOptions): this {
+    return this.minLength(min, options);
   }
 
   /** Maximum string length */
-  maxLength(max: number): this {
-    return this.addStrategy(new MaxLengthStrategy(max));
+  maxLength(max: number, options?: ValidationOptions): this {
+    return this.addStrategy(new MaxLengthStrategy(max, options));
   }
 
   /** Alias for maxLength */
-  max(max: number): this {
-    return this.maxLength(max);
+  max(max: number, options?: ValidationOptions): this {
+    return this.maxLength(max, options);
   }
 
   /** Exact string length */
-  length(len: number): this {
-    return this.addStrategy(new LengthStrategy(len));
+  length(len: number, options?: ValidationOptions): this {
+    return this.addStrategy(new LengthStrategy(len, options));
   }
 
   // -------------------------------------------------------------------------
@@ -115,18 +115,18 @@ export class StringValidator extends BaseValidator<unknown, string> {
   // -------------------------------------------------------------------------
 
   /** Match a regex pattern */
-  matches(pattern: RegExp, message?: string): this {
-    return this.addStrategy(new PatternStrategy(pattern, message));
+  matches(pattern: RegExp, options?: ValidationOptions): this {
+    return this.addStrategy(new PatternStrategy(pattern, options));
   }
 
   /** Alias for matches */
-  pattern(pattern: RegExp, message?: string): this {
-    return this.matches(pattern, message);
+  pattern(pattern: RegExp, options?: ValidationOptions): this {
+    return this.matches(pattern, options);
   }
 
   /** Alias for matches */
-  regex(pattern: RegExp, message?: string): this {
-    return this.matches(pattern, message);
+  regex(pattern: RegExp, options?: ValidationOptions): this {
+    return this.matches(pattern, options);
   }
 
   // -------------------------------------------------------------------------
@@ -134,23 +134,23 @@ export class StringValidator extends BaseValidator<unknown, string> {
   // -------------------------------------------------------------------------
 
   /** String must start with a prefix */
-  startsWith(prefix: string): this {
-    return this.addStrategy(new StartsWithStrategy(prefix));
+  startsWith(prefix: string, options?: ValidationOptions): this {
+    return this.addStrategy(new StartsWithStrategy(prefix, options));
   }
 
   /** String must end with a suffix */
-  endsWith(suffix: string): this {
-    return this.addStrategy(new EndsWithStrategy(suffix));
+  endsWith(suffix: string, options?: ValidationOptions): this {
+    return this.addStrategy(new EndsWithStrategy(suffix, options));
   }
 
   /** String must contain a substring */
-  contains(substring: string): this {
-    return this.addStrategy(new ContainsStrategy(substring));
+  contains(substring: string, options?: ValidationOptions): this {
+    return this.addStrategy(new ContainsStrategy(substring, options));
   }
 
   /** Alias for contains */
-  includes(substring: string): this {
-    return this.contains(substring);
+  includes(substring: string, options?: ValidationOptions): this {
+    return this.contains(substring, options);
   }
 
   // -------------------------------------------------------------------------
@@ -158,23 +158,23 @@ export class StringValidator extends BaseValidator<unknown, string> {
   // -------------------------------------------------------------------------
 
   /** Must contain only letters (a-z, A-Z) */
-  alpha(): this {
-    return this.addStrategy(new AlphaStrategy());
+  alpha(options?: ValidationOptions): this {
+    return this.addStrategy(new AlphaStrategy(options));
   }
 
   /** Must contain only letters and numbers */
-  alphanumeric(): this {
-    return this.addStrategy(new AlphanumericStrategy());
+  alphanumeric(options?: ValidationOptions): this {
+    return this.addStrategy(new AlphanumericStrategy(options));
   }
 
   /** Alias for alphanumeric */
-  alphanum(): this {
-    return this.alphanumeric();
+  alphanum(options?: ValidationOptions): this {
+    return this.alphanumeric(options);
   }
 
   /** Must contain only numeric characters */
-  numeric(): this {
-    return this.addStrategy(new NumericStrategy());
+  numeric(options?: ValidationOptions): this {
+    return this.addStrategy(new NumericStrategy(options));
   }
 
   // -------------------------------------------------------------------------
@@ -182,13 +182,13 @@ export class StringValidator extends BaseValidator<unknown, string> {
   // -------------------------------------------------------------------------
 
   /** Must be all lowercase */
-  lowercase(): this {
-    return this.addStrategy(new LowercaseStrategy());
+  lowercase(options?: ValidationOptions): this {
+    return this.addStrategy(new LowercaseStrategy(options));
   }
 
   /** Must be all uppercase */
-  uppercase(): this {
-    return this.addStrategy(new UppercaseStrategy());
+  uppercase(options?: ValidationOptions): this {
+    return this.addStrategy(new UppercaseStrategy(options));
   }
 
   // -------------------------------------------------------------------------
@@ -196,13 +196,13 @@ export class StringValidator extends BaseValidator<unknown, string> {
   // -------------------------------------------------------------------------
 
   /** Must not be empty or whitespace only */
-  notEmpty(): this {
-    return this.addStrategy(new NotEmptyStrategy());
+  notEmpty(options?: ValidationOptions): this {
+    return this.addStrategy(new NotEmptyStrategy(options));
   }
 
   /** Alias for notEmpty */
-  nonempty(): this {
-    return this.notEmpty();
+  nonempty(options?: ValidationOptions): this {
+    return this.notEmpty(options);
   }
 
   // -------------------------------------------------------------------------

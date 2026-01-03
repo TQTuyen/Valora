@@ -5,7 +5,7 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /**
  * URL slug validation strategy
@@ -25,8 +25,12 @@ export class UrlSlugStrategy extends BaseValidationStrategy<string, string> {
       /** Allow underscores in addition to hyphens */
       allowUnderscores?: boolean;
     },
+    validationOptions?: ValidationOptions,
   ) {
     super();
+    if (validationOptions?.message) {
+      this.withMessage(validationOptions.message);
+    }
   }
 
   validate(value: string, context: ValidationContext): ValidationResult<string> {

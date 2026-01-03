@@ -7,6 +7,8 @@ import { string } from '@validators/string';
 
 import { createTypeDecorator } from '../../core/factory';
 
+import type { ValidationOptions } from '#types/index';
+
 /**
  * Validates that string is all lowercase
  *
@@ -22,6 +24,6 @@ import { createTypeDecorator } from '../../core/factory';
  * }
  * ```
  */
-export function IsLowercase(): PropertyDecorator {
-  return createTypeDecorator(() => string().lowercase())();
+export function IsLowercase(options?: ValidationOptions): PropertyDecorator {
+  return createTypeDecorator(() => string().lowercase(options))();
 }

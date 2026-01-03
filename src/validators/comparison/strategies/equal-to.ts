@@ -8,14 +8,20 @@ import { BaseValidationStrategy } from '@core/index';
 import { getRefValue, isFieldRef } from './helpers';
 
 import type { FieldRef } from './helpers';
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** Equal to value or field strategy */
 export class EqualToStrategy<T> extends BaseValidationStrategy<T, T> {
   readonly name = 'equalTo';
 
-  constructor(private readonly compareValue: T | FieldRef) {
+  constructor(
+    private readonly compareValue: T | FieldRef,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: T, context: ValidationContext): ValidationResult<T> {

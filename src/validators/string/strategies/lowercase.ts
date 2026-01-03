@@ -5,11 +5,18 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** Lowercase strategy */
 export class LowercaseStrategy extends BaseValidationStrategy<string, string> {
   readonly name = 'lowercase';
+
+  constructor(options?: ValidationOptions) {
+    super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
+  }
 
   validate(value: string, context: ValidationContext): ValidationResult<string> {
     if (value !== value.toLowerCase()) {

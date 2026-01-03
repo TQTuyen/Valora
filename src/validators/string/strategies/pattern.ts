@@ -5,7 +5,7 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** Pattern matching strategy */
 export class PatternStrategy extends BaseValidationStrategy<string, string> {
@@ -13,11 +13,11 @@ export class PatternStrategy extends BaseValidationStrategy<string, string> {
 
   constructor(
     private readonly pattern: RegExp,
-    errorMessage?: string,
+    options?: ValidationOptions,
   ) {
     super();
-    if (errorMessage) {
-      this.customMessage = errorMessage;
+    if (options?.message) {
+      this.withMessage(options.message);
     }
   }
 

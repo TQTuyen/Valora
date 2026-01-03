@@ -7,6 +7,8 @@ import { string } from '@validators/string';
 
 import { createPropertyDecorator } from '../../core/factory';
 
+import type { ValidationOptions } from '#types/index';
+
 /**
  * Validates that string ends with a specific suffix
  *
@@ -23,6 +25,8 @@ import { createPropertyDecorator } from '../../core/factory';
  * }
  * ```
  */
-export function EndsWith(suffix: string): PropertyDecorator {
-  return createPropertyDecorator((suf: string) => string().endsWith(suf))(suffix);
+export function EndsWith(suffix: string, options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((suf: string, options?: ValidationOptions) =>
+    string().endsWith(suf, options),
+  )(suffix, options);
 }

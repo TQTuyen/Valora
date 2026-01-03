@@ -18,7 +18,12 @@ import {
 } from './strategies';
 
 import type { ObjectSchema } from './strategies';
-import type { IValidator, ValidationContext, ValidationResult } from '#types/index';
+import type {
+  IValidator,
+  ValidationContext,
+  ValidationOptions,
+  ValidationResult,
+} from '#types/index';
 
 /**
  * Object validator with fluent API (Composite Pattern)
@@ -187,11 +192,11 @@ export class ObjectValidator<T extends Record<string, unknown>> extends BaseVali
   /**
    * Strict mode - no extra keys allowed (fail if unknown keys present)
    */
-  strict(): this {
+  strict(options?: ValidationOptions): this {
     const cloned = this.clone() as this;
     cloned.strictMode = true;
     cloned.stripMode = false;
-    cloned.strategies.push(new StrictStrategy(this.schema) as never);
+    cloned.strategies.push(new StrictStrategy(this.schema, options) as never);
     return cloned;
   }
 
@@ -222,18 +227,18 @@ export class ObjectValidator<T extends Record<string, unknown>> extends BaseVali
   // -------------------------------------------------------------------------
 
   /** Minimum number of keys */
-  minKeys(count: number): this {
-    return this.addStrategy(new MinKeysStrategy(count) as never);
+  minKeys(count: number, options?: ValidationOptions): this {
+    return this.addStrategy(new MinKeysStrategy(count, options) as never);
   }
 
   /** Maximum number of keys */
-  maxKeys(count: number): this {
-    return this.addStrategy(new MaxKeysStrategy(count) as never);
+  maxKeys(count: number, options?: ValidationOptions): this {
+    return this.addStrategy(new MaxKeysStrategy(count, options) as never);
   }
 
   /** Exact number of keys */
-  keyCount(count: number): this {
-    return this.minKeys(count).maxKeys(count);
+  keyCount(count: number, options?: ValidationOptions): this {
+    return this.minKeys(count, options).maxKeys(count, options);
   }
 }
 
