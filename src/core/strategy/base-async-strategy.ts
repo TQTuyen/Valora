@@ -21,8 +21,14 @@ export abstract class BaseAsyncValidationStrategy<
   TOutput = TInput,
 > implements IAsyncValidationStrategy<TInput, TOutput> {
   abstract readonly name: string;
+  protected customMessage?: string;
 
   abstract validate(value: TInput, context: ValidationContext): Promise<ValidationResult<TOutput>>;
+
+  withMessage(message: string): this {
+    this.customMessage = message;
+    return this;
+  }
 
   /**
    * Create a success result
@@ -40,8 +46,8 @@ export abstract class BaseAsyncValidationStrategy<
     params?: Record<string, unknown>,
   ): ValidationResult<TOutput> {
     const i18n = getI18n();
-    const message = i18n.t(code, params);
-    const error = createError(code, message, context.path, context.field, params);
+    const message = this.customMessage ?? i18n.t(code, params);
+    const error = createError(code, message, [...context.path], context.field, params);
     return createFailureResult([error]);
   }
 }

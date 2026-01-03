@@ -4,16 +4,26 @@
  */
 
 import { BaseValidationStrategy } from '@core/index';
-import { createError } from '@utils/index';
 
-import type { IValidator, ValidationContext, ValidationResult } from '#types/index';
+import type {
+  IValidator,
+  ValidationContext,
+  ValidationOptions,
+  ValidationResult,
+} from '#types/index';
 
 /** Union type validator - value must match one of the types */
 export class UnionStrategy<T, U> extends BaseValidationStrategy<T, U> {
   readonly name = 'union';
 
-  constructor(private readonly validators: IValidator<T, U>[]) {
+  constructor(
+    private readonly validators: IValidator<T, U>[],
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: T, context: ValidationContext): ValidationResult<U> {
@@ -24,12 +34,6 @@ export class UnionStrategy<T, U> extends BaseValidationStrategy<T, U> {
       }
     }
 
-    return {
-      success: false,
-      errors: [
-        createError('logic.union', 'Value does not match any type in the union', context.path),
-      ],
-      data: undefined,
-    };
+    return this.failure('logic.union', context);
   }
 }

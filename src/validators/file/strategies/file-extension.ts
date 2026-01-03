@@ -6,7 +6,7 @@
 import { BaseValidationStrategy } from '@core/index';
 
 import type { ValidatableFile } from './mime-type';
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /**
  * File extension validation strategy
@@ -21,12 +21,15 @@ export class FileExtensionStrategy extends BaseValidationStrategy<
 
   private readonly normalizedExtensions: string[];
 
-  constructor(allowedExtensions: string[]) {
+  constructor(allowedExtensions: string[], options?: ValidationOptions) {
     super();
     // Normalize extensions (remove leading dots, lowercase)
     this.normalizedExtensions = allowedExtensions.map((ext) =>
       ext.replace(/^\./, '').toLowerCase(),
     );
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: ValidatableFile, context: ValidationContext): ValidationResult<ValidatableFile> {

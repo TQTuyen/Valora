@@ -14,6 +14,7 @@ import {
 } from './strategies';
 
 import type { CreditCardType } from './strategies';
+import type { ValidationOptions } from '#types/index';
 
 /**
  * Business validator for domain-specific validation rules
@@ -34,40 +35,51 @@ export class BusinessValidator extends StringValidator {
   /**
    * Validate credit card number
    * @param allowedTypes - Optional array of allowed card types
+   * @param options - Optional validation options
    */
-  creditCard(allowedTypes?: CreditCardType[]): this {
-    return this.addStrategy(new CreditCardStrategy(allowedTypes));
+  creditCard(allowedTypes?: CreditCardType[], options?: ValidationOptions): this {
+    return this.addStrategy(new CreditCardStrategy(allowedTypes, options));
   }
 
   /**
    * Validate phone number
-   * @param options - Phone validation options
+   * @param phoneOptions - Phone validation options
+   * @param options - Optional validation options
    */
-  phone(options?: { countryCode?: string; allowExtension?: boolean }): this {
-    return this.addStrategy(new PhoneStrategy(options));
+  phone(
+    phoneOptions?: { countryCode?: string; allowExtension?: boolean },
+    options?: ValidationOptions,
+  ): this {
+    return this.addStrategy(new PhoneStrategy(phoneOptions, options));
   }
 
   /**
    * Validate IBAN (International Bank Account Number)
    * @param allowedCountries - Optional array of allowed country codes
+   * @param options - Optional validation options
    */
-  iban(allowedCountries?: string[]): this {
-    return this.addStrategy(new IBANStrategy(allowedCountries));
+  iban(allowedCountries?: string[], options?: ValidationOptions): this {
+    return this.addStrategy(new IBANStrategy(allowedCountries, options));
   }
 
   /**
    * Validate SSN (U.S. Social Security Number)
+   * @param options - Optional validation options
    */
-  ssn(): this {
-    return this.addStrategy(new SSNStrategy());
+  ssn(options?: ValidationOptions): this {
+    return this.addStrategy(new SSNStrategy(options));
   }
 
   /**
    * Validate URL slug
-   * @param options - Slug validation options
+   * @param slugOptions - Slug validation options
+   * @param options - Optional validation options
    */
-  slug(options?: { minLength?: number; maxLength?: number; allowUnderscores?: boolean }): this {
-    return this.addStrategy(new UrlSlugStrategy(options));
+  slug(
+    slugOptions?: { minLength?: number; maxLength?: number; allowUnderscores?: boolean },
+    options?: ValidationOptions,
+  ): this {
+    return this.addStrategy(new UrlSlugStrategy(slugOptions, options));
   }
 }
 

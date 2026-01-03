@@ -7,6 +7,8 @@ import { string } from '@validators/string';
 
 import { createPropertyDecorator } from '../../core/factory';
 
+import type { ValidationOptions } from '#types/index';
+
 /**
  * Validates maximum string length
  *
@@ -23,6 +25,8 @@ import { createPropertyDecorator } from '../../core/factory';
  * }
  * ```
  */
-export function MaxLength(max: number): PropertyDecorator {
-  return createPropertyDecorator((maxLength: number) => string().maxLength(maxLength))(max);
+export function MaxLength(max: number, options?: ValidationOptions): PropertyDecorator {
+  return createPropertyDecorator((maxLength: number, options?: ValidationOptions) =>
+    string().maxLength(maxLength, options),
+  )(max, options);
 }

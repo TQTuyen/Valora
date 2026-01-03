@@ -5,7 +5,7 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /**
  * Every item must satisfy condition strategy
@@ -13,8 +13,14 @@ import type { ValidationContext, ValidationResult } from '#types/index';
 export class EveryStrategy<T> extends BaseValidationStrategy<T[], T[]> {
   readonly name = 'every';
 
-  constructor(private readonly predicate: (item: T, index: number) => boolean) {
+  constructor(
+    private readonly predicate: (item: T, index: number) => boolean,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: T[], context: ValidationContext): ValidationResult<T[]> {

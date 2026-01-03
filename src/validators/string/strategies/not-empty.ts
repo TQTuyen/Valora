@@ -5,11 +5,18 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** Not empty strategy (non-whitespace) */
 export class NotEmptyStrategy extends BaseValidationStrategy<string, string> {
   readonly name = 'notEmpty';
+
+  constructor(options?: ValidationOptions) {
+    super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
+  }
 
   validate(value: string, context: ValidationContext): ValidationResult<string> {
     if (value.trim().length === 0) {

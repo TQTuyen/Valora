@@ -5,14 +5,25 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { IValidator, ValidationContext, ValidationResult } from '#types/index';
+import type {
+  IValidator,
+  ValidationContext,
+  ValidationOptions,
+  ValidationResult,
+} from '#types/index';
 
 /** Intersection type validator - value must satisfy all validators */
 export class IntersectionStrategy<T, U> extends BaseValidationStrategy<T, U> {
   readonly name = 'intersection';
 
-  constructor(private readonly validators: IValidator<T, unknown>[]) {
+  constructor(
+    private readonly validators: IValidator<T, unknown>[],
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: T, context: ValidationContext): ValidationResult<U> {
@@ -39,6 +50,9 @@ export class IntersectionStrategy<T, U> extends BaseValidationStrategy<T, U> {
     }
 
     if (allErrors.length > 0) {
+      if (this.customMessage) {
+        return this.failure('logic.intersection', context);
+      }
       return {
         success: false,
         errors: allErrors,

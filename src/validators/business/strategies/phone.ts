@@ -5,7 +5,7 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /**
  * Phone number validation strategy
@@ -22,8 +22,12 @@ export class PhoneStrategy extends BaseValidationStrategy<string, string> {
       /** Allow extension numbers */
       allowExtension?: boolean;
     },
+    validationOptions?: ValidationOptions,
   ) {
     super();
+    if (validationOptions?.message) {
+      this.withMessage(validationOptions.message);
+    }
   }
 
   validate(value: string, context: ValidationContext): ValidationResult<string> {

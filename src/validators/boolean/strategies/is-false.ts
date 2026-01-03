@@ -5,7 +5,7 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /**
  * Must be false strategy
@@ -13,10 +13,10 @@ import type { ValidationContext, ValidationResult } from '#types/index';
 export class IsFalseStrategy extends BaseValidationStrategy<boolean, boolean> {
   readonly name = 'isFalse';
 
-  constructor(message?: string) {
+  constructor(options?: ValidationOptions) {
     super();
-    if (message) {
-      this.withMessage(message);
+    if (options?.message) {
+      this.withMessage(options.message);
     }
   }
 

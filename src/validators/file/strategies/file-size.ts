@@ -6,7 +6,7 @@
 import { BaseValidationStrategy } from '@core/index';
 
 import type { ValidatableFile } from './mime-type';
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /**
  * File size units in bytes
@@ -24,8 +24,14 @@ export const FILE_SIZE_UNITS = {
 export class MinFileSizeStrategy extends BaseValidationStrategy<ValidatableFile, ValidatableFile> {
   readonly name = 'minFileSize';
 
-  constructor(private readonly minSize: number) {
+  constructor(
+    private readonly minSize: number,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: ValidatableFile, context: ValidationContext): ValidationResult<ValidatableFile> {
@@ -56,8 +62,14 @@ export class MinFileSizeStrategy extends BaseValidationStrategy<ValidatableFile,
 export class MaxFileSizeStrategy extends BaseValidationStrategy<ValidatableFile, ValidatableFile> {
   readonly name = 'maxFileSize';
 
-  constructor(private readonly maxSize: number) {
+  constructor(
+    private readonly maxSize: number,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: ValidatableFile, context: ValidationContext): ValidationResult<ValidatableFile> {

@@ -5,7 +5,7 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** Minimum number of keys strategy */
 export class MinKeysStrategy extends BaseValidationStrategy<
@@ -14,8 +14,14 @@ export class MinKeysStrategy extends BaseValidationStrategy<
 > {
   readonly name = 'minKeys';
 
-  constructor(private readonly minKeys: number) {
+  constructor(
+    private readonly minKeys: number,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(

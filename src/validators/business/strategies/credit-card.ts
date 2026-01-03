@@ -5,7 +5,7 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /**
  * Credit card type
@@ -41,8 +41,14 @@ const CARD_PATTERNS: Record<CreditCardType, RegExp> = {
 export class CreditCardStrategy extends BaseValidationStrategy<string, string> {
   readonly name = 'creditCard';
 
-  constructor(private readonly allowedTypes?: CreditCardType[]) {
+  constructor(
+    private readonly allowedTypes?: CreditCardType[],
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: string, context: ValidationContext): ValidationResult<string> {

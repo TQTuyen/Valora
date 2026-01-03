@@ -5,11 +5,18 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** Non-positive strategy (<= 0) */
 export class NonPositiveStrategy extends BaseValidationStrategy<number, number> {
   readonly name = 'nonPositive';
+
+  constructor(options?: ValidationOptions) {
+    super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
+  }
 
   validate(value: number, context: ValidationContext): ValidationResult<number> {
     if (value > 0) {

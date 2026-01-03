@@ -6,7 +6,7 @@
 import { BaseAsyncValidationStrategy } from '@core/index';
 
 import type { ValidatableFile } from './mime-type';
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /**
  * Extended file interface with dimension data
@@ -37,8 +37,14 @@ export interface DimensionConstraints {
 export class ImageDimensionsStrategy extends BaseAsyncValidationStrategy<ImageFile, ImageFile> {
   readonly name = 'imageDimensions';
 
-  constructor(private readonly constraints: DimensionConstraints) {
+  constructor(
+    private readonly constraints: DimensionConstraints,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   // eslint-disable-next-line complexity

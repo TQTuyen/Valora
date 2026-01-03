@@ -8,14 +8,20 @@ import { BaseValidationStrategy } from '@core/index';
 import { getRefValue } from './helpers';
 
 import type { FieldRef } from './helpers';
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** Different from field strategy */
 export class DifferentFromStrategy<T> extends BaseValidationStrategy<T, T> {
   readonly name = 'differentFrom';
 
-  constructor(private readonly fieldPath: string) {
+  constructor(
+    private readonly fieldPath: string,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: T, context: ValidationContext): ValidationResult<T> {

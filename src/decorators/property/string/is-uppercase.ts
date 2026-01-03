@@ -7,6 +7,8 @@ import { string } from '@validators/string';
 
 import { createTypeDecorator } from '../../core/factory';
 
+import type { ValidationOptions } from '#types/index';
+
 /**
  * Validates that string is all uppercase
  *
@@ -22,6 +24,6 @@ import { createTypeDecorator } from '../../core/factory';
  * }
  * ```
  */
-export function IsUppercase(): PropertyDecorator {
-  return createTypeDecorator(() => string().uppercase())();
+export function IsUppercase(options?: ValidationOptions): PropertyDecorator {
+  return createTypeDecorator(() => string().uppercase(options))();
 }

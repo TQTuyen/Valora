@@ -277,11 +277,32 @@ function validateNestedProperty(
     }
 
     if (errors.length > 0) {
+      if (metadata.options?.message) {
+        return createFailureResult<any>([
+          {
+            code: 'nested.validation',
+            message: metadata.options.message,
+            path: context.path,
+            field: context.field,
+          },
+        ]);
+      }
       return createFailureResult<any>(errors);
     }
   } else {
     // Single nested object
-    return validateClassInstance(value);
+    const result = validateClassInstance(value);
+    if (!result.success && metadata.options?.message) {
+      return createFailureResult<any>([
+        {
+          code: 'nested.validation',
+          message: metadata.options.message,
+          path: context.path,
+          field: context.field,
+        },
+      ]);
+    }
+    return result;
   }
 
   return createSuccessResult(value);

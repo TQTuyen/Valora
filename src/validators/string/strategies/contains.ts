@@ -5,14 +5,20 @@
 
 import { BaseValidationStrategy } from '@core/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /** Contains strategy */
 export class ContainsStrategy extends BaseValidationStrategy<string, string> {
   readonly name = 'contains';
 
-  constructor(private readonly substring: string) {
+  constructor(
+    private readonly substring: string,
+    options?: ValidationOptions,
+  ) {
     super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
   }
 
   validate(value: string, context: ValidationContext): ValidationResult<string> {

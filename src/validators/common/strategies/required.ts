@@ -7,13 +7,20 @@
 import { BaseValidationStrategy } from '@core/index';
 import { isNil } from '@utils/index';
 
-import type { ValidationContext, ValidationResult } from '#types/index';
+import type { ValidationContext, ValidationOptions, ValidationResult } from '#types/index';
 
 /**
  * Required strategy - ensures value is not null, undefined, or empty
  */
 export class RequiredStrategy<T> extends BaseValidationStrategy<T, T> {
   readonly name = 'required';
+
+  constructor(options?: ValidationOptions) {
+    super();
+    if (options?.message) {
+      this.withMessage(options.message);
+    }
+  }
 
   validate(value: T, context: ValidationContext): ValidationResult<T> {
     if (isNil(value)) {
