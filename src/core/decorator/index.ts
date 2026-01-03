@@ -5,7 +5,8 @@
 
 export { ValidatorDecorator } from './base-decorator';
 export { DefaultDecorator } from './default';
-export { MessageDecorator } from './message';
-export { NullableDecorator } from './nullable';
-export { OptionalDecorator } from './optional';
-export { TransformDecorator } from './transform';
+export * from './message';
+export * from './nullable';
+export * from './optional';
+export * from './preprocess';
+export * from './transform';

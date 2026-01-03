@@ -6,6 +6,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
+    // @ts-expect-error: environmentMatchGlobs is valid but missing in type
     environmentMatchGlobs: [
       // Use jsdom for adapter DOM tests
       ['tests/unit/adapters/vanilla*.test.ts', 'jsdom'],
