@@ -1,19 +1,15 @@
 {
-  "name": "vanilla-example",
-  "devDependencies": {
-    "@types/bun": "latest",
-    "vite": "^7.3.0"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
-  },
+  "name": "valora-vanilla-example",
+  "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "vite src",
-    "build": "vite build src",
-    "preview": "vite preview src"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
-  "dependencies": {
-    "@tqtos/valora": "^0.0.5"
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "typescript": "^5.3.0"
   }
 }

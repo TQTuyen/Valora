@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    // Ignore deprecation warnings for baseUrl (until TypeScript 7.0)
+    "ignoreDeprecations": "6.0",
+    
     // Environment setup & latest features
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "target": "ESNext",
