@@ -24,16 +24,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const registrationAdapter = createVanillaAdapter({
     // String validation with transform - automatically trim and convert to title case
-    name: string()
-      .required({ message: 'Name is required' })
-      .minLength(2, { message: 'Name must be at least 2 characters' })
-      .maxLength(50, { message: 'Name must not exceed 50 characters' })
-      .matches(/^[a-zA-Z\s]+$/, { message: 'Name can only contain letters and spaces' }),
+    name:
+      string()
+        .required({ message: 'Name is require' })
+        .minLength(2, { message: 'Name must be at least 2 characters' })
+        .maxLength(50, { message: 'Name must not exceed 50 characters' })
+        .matches(/^[a-zA-Z\s]+$/, { message: 'Name can only contain letters and spaces' }),
 
     // Email validation with lowercase transform
-    email: string()
-      .required({ message: 'Email is required' })
-      .email({ message: 'Please enter a valid email address' }),
+    email:
+      string()
+        .required({ message: 'Email is required' })
+        .email({ message: 'Please enter a valid email address' }),
 
     // Complex password validation with multiple rules
     password: string()
@@ -103,27 +105,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const contactAdapter = createVanillaAdapter({
     // Name with trim transformation
-    name: string()
-      .required({ message: 'Name is required' })
-      .minLength(2, { message: 'Name must be at least 2 characters' })
-      .maxLength(100, { message: 'Name is too long' }),
+    name:
+      string()
+        .required({ message: 'Name is required' })
+        .minLength(2, { message: 'Name must be at least 2 characters' })
+        .maxLength(100, { message: 'Name is too long' }),
 
     // Email with lowercase and trim
-    email: string()
-      .required({ message: 'Email is required' })
-      .email({ message: 'Valid email address is required' }),
+    email:
+      string()
+        .required({ message: 'Email is required' })
+        .email({ message: 'Valid email address is required' }),
 
     // Subject with trim and uppercase
-    subject: string()
-      .required({ message: 'Subject is required' })
-      .minLength(5, { message: 'Subject must be at least 5 characters' })
-      .maxLength(100, { message: 'Subject is too long' }),
+    subject:
+      string()
+        .required({ message: 'Subject is required' })
+        .minLength(5, { message: 'Subject must be at least 5 characters' })
+        .maxLength(100, { message: 'Subject is too long' }),
 
     // Message with character count validation
-    message: string()
-      .required({ message: 'Message is required' })
-      .minLength(10, { message: 'Message must be at least 10 characters' })
-      .maxLength(500, { message: 'Message must not exceed 500 characters' }),
+    message:
+      string()
+        .required({ message: 'Message is required' })
+        .minLength(10, { message: 'Message must be at least 10 characters' })
+        .maxLength(500, { message: 'Message must not exceed 500 characters' }),
   });
 
   // Bind contact form
