@@ -2,7 +2,8 @@
   "extends": "@tsconfig/svelte/tsconfig.json",
   "compilerOptions": {
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
       "valora": ["../../src/index.ts"],
@@ -12,6 +13,8 @@
       "@notification/*": ["../../src/notification/*"],
       "@validators/*": ["../../src/validators/*"],
       "@adapters/*": ["../../src/adapters/*"],
+      "@plugins/*": ["../../src/plugins/*"],
+      "@utils/*": ["../../src/utils/*"],
       "@core/*": ["../../src/core/*"],
       "#types/*": ["../../src/types/*"]
     },

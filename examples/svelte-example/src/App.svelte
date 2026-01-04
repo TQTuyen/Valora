@@ -3,6 +3,10 @@
   import { boolean, string } from '@tqtos/valora/validators';
 
   const schema = {
+    username: string()
+      .required({ message: 'Username is required' })
+      .minLength(3, { message: 'At least 3 characters' })
+      .maxLength(20, { message: 'Maximum 20 characters' }),
     email: string()
       .required({ message: 'Email is required' })
       .email({ message: 'Use a valid email address' }),
@@ -15,12 +19,23 @@
   } as const;
 
   const { adapter, formState, validateAll, resetAll, getValues } = createFormValidation(schema, {
-    validationMode: 'onBlur',
+    validationMode: 'onChange',
   });
 
+  // Initialize with empty values to avoid type validation errors
+  adapter.setFieldValue('username', '');
+  adapter.setFieldValue('email', '');
+  adapter.setFieldValue('password', '');
+  adapter.setFieldValue('terms', false);
+
+  const username = createFieldValidation(adapter, 'username');
   const email = createFieldValidation(adapter, 'email');
   const password = createFieldValidation(adapter, 'password');
   const terms = createFieldValidation(adapter, 'terms');
+
+  const usernameValue = username.value;
+  const usernameShouldShowError = username.shouldShowError;
+  const usernameErrorMessages = username.errorMessages;
 
   const emailValue = email.value;
   const emailShouldShowError = email.shouldShowError;
@@ -34,21 +49,27 @@
   const termsShouldShowError = terms.shouldShowError;
   const termsErrorMessages = terms.errorMessages;
 
-  const formCanSubmit = formState.canSubmit;
-  const formTouched = formState.touched;
   const formValid = formState.isValid;
-  const formValidating = formState.validating;
+  const formTouched = formState.isTouched;
+  const formValidating = formState.isValidating;
 
   let result: string | null = null;
 
   const handleSubmit = (event: Event) => {
     event.preventDefault();
+    
+    // Touch all fields to show errors
+    username.touch();
+    email.touch();
+    password.touch();
+    terms.touch();
+    
     const validation = validateAll();
 
     if (validation.success) {
       result = JSON.stringify(getValues(), null, 2);
     } else {
-      result = 'Please fix the highlighted fields.';
+      result = null;
     }
   };
 
@@ -70,6 +91,27 @@
 
   <main class="card">
     <form class="form" on:submit|preventDefault={handleSubmit}>
+      <div class="field">
+        <label for="username">Username</label>
+        <input
+          id="username"
+          name="username"
+          type="text"
+          value={$usernameValue ?? ''}
+          on:input={(event) => username.onInput(event.currentTarget.value)}
+          on:blur={username.onBlur}
+          class:error={$usernameShouldShowError}
+          placeholder="Enter username"
+        />
+        {#if $usernameShouldShowError}
+          <ul class="errors">
+            {#each $usernameErrorMessages as msg}
+              <li>{msg}</li>
+            {/each}
+          </ul>
+        {/if}
+      </div>
+
       <div class="field">
         <label for="email">Email</label>
         <input
@@ -112,45 +154,36 @@
         {/if}
       </div>
 
-      <label class="checkbox">
-        <input
-          type="checkbox"
-          checked={$termsValue ?? false}
-          on:input={(event) => terms.onInput(event.currentTarget.checked)}
-          on:blur={terms.onBlur}
-        />
-        <span>I agree to the terms</span>
-      </label>
-      {#if $termsShouldShowError}
-        <div class="errors">
-          {#each $termsErrorMessages as msg}
-            <div>{msg}</div>
-          {/each}
-        </div>
-      {/if}
+      <div class="field checkbox-field">
+        <label>
+          <input
+            id="terms"
+            name="terms"
+            type="checkbox"
+            checked={$termsValue ?? false}
+            on:change={(event) => terms.onInput(event.currentTarget.checked)}
+            on:blur={terms.onBlur}
+          />
+          <span>I agree to the terms and conditions</span>
+        </label>
+        {#if $termsShouldShowError}
+          <ul class="errors">
+            {#each $termsErrorMessages as msg}
+              <li>{msg}</li>
+            {/each}
+          </ul>
+        {/if}
+      </div>
 
       <div class="actions">
-        <button type="submit" disabled={!$formCanSubmit || !$formTouched}>
+        <button type="submit">
           {$formValidating ? 'Validating…' : 'Submit'}
         </button>
-        <button type="button" class="secondary" on:click={handleReset}> Reset </button>
+        <button type="button" class="secondary" on:click={handleReset}>
+          Reset
+        </button>
       </div>
     </form>
-
-    <section class="status">
-      <div>
-        <p class="label">Form valid</p>
-        <p class="value">{$formValid ? 'Yes' : 'No'}</p>
-      </div>
-      <div>
-        <p class="label">Touched</p>
-        <p class="value">{$formTouched ? 'Yes' : 'No'}</p>
-      </div>
-      <div>
-        <p class="label">Validating</p>
-        <p class="value">{$formValidating ? 'Yes' : 'No'}</p>
-      </div>
-    </section>
 
     {#if result}
       <section class="result">
