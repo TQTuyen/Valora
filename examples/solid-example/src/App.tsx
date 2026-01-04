@@ -17,7 +17,7 @@ const schema = {
 
 export default function App() {
   const { adapter, formState, validateAll, resetAll, getValues } = createFormValidation(schema, {
-    validationMode: 'onBlur',
+    validationMode: 'onChange',
   });
 
   const email = createFieldValidation(adapter, 'email');
@@ -48,8 +48,8 @@ export default function App() {
         <p class="eyebrow">Solid + Valora</p>
         <h1>SolidJS adapter demo</h1>
         <p class="lede">
-          Reactive form validation powered by Valora. Built with the Solid adapter so signals stay in
-          sync with validation state.
+          Reactive form validation powered by Valora. Built with the Solid adapter so signals stay
+          in sync with validation state.
         </p>
       </header>
 
