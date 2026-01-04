@@ -254,13 +254,13 @@ export type {
   CreateFieldValidationReturn as SolidFieldValidation,
   SolidFormState,
   CreateFormValidationReturn as SolidFormValidation,
-} from './adapters/index';
+} from './adapters/solid/index';
 export {
   createSolidAdapter,
   createFieldValidation as createSolidFieldValidation,
   createFormValidation as createSolidFormValidation,
   SolidAdapter,
-} from './adapters/index';
+} from './adapters/solid/index';
 
 // -------------------------------------------------------------------------
 // Svelte Adapter
