@@ -35,7 +35,6 @@ export default function App() {
   const username = createFieldValidation(adapter, 'username');
   const email = createFieldValidation(adapter, 'email');
   const password = createFieldValidation(adapter, 'password');
-  const confirmPassword = createFieldValidation(adapter, 'confirmPassword');
   const terms = createFieldValidation(adapter, 'terms');
 
   const [result, setResult] = createSignal<string | null>(null);
@@ -144,25 +143,6 @@ export default function App() {
             <Show when={password.shouldShowError()}>
               <ul class="errors">
                 <For each={password.errorMessages()}>{(msg) => <li>{msg}</li>}</For>
-              </ul>
-            </Show>
-          </div>
-
-          <div class="field">
-            <label for="confirmPassword">Confirm Password</label>
-            <input
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              value={confirmPassword.value() ?? ''}
-              onInput={(event) => confirmPassword.onInput(event.currentTarget.value)}
-              onBlur={confirmPassword.onBlur}
-              classList={{ error: confirmPassword.shouldShowError() }}
-              placeholder="Confirm your password"
-            />
-            <Show when={confirmPassword.shouldShowError()}>
-              <ul class="errors">
-                <For each={confirmPassword.errorMessages()}>{(msg) => <li>{msg}</li>}</For>
               </ul>
             </Show>
           </div>
