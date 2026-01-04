@@ -278,7 +278,7 @@ describe('Field Selector Utilities', () => {
 
       setFieldValue(input, undefined);
 
-      expect(input.value).toBe('undefined');
+      expect(input.value).toBe('');
     });
 
     it('should handle null values', () => {
@@ -287,7 +287,7 @@ describe('Field Selector Utilities', () => {
 
       setFieldValue(input, null);
 
-      expect(input.value).toBe('null');
+      expect(input.value).toBe('');
     });
 
     it('should handle range input', () => {
