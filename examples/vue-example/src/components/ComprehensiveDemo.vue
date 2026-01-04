@@ -326,8 +326,8 @@
  */
 
 import { ref, computed, onMounted } from 'vue';
-import { useFormValidation, useFieldValidation } from 'valora/adapters/vue';
-import { string, number } from 'valora/validators';
+import { useFormValidation, useFieldValidation } from '@tqtos/valora/adapters/vue';
+import { string, number } from '@tqtos/valora/validators';
 import './ComprehensiveDemo.css';
 
 // ============================================================================
@@ -363,7 +363,9 @@ const registrationSchema = {
     .required({ message: 'Username is required' })
     .minLength(3, { message: 'Username must have at least 3 characters' })
     .maxLength(20, { message: 'Username must be a maximum of 20 characters' })
-    .pattern(/^[a-z0-9_]+$/, { message: 'Only lowercase letters, numbers, and underscores' })
+    .pattern(/^[a-z0-9_]+$/, {
+      message: 'Only lowercase letters, numbers, and underscores',
+    })
     .custom((value) => /^[a-z]/.test(value), 'Must start with a lowercase letter'),
 
   password: string()
