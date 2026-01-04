@@ -212,6 +212,7 @@ describe('Class Decorator Integration Tests', () => {
       user.interests = ['coding', 'reading', 'gaming'];
 
       const result = validateClassInstance(user);
+
       expect(result.success).toBe(true);
     });
 
