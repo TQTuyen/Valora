@@ -4,12 +4,24 @@ import { createFieldValidation, createFormValidation } from 'valora/adapters/sol
 import { boolean, string } from '@tqtos/valora/validators';
 
 const schema = {
+  username: string()
+    .required({ message: 'Username is required' })
+    .minLength(3, { message: 'At least 3 characters' })
+    .maxLength(20, { message: 'Maximum 20 characters' }),
   email: string()
     .required({ message: 'Email is required' })
     .email({ message: 'Use a valid email address' }),
   password: string()
     .required({ message: 'Password is required' })
     .minLength(8, { message: 'At least 8 characters' }),
+  confirmPassword: string()
+    .required({ message: 'Please confirm your password' })
+    .custom((value, context) => {
+      if (value !== context.values.password) {
+        return { success: false, errors: [{ message: 'Passwords do not match' }] };
+      }
+      return { success: true };
+    }),
   terms: boolean()
     .required({ message: 'You must accept terms' })
     .isTrue({ message: 'Please accept the terms' }),
@@ -20,8 +32,10 @@ export default function App() {
     validationMode: 'onChange',
   });
 
+  const username = createFieldValidation(adapter, 'username');
   const email = createFieldValidation(adapter, 'email');
   const password = createFieldValidation(adapter, 'password');
+  const confirmPassword = createFieldValidation(adapter, 'confirmPassword');
   const terms = createFieldValidation(adapter, 'terms');
 
   const [result, setResult] = createSignal<string | null>(null);
@@ -55,6 +69,25 @@ export default function App() {
 
       <main class="card">
         <form class="form" onSubmit={handleSubmit}>
+          <div class="field">
+            <label for="username">Username</label>
+            <input
+              id="username"
+              name="username"
+              type="text"
+              value={username.value() ?? ''}
+              onInput={(event) => username.onInput(event.currentTarget.value)}
+              onBlur={username.onBlur}
+              classList={{ error: username.shouldShowError() }}
+              placeholder="Enter username"
+            />
+            <Show when={username.shouldShowError()}>
+              <ul class="errors">
+                <For each={username.errorMessages()}>{(msg) => <li>{msg}</li>}</For>
+              </ul>
+            </Show>
+          </div>
+
           <div class="field">
             <label for="email">Email</label>
             <input
@@ -93,6 +126,25 @@ export default function App() {
             </Show>
           </div>
 
+          <div class="field">
+            <label for="confirmPassword">Confirm Password</label>
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              value={confirmPassword.value() ?? ''}
+              onInput={(event) => confirmPassword.onInput(event.currentTarget.value)}
+              onBlur={confirmPassword.onBlur}
+              classList={{ error: confirmPassword.shouldShowError() }}
+              placeholder="Confirm your password"
+            />
+            <Show when={confirmPassword.shouldShowError()}>
+              <ul class="errors">
+                <For each={confirmPassword.errorMessages()}>{(msg) => <li>{msg}</li>}</For>
+              </ul>
+            </Show>
+          </div>
+
           <label class="checkbox">
             <input
               type="checkbox"
@@ -117,21 +169,6 @@ export default function App() {
             </button>
           </div>
         </form>
-
-        <section class="status">
-          <div>
-            <p class="label">Form valid</p>
-            <p class="value">{formState.isValid() ? 'Yes' : 'No'}</p>
-          </div>
-          <div>
-            <p class="label">Touched</p>
-            <p class="value">{formState.touched() ? 'Yes' : 'No'}</p>
-          </div>
-          <div>
-            <p class="label">Validating</p>
-            <p class="value">{formState.validating() ? 'Yes' : 'No'}</p>
-          </div>
-        </section>
 
         <Show when={result()}>
           <section class="result">
