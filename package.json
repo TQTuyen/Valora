@@ -107,13 +107,14 @@
     "typescript-eslint": "^8.49.0",
     "vite": "^7.2.7",
     "vite-plugin-dts": "^4.5.4",
-    "vitest": "^4.0.15"
+    "vitest": "^4.0.15",
+    "vue": "^3.5.26"
   },
   "peerDependencies": {
     "react": ">=17.0.0",
     "solid-js": ">=1.0.0",
     "svelte": ">=4.0.0",
-    "vue": "^3.5.26"
+    "vue": ">=3.5.26"
   },
   "peerDependenciesMeta": {
     "react": {
