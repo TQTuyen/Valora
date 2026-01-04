@@ -7,7 +7,6 @@
     "preview": "vite preview src"
   },
   "devDependencies": {
-    "@tqtos/valora": "^0.0.4",
     "@types/bun": "latest",
     "vite": "^7.3.0"
   },
@@ -15,6 +14,6 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@tqtos/valora": "^0.0.3"
+    "@tqtos/valora": "^0.0.4"
   }
 }
