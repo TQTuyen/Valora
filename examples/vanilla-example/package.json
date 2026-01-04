@@ -1,0 +1,20 @@
+{
+  "name": "vanilla-example",
+  "private": true,
+  "scripts": {
+    "dev": "vite src",
+    "build": "vite build src",
+    "preview": "vite preview src"
+  },
+  "devDependencies": {
+    "@tqtos/valora": "^0.0.4",
+    "@types/bun": "latest",
+    "vite": "^7.3.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@tqtos/valora": "^0.0.3"
+  }
+}
