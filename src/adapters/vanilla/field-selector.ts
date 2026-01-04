@@ -72,13 +72,16 @@ export function getFieldValue(element: HTMLElement): unknown {
  * Set value on field element
  */
 export function setFieldValue(element: HTMLElement, value: unknown): void {
+  // Use empty string for null/undefined to avoid setting value to "null" or "undefined"
+  const safeValue = value == null ? '' : String(value as unknown);
+
   if (element instanceof HTMLInputElement) {
     if (element.type === 'checkbox') {
       element.checked = Boolean(value);
     } else if (element.type === 'radio') {
       element.checked = element.value === value;
     } else {
-      element.value = String(value);
+      element.value = safeValue;
     }
   } else if (element instanceof HTMLSelectElement) {
     if (element.multiple && Array.isArray(value)) {
@@ -86,9 +89,9 @@ export function setFieldValue(element: HTMLElement, value: unknown): void {
         opt.selected = value.includes(opt.value);
       });
     } else {
-      element.value = String(value);
+      element.value = safeValue;
     }
   } else if (element instanceof HTMLTextAreaElement) {
-    element.value = String(value);
+    element.value = safeValue;
   }
 }
