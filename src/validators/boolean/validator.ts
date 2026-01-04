@@ -38,6 +38,10 @@ export class BooleanValidator extends BaseValidator<unknown, boolean> {
     value: unknown,
     context: ValidationContext,
   ): ValidationResult<boolean> {
+    // Allow undefined/null to pass through - will be caught by required() if needed
+    if (value === undefined || value === null) {
+      return this.succeed(value as boolean, context);
+    }
     if (typeof value !== 'boolean') {
       return this.fail('boolean.type', context);
     }

@@ -56,6 +56,10 @@ export class StringValidator extends BaseValidator<unknown, string> {
     value: unknown,
     context: ValidationContext,
   ): ValidationResult<string> {
+    // Allow undefined/null to pass through - will be caught by required() if needed
+    if (value === undefined || value === null) {
+      return this.succeed(value as string, context);
+    }
     if (typeof value !== 'string') {
       return this.fail('string.type', context);
     }
