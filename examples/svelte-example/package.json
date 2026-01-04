@@ -11,10 +11,10 @@
     },
     "dependencies": {
         "@tqtos/valora": "^0.0.5",
-        "svelte": "^4.2.18"
+        "svelte": "^5.0.0"
     },
     "devDependencies": {
-        "@sveltejs/vite-plugin-svelte": "^4.0.0",
+        "@sveltejs/vite-plugin-svelte": "^4.0.4",
         "@tsconfig/svelte": "^5.0.0",
         "svelte-check": "^4.0.0",
         "typescript": "^5.3.0",

@@ -246,6 +246,40 @@ export {
 export { createVanillaAdapter, VanillaAdapter } from './adapters/index';
 
 // -------------------------------------------------------------------------
+// Solid Adapter
+// -------------------------------------------------------------------------
+export {
+  createSolidAdapter,
+  SolidAdapter,
+  createFieldValidation as createSolidFieldValidation,
+  createFormValidation as createSolidFormValidation,
+} from './adapters/index';
+export type {
+  CreateFieldValidationReturn as SolidFieldValidation,
+  CreateFormValidationReturn as SolidFormValidation,
+  SolidFieldBindings,
+  SolidFieldState,
+  SolidFormState,
+} from './adapters/index';
+
+// -------------------------------------------------------------------------
+// Svelte Adapter
+// -------------------------------------------------------------------------
+export {
+  createSvelteAdapter,
+  SvelteAdapter,
+  createFieldValidation as createSvelteFieldValidation,
+  createFormValidation as createSvelteFormValidation,
+} from './adapters/index';
+export type {
+  CreateFieldValidationReturn as SvelteFieldValidation,
+  CreateFormValidationReturn as SvelteFormValidation,
+  SvelteFieldBindings,
+  SvelteFieldState,
+  SvelteFormState,
+} from './adapters/index';
+
+// -------------------------------------------------------------------------
 // Additional Core Types (from types/index)
 // -------------------------------------------------------------------------
 export type {
