@@ -14,6 +14,14 @@ const schema = {
   password: string()
     .required({ message: 'Password is required' })
     .minLength(8, { message: 'At least 8 characters' }),
+  confirmPassword: string()
+    .required({ message: 'Please confirm your password' })
+    .custom((value, context) => {
+      if (value !== context.values.password) {
+        return { success: false, errors: [{ message: 'Passwords do not match' }] };
+      }
+      return { success: true };
+    }, 'Passwords do not match'),
   terms: boolean()
     .required({ message: 'You must accept terms' })
     .isTrue({ message: 'Please accept the terms' }),
@@ -27,6 +35,7 @@ export default function App() {
   const username = createFieldValidation(adapter, 'username');
   const email = createFieldValidation(adapter, 'email');
   const password = createFieldValidation(adapter, 'password');
+  const confirmPassword = createFieldValidation(adapter, 'confirmPassword');
   const terms = createFieldValidation(adapter, 'terms');
 
   const [result, setResult] = createSignal<string | null>(null);
@@ -135,6 +144,25 @@ export default function App() {
             <Show when={password.shouldShowError()}>
               <ul class="errors">
                 <For each={password.errorMessages()}>{(msg) => <li>{msg}</li>}</For>
+              </ul>
+            </Show>
+          </div>
+
+          <div class="field">
+            <label for="confirmPassword">Confirm Password</label>
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              value={confirmPassword.value() ?? ''}
+              onInput={(event) => confirmPassword.onInput(event.currentTarget.value)}
+              onBlur={confirmPassword.onBlur}
+              classList={{ error: confirmPassword.shouldShowError() }}
+              placeholder="Confirm your password"
+            />
+            <Show when={confirmPassword.shouldShowError()}>
+              <ul class="errors">
+                <For each={confirmPassword.errorMessages()}>{(msg) => <li>{msg}</li>}</For>
               </ul>
             </Show>
           </div>
