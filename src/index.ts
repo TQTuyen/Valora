@@ -192,6 +192,7 @@ export {
   sequence,
   stringTransforms,
   tap,
+  transform,
   TransformPlugin,
   when as whenTransform,
 } from './plugins/transform/index';

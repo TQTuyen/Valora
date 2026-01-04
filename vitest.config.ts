@@ -10,6 +10,7 @@ export default defineConfig({
     environmentMatchGlobs: [
       // Use jsdom for adapter DOM tests
       ['tests/unit/adapters/vanilla*.test.ts', 'jsdom'],
+      ['tests/unit/adapters/vue*.test.ts', 'jsdom'],
     ],
     include: ['tests/**/*.{test,spec}.ts', 'src/**/*.{test,spec}.ts'],
     exclude: ['node_modules', 'dist', 'examples'],
