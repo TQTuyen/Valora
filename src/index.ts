@@ -243,7 +243,7 @@ export {
 // -------------------------------------------------------------------------
 // Vanilla Adapter
 // -------------------------------------------------------------------------
-export { createVanillaAdapter, VanillaAdapter } from './adapters/index';
+export { createVanillaAdapter, VanillaAdapter } from './adapters/vanilla/index';
 
 // -------------------------------------------------------------------------
 // Solid Adapter
@@ -271,19 +271,24 @@ export type {
   CreateFieldValidationReturn as SvelteFieldValidation,
   SvelteFormState,
   CreateFormValidationReturn as SvelteFormValidation,
-} from './adapters/index';
+} from './adapters/svelte/index';
 export {
   createSvelteAdapter,
   createFieldValidation as createSvelteFieldValidation,
   createFormValidation as createSvelteFormValidation,
   SvelteAdapter,
-} from './adapters/index';
+} from './adapters/svelte/index';
+
+// -------------------------------------------------------------------------
+// Vue Adapter
+// -------------------------------------------------------------------------
+export type { VueFieldBindings, VueFieldState, VueFormState } from './adapters/vue/index';
 export {
-  createSolidAdapter,
-  createFieldValidation as createSolidFieldValidation,
-  createFormValidation as createSolidFormValidation,
-  SolidAdapter,
-} from './adapters/index';
+  createVueAdapter,
+  useFieldValidation as useVueFieldValidation,
+  useFormValidation as useVueFormValidation,
+  VueAdapter,
+} from './adapters/vue/index';
 
 // -------------------------------------------------------------------------
 // Additional Core Types (from types/index)

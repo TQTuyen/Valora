@@ -22,6 +22,6 @@ export {
 // Framework-specific adapters
 // export * from './vue';
 // export * from './react';
-// export * from './svelte';
 // export * from './solid';
+// export * from './svelte';
 // export * from './vanilla';
