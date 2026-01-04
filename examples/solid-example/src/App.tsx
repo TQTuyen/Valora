@@ -14,46 +14,59 @@ const schema = {
   password: string()
     .required({ message: 'Password is required' })
     .minLength(8, { message: 'At least 8 characters' }),
-  confirmPassword: string()
-    .required({ message: 'Please confirm your password' })
-    .custom((value, context) => {
-      if (value !== context.values.password) {
-        return { success: false, errors: [{ message: 'Passwords do not match' }] };
-      }
-      return { success: true };
-    }),
   terms: boolean()
     .required({ message: 'You must accept terms' })
     .isTrue({ message: 'Please accept the terms' }),
 };
 
 export default function App() {
-  const { adapter, formState, validateAll, resetAll, getValues } = createFormValidation(schema, {
-    validationMode: 'onChange',
+  const { adapter, validateAll, resetAll, getValues } = createFormValidation(schema, {
+    validationMode: 'onSubmit',
   });
 
   const username = createFieldValidation(adapter, 'username');
   const email = createFieldValidation(adapter, 'email');
   const password = createFieldValidation(adapter, 'password');
-  const confirmPassword = createFieldValidation(adapter, 'confirmPassword');
   const terms = createFieldValidation(adapter, 'terms');
 
   const [result, setResult] = createSignal<string | null>(null);
+  const [submitted, setSubmitted] = createSignal(false);
 
   const handleSubmit = (event: Event) => {
     event.preventDefault();
+    setSubmitted(true);
+
+    // Touch tất cả fields để hiện errors
+    (Object.keys(schema) as Array<keyof typeof schema>).forEach((field) => {
+      adapter.touchField(field);
+    });
+
     const validation = validateAll();
 
     if (validation.success) {
       setResult(JSON.stringify(getValues(), null, 2));
     } else {
-      setResult('Please fix the highlighted fields.');
+      setResult(null);
     }
   };
 
   const handleReset = () => {
     resetAll();
     setResult(null);
+    setSubmitted(false);
+  };
+
+  // Helper function to handle input with validation after submit
+  const createInputHandler = <T,>(
+    fieldValidation: { onInput: (value: T) => void },
+    field: keyof typeof schema,
+  ) => {
+    return (value: T) => {
+      fieldValidation.onInput(value);
+      if (submitted()) {
+        adapter.validateField(field);
+      }
+    };
   };
 
   return (
@@ -76,7 +89,9 @@ export default function App() {
               name="username"
               type="text"
               value={username.value() ?? ''}
-              onInput={(event) => username.onInput(event.currentTarget.value)}
+              onInput={(event) =>
+                createInputHandler(username, 'username')(event.currentTarget.value)
+              }
               onBlur={username.onBlur}
               classList={{ error: username.shouldShowError() }}
               placeholder="Enter username"
@@ -95,7 +110,7 @@ export default function App() {
               name="email"
               type="email"
               value={email.value() ?? ''}
-              onInput={(event) => email.onInput(event.currentTarget.value)}
+              onInput={(event) => createInputHandler(email, 'email')(event.currentTarget.value)}
               onBlur={email.onBlur}
               classList={{ error: email.shouldShowError() }}
               placeholder="you@example.com"
@@ -114,7 +129,9 @@ export default function App() {
               name="password"
               type="password"
               value={password.value() ?? ''}
-              onInput={(event) => password.onInput(event.currentTarget.value)}
+              onInput={(event) =>
+                createInputHandler(password, 'password')(event.currentTarget.value)
+              }
               onBlur={password.onBlur}
               classList={{ error: password.shouldShowError() }}
               placeholder="At least 8 characters"
@@ -126,30 +143,11 @@ export default function App() {
             </Show>
           </div>
 
-          <div class="field">
-            <label for="confirmPassword">Confirm Password</label>
-            <input
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              value={confirmPassword.value() ?? ''}
-              onInput={(event) => confirmPassword.onInput(event.currentTarget.value)}
-              onBlur={confirmPassword.onBlur}
-              classList={{ error: confirmPassword.shouldShowError() }}
-              placeholder="Confirm your password"
-            />
-            <Show when={confirmPassword.shouldShowError()}>
-              <ul class="errors">
-                <For each={confirmPassword.errorMessages()}>{(msg) => <li>{msg}</li>}</For>
-              </ul>
-            </Show>
-          </div>
-
           <label class="checkbox">
             <input
               type="checkbox"
               checked={terms.value() ?? false}
-              onInput={(event) => terms.onInput(event.currentTarget.checked)}
+              onInput={(event) => createInputHandler(terms, 'terms')(event.currentTarget.checked)}
               onBlur={terms.onBlur}
             />
             <span>I agree to the terms</span>
@@ -161,9 +159,7 @@ export default function App() {
           </Show>
 
           <div class="actions">
-            <button type="submit" disabled={!formState.canSubmit() || !formState.touched()}>
-              Submit
-            </button>
+            <button type="submit">Submit</button>
             <button type="button" class="secondary" onClick={handleReset}>
               Reset
             </button>
