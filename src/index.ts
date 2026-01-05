@@ -291,23 +291,6 @@ export {
 } from './adapters/vue/index';
 
 // -------------------------------------------------------------------------
-// Solid Adapter
-// -------------------------------------------------------------------------
-export type {
-  CreateFieldValidationReturn,
-  CreateFormValidationReturn,
-  SolidFieldBindings,
-  SolidFieldState,
-  SolidFormState,
-} from './adapters/index';
-export {
-  createSolidAdapter,
-  createFieldValidation as createSolidFieldValidation,
-  createFormValidation as createSolidFormValidation,
-  SolidAdapter,
-} from './adapters/index';
-
-// -------------------------------------------------------------------------
 // Additional Core Types (from types/index)
 // -------------------------------------------------------------------------
 export type {
