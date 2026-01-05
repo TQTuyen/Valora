@@ -1,6 +1,6 @@
 {
   "name": "@tqtos/valora",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A modern, tree-shakeable validation framework with framework adapters",
   "author": "TQTos",
   "license": "MIT",
