@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import { useFormValidation, useFieldValidation } from 'valora/adapters/react';
-import { string, number } from 'valora/validators';
+import { useFormValidation, useFieldValidation } from '@tqtos/valora/adapters/react';
+import { string, number } from '@tqtos/valora/validators';
 import './ComprehensiveDemo.css';
 
 interface ComprehensiveForm {
@@ -30,7 +30,7 @@ const ComprehensiveDemo = () => {
       .custom(
         // YÊU CẦU 6 & 2: Custom validation tự kiểm tra bằng code
         (value: string) => /^[a-z]/.test(value),
-        'Must start with a lowercase.'
+        'Must start with a lowercase.',
       ),
 
     // Password - YÊU CẦU 4 & 6: Kết hợp nhiều custom validation
@@ -42,14 +42,11 @@ const ComprehensiveDemo = () => {
       .custom((value: string) => /[0-9]/.test(value), 'Must contain a number')
       .custom(
         (value: string) => /[!@#$%^&*(),.?":{}|<>]/.test(value),
-        'Must contain special character'
+        'Must contain special character',
       ),
 
     // Email - Sử dụng built-in validator
-    email: string()
-      .required()
-      .email()
-      .withMessage('Invalid email format'),
+    email: string().required().email().withMessage('Invalid email format'),
 
     // Phone Number - YÊU CẦU 5 & 6: Regex pattern + custom validation
     phoneNumber: string()
@@ -57,17 +54,39 @@ const ComprehensiveDemo = () => {
       .numeric()
       .length(10)
       .pattern(/^0\d{9}$/, 'Must start with 0')
-      .custom(
-        (value: string) => {
-          const prefixes = [
-            '086', '096', '097', '098', '032', '033', '034', '035', '036', '037', '038', '039',
-            '088', '091', '094', '083', '084', '085', '081', '082',
-            '089', '090', '093', '070', '079', '077', '076', '078'
-          ];
-          return prefixes.some(prefix => value.startsWith(prefix));
-        },
-        'Invalid Vietnamese phone number'
-      ),
+      .custom((value: string) => {
+        const prefixes = [
+          '086',
+          '096',
+          '097',
+          '098',
+          '032',
+          '033',
+          '034',
+          '035',
+          '036',
+          '037',
+          '038',
+          '039',
+          '088',
+          '091',
+          '094',
+          '083',
+          '084',
+          '085',
+          '081',
+          '082',
+          '089',
+          '090',
+          '093',
+          '070',
+          '079',
+          '077',
+          '076',
+          '078',
+        ];
+        return prefixes.some((prefix) => value.startsWith(prefix));
+      }, 'Invalid Vietnamese phone number'),
 
     // Age - Number validation với range
     age: number()
@@ -96,10 +115,10 @@ const ComprehensiveDemo = () => {
 
   const showToast = (message: string, type: Toast['type'] = 'info') => {
     const id = toastId++;
-    setToasts(prev => [...prev, { id, message, type }]);
+    setToasts((prev) => [...prev, { id, message, type }]);
 
     setTimeout(() => {
-      setToasts(prev => prev.filter(t => t.id !== id));
+      setToasts((prev) => prev.filter((t) => t.id !== id));
     }, 4000);
   };
 
@@ -320,18 +339,10 @@ const ComprehensiveDemo = () => {
 
         {/* Form Actions */}
         <div className="form-actions">
-          <button
-            type="submit"
-            className="btn-submit"
-            disabled={isSubmitting}
-          >
+          <button type="submit" className="btn-submit" disabled={isSubmitting}>
             {isSubmitting ? 'Submitting...' : 'Submit'}
           </button>
-          <button
-            type="button"
-            className="btn-reset"
-            onClick={resetForm}
-          >
+          <button type="button" className="btn-reset" onClick={resetForm}>
             Reset
           </button>
         </div>
@@ -340,10 +351,7 @@ const ComprehensiveDemo = () => {
       {/* YÊU CẦU 1: Cách 4 - Toast notifications */}
       <div className="toast-container">
         {toasts.map((toast) => (
-          <div
-            key={toast.id}
-            className={`toast toast-${toast.type}`}
-          >
+          <div key={toast.id} className={`toast toast-${toast.type}`}>
             {toast.message}
           </div>
         ))}
@@ -362,10 +370,10 @@ const ComprehensiveDemo = () => {
                   password: password.value,
                   email: email.value,
                   phoneNumber: phoneNumber.value,
-                  age: age.value
+                  age: age.value,
                 },
                 null,
-                2
+                2,
               )}
             </pre>
             <button onClick={() => setShowSuccessModal(false)} className="btn-close">
