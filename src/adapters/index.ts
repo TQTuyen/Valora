@@ -20,8 +20,8 @@ export {
 } from './adapter-utils';
 
 // Framework-specific adapters
-// export * as VueAdapter from './vue';
-// export * as ReactAdapter from './react';
-// export * as SvelteAdapter from './svelte';
-// export * as SolidAdapter from './solid';
-// export * as VanillaAdapter from './vanilla';
+// export * from './vue';
+// export * from './react';
+// export * from './solid';
+// export * from './svelte';
+// export * from './vanilla';
