@@ -1,6 +1,6 @@
 /**
- * Solid adapter entry point
- * @module adapters/solid
+ * Svelte adapter
+ * @module adapters/svelte
  */
 
 export type { ValidatorMap } from '../types';
