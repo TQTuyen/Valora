@@ -248,18 +248,18 @@ export { createVanillaAdapter, VanillaAdapter } from './adapters/index';
 // -------------------------------------------------------------------------
 // Solid Adapter
 // -------------------------------------------------------------------------
-export {
-  createSolidAdapter,
-  SolidAdapter,
-  createFieldValidation as createSolidFieldValidation,
-  createFormValidation as createSolidFormValidation,
-} from './adapters/index';
 export type {
   CreateFieldValidationReturn,
   CreateFormValidationReturn,
   SolidFieldBindings,
   SolidFieldState,
   SolidFormState,
+} from './adapters/index';
+export {
+  createSolidAdapter,
+  createFieldValidation as createSolidFieldValidation,
+  createFormValidation as createSolidFormValidation,
+  SolidAdapter,
 } from './adapters/index';
 
 // -------------------------------------------------------------------------

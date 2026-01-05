@@ -1,6 +1,6 @@
 import { createSignal, For, Show } from 'solid-js';
 
-import { createFieldValidation, createFormValidation } from 'valora/adapters/solid';
+import { createFieldValidation, createFormValidation } from '@tqtos/valora/adapters/solid';
 import { boolean, string } from '@tqtos/valora/validators';
 
 const schema = {
