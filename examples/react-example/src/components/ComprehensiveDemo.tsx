@@ -26,7 +26,7 @@ const ComprehensiveDemo = () => {
       .required()
       .minLength(3, { message: 'Username must have at least 3 characters.' })
       .maxLength(20)
-      .pattern(/^[a-z0-9_]+$/, 'Only lowercase letters, numbers, and underscores.') // YÊU CẦU 5: Regular expression
+      .pattern(/^[a-z0-9_]+$/, { message: 'Only lowercase letters, numbers, an d underscores.' }) // YÊU CẦU 5: Regular expression
       .custom(
         // YÊU CẦU 6 & 2: Custom validation tự kiểm tra bằng code
         (value: string) => /^[a-z]/.test(value),
@@ -53,7 +53,7 @@ const ComprehensiveDemo = () => {
       .required()
       .numeric()
       .length(10)
-      .pattern(/^0\d{9}$/, 'Must start with 0')
+      .pattern(/^0\d{9}$/, { message: 'Must start with 0' })
       .custom((value: string) => {
         const prefixes = [
           '086',
