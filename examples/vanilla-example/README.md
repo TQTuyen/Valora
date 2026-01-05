@@ -5,6 +5,7 @@ Complete example demonstrating Valora's **VanillaAdapter** for progressive enhan
 ## 📋 Features Demonstrated
 
 ### Core Validation Features
+
 - ✅ Real-time validation on input/blur
 - ✅ Multiple validation rules per field (min/max length, patterns, ranges)
 - ✅ Custom error messages
@@ -13,6 +14,7 @@ Complete example demonstrating Valora's **VanillaAdapter** for progressive enhan
 - ✅ Form reset functionality
 
 ### Advanced Features
+
 - 🔄 **Transform Plugin** - Automatic data transformation (trim, toLowerCase, toUpperCase)
 - 🎯 **Field Subscriptions** - React to field state changes
 - 📊 **Form State Management** - Track form validity, touched, dirty states

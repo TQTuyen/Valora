@@ -14,6 +14,14 @@ const schema = {
   password: string()
     .required({ message: 'Password is required' })
     .minLength(8, { message: 'At least 8 characters' }),
+  confirmPassword: string()
+    .required({ message: 'Please confirm your password' })
+    .custom((value, context) => {
+      if (value !== context.values.password) {
+        return { success: false, errors: [{ message: 'Passwords do not match' }] };
+      }
+      return { success: true };
+    }, 'Passwords do not match'),
   terms: boolean()
     .required({ message: 'You must accept terms' })
     .isTrue({ message: 'Please accept the terms' }),
