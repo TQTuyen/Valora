@@ -1,0 +1,25 @@
+{
+  "extends": "@tsconfig/svelte/tsconfig.json",
+  "compilerOptions": {
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "ignoreDeprecations": "6.0",
+    "baseUrl": ".",
+    "paths": {
+      "valora": ["../../src/index.ts"],
+      "valora/*": ["../../src/*"],
+      "@tqtos/valora": ["../../src/index.ts"],
+      "@tqtos/valora/*": ["../../src/*"],
+      "@notification/*": ["../../src/notification/*"],
+      "@validators/*": ["../../src/validators/*"],
+      "@adapters/*": ["../../src/adapters/*"],
+      "@plugins/*": ["../../src/plugins/*"],
+      "@utils/*": ["../../src/utils/*"],
+      "@core/*": ["../../src/core/*"],
+      "#types/*": ["../../src/types/*"]
+    },
+    "types": ["svelte"]
+  },
+  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.svelte"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
