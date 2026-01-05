@@ -278,6 +278,12 @@ export {
   createFormValidation as createSvelteFormValidation,
   SvelteAdapter,
 } from './adapters/index';
+export {
+  createSolidAdapter,
+  createFieldValidation as createSolidFieldValidation,
+  createFormValidation as createSolidFormValidation,
+  SolidAdapter,
+} from './adapters/index';
 
 // -------------------------------------------------------------------------
 // Additional Core Types (from types/index)
