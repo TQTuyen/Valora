@@ -94,8 +94,72 @@
     result = null;
   };
 
-  
-</script>
+  // Contact form setup
+  const {
+    adapter: contactAdapter,
+    formState: contactFormState,
+    validateAll: validateContact,
+    resetAll: resetContact,
+    getValues: getContactValues,
+  } = createFormValidation(contactSchema, {
+    validationMode: 'onChange',
+  });
+
+  // Initialize contact form with empty values
+  contactAdapter.setFieldValue('name', '');
+  contactAdapter.setFieldValue('email', '');
+  contactAdapter.setFieldValue('message', '');
+
+  const contactName = createFieldValidation(contactAdapter, 'name');
+  const contactEmail = createFieldValidation(contactAdapter, 'email');
+  const contactMessage = createFieldValidation(contactAdapter, 'message');
+
+  const contactNameValue = contactName.value;
+  const contactNameShouldShowError = contactName.shouldShowError;
+  const contactNameErrorMessages = contactName.errorMessages;
+
+  const contactEmailValue = contactEmail.value;
+  const contactEmailShouldShowError = contactEmail.shouldShowError;
+  const contactEmailErrorMessages = contactEmail.errorMessages;
+
+  const contactMessageValue = contactMessage.value;
+  const contactMessageShouldShowError = contactMessage.shouldShowError;
+  const contactMessageErrorMessages = contactMessage.errorMessages;
+
+  const contactFormValid = contactFormState.isValid;
+  const contactFormTouched = contactFormState.isTouched;
+  const contactFormValidating = contactFormState.isValidating;
+
+  let contactResult: string | null = null;
+
+  // Character counter for message field
+  const characterCounterText = derived(contactMessageValue, ($value) => {
+    const currentLength = $value?.length || 0;
+    const maxLength = 500;
+    const remaining = maxLength - currentLength;
+
+    if (currentLength >= 10) {
+      return `${currentLength}/500 characters (${remaining} remaining)`;
+    } else {
+      return `${currentLength}/500 characters (minimum 10 required)`;
+    }
+  });
+
+  const characterCounterClass = derived(
+    [contactMessageValue, contactMessage.touched],
+    ([$value, $touched]) => {
+      const currentLength = $value?.length || 0;
+
+      if (currentLength >= 10) {
+        return 'success-hint';
+      } else if ($touched) {
+        return 'error-hint';
+      } else {
+        return '';
+      }
+    }
+  );
+
 
 <div class="page">
   <header class="hero">
