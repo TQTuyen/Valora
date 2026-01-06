@@ -12,6 +12,12 @@ interface ComprehensiveForm {
   age: number;
 }
 
+interface ContactForm {
+  name: string;
+  email: string;
+  message: string;
+}
+
 interface Toast {
   id: number;
   message: string;
@@ -106,10 +112,43 @@ const ComprehensiveDemo = () => {
   const phoneNumber = useFieldValidation(adapter, 'phoneNumber');
   const age = useFieldValidation(adapter, 'age');
 
+  // Contact Form Setup
+  const contactSchema = {
+    name: string()
+      .required({ message: 'Name is required' })
+      .minLength(2, { message: 'Name must be at least 2 characters' })
+      .maxLength(100, { message: 'Name is too long' }),
+
+    email: string()
+      .required({ message: 'Email is required' })
+      .email({ message: 'Valid email address is required' }),
+
+    message: string()
+      .required({ message: 'Message is required' })
+      .minLength(10, { message: 'Message must be at least 10 characters' })
+      .maxLength(500, { message: 'Message must not exceed 500 characters' }),
+  };
+
+  const {
+    adapter: contactAdapter,
+    validateAll: validateContact,
+    resetAll: resetContact,
+  } = useFormValidation<ContactForm>(contactSchema);
+
+  const contactName = useFieldValidation(contactAdapter, 'name');
+  const contactEmail = useFieldValidation(contactAdapter, 'email');
+  const contactMessage = useFieldValidation(contactAdapter, 'message');
+
   // Toast notifications - YÊU CẦU 1: Cách thông báo khác nhau (Toast)
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successModalTitle, setSuccessModalTitle] = useState('Success!');
+  const [successModalData, setSuccessModalData] = useState('');
+
+  // Character counter for contact message
+  const [characterCounterText, setCharacterCounterText] = useState('10-500 characters required');
+  const [characterCounterClass, setCharacterCounterClass] = useState('');
 
   let toastId = 0;
 
@@ -188,6 +227,8 @@ const ComprehensiveDemo = () => {
     resetAll();
     showToast('Form has been reset', 'info');
   };
+
+
 
   return (
     <div className="comprehensive-demo">
@@ -354,6 +395,106 @@ const ComprehensiveDemo = () => {
         </div>
       </form>
 
+      {/* CONTACT US SECTION */}
+      <section className="form-section" style={{ marginTop: '2rem' }}>
+        <h2>Contact Us</h2>
+        <p className="section-description">Demonstrating character counter using field subscriptions</p>
+
+        <form onSubmit={handleContactSubmit} className="demo-form">
+          {/* NAME */}
+          <div className="form-group">
+            <label htmlFor="contact-name">
+              Name
+              <span className="required">*</span>
+            </label>
+            <input
+              id="contact-name"
+              type="text"
+              value={contactName.value || ''}
+              onChange={(e) => contactName.setValue(e.target.value)}
+              onBlur={() => { contactName.touch(); contactName.validate(); }}
+              placeholder="Your name"
+              className={`${contactName.shouldShowError ? 'error' : ''} ${contactName.isValid && contactName.touched ? 'success' : ''}`}
+            />
+            {contactName.shouldShowError && (
+              <div className="error-messages">
+                {contactName.errorMessages.map((msg, index) => (
+                  <p key={index} className="error-message">
+                    {msg}
+                  </p>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* EMAIL */}
+          <div className="form-group">
+            <label htmlFor="contact-email">
+              Email
+              <span className="required">*</span>
+            </label>
+            <input
+              id="contact-email"
+              type="email"
+              value={contactEmail.value || ''}
+              onChange={(e) => contactEmail.setValue(e.target.value)}
+              onBlur={() => { contactEmail.touch(); contactEmail.validate(); }}
+              placeholder="your@email.com"
+              className={`${contactEmail.shouldShowError ? 'error' : ''} ${contactEmail.isValid && contactEmail.touched ? 'success' : ''}`}
+            />
+            {contactEmail.shouldShowError && (
+              <div className="error-messages">
+                {contactEmail.errorMessages.map((msg, index) => (
+                  <p key={index} className="error-message">
+                    {msg}
+                  </p>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* MESSAGE with Character Counter */}
+          <div className="form-group">
+            <label htmlFor="contact-message">
+              Message
+              <span className="required">*</span>
+            </label>
+            <textarea
+              id="contact-message"
+              value={contactMessage.value || ''}
+              onChange={(e) => contactMessage.setValue(e.target.value)}
+              onBlur={() => { contactMessage.touch(); contactMessage.validate(); }}
+              rows={5}
+              placeholder="Your message here..."
+              className={`${contactMessage.shouldShowError ? 'error' : ''} ${contactMessage.isValid && contactMessage.touched ? 'success' : ''}`}
+            />
+            {/* Character Counter */}
+            <small className={`hint ${characterCounterClass}`}>
+              {characterCounterText}
+            </small>
+            {contactMessage.shouldShowError && (
+              <div className="error-messages">
+                {contactMessage.errorMessages.map((msg, index) => (
+                  <p key={index} className="error-message">
+                    {msg}
+                  </p>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Form Actions */}
+          <div className="form-actions">
+            <button type="submit" className="btn-submit">
+              Send Message
+            </button>
+            <button type="button" className="btn-secondary" onClick={resetContactForm}>
+              Clear
+            </button>
+          </div>
+        </form>
+      </section>
+
       {/* YÊU CẦU 1: Cách 4 - Toast notifications */}
       <div className="toast-container">
         {toasts.map((toast) => (
@@ -367,21 +508,9 @@ const ComprehensiveDemo = () => {
       {showSuccessModal && (
         <div className="modal-overlay" onClick={() => setShowSuccessModal(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h2>Success!</h2>
+            <h2>{successModalTitle}</h2>
             <p>All data has been validated successfully.</p>
-            <pre className="data-preview">
-              {JSON.stringify(
-                {
-                  username: username.value,
-                  password: password.value,
-                  email: email.value,
-                  phoneNumber: phoneNumber.value,
-                  age: age.value,
-                },
-                null,
-                2,
-              )}
-            </pre>
+            <pre className="data-preview">{successModalData}</pre>
             <button onClick={() => setShowSuccessModal(false)} className="btn-close">
               Close
             </button>
