@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createFieldValidation, createFormValidation } from 'valora/adapters/svelte';
   import { boolean, string } from '@tqtos/valora/validators';
+  import { derived } from 'svelte/store';
 
   const schema = {
     username: string()
@@ -16,6 +17,21 @@
     terms: boolean()
       .required({ message: 'You must accept terms' })
       .isTrue({ message: 'Please accept the terms' }),
+  } as const;
+
+  // Contact form schema
+  const contactSchema = {
+    name: string()
+      .required({ message: 'Name is required' })
+      .minLength(2, { message: 'Name must be at least 2 characters' })
+      .maxLength(100, { message: 'Name is too long' }),
+    email: string()
+      .required({ message: 'Email is required' })
+      .email({ message: 'Valid email address is required' }),
+    message: string()
+      .required({ message: 'Message is required' })
+      .minLength(10, { message: 'Message must be at least 10 characters' })
+      .maxLength(500, { message: 'Message must not exceed 500 characters' }),
   } as const;
 
   const { adapter, formState, validateAll, resetAll, getValues } = createFormValidation(schema, {
@@ -77,6 +93,8 @@
     resetAll();
     result = null;
   };
+
+  
 </script>
 
 <div class="page">
