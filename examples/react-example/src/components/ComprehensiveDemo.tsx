@@ -228,7 +228,52 @@ const ComprehensiveDemo = () => {
     showToast('Form has been reset', 'info');
   };
 
+  // Contact form submit
+  const handleContactSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const result = validateContact();
 
+    if (result.success) {
+      const values = contactAdapter.getValues();
+      setSuccessModalTitle('Message Sent!');
+      setSuccessModalData(JSON.stringify(values, null, 2));
+      setShowSuccessModal(true);
+      showToast('Message sent successfully!', 'success');
+
+      // Reset contact form after successful submission
+      resetContact();
+    } else {
+      // Touch all contact fields to show validation errors
+      contactName.touch();
+      contactEmail.touch();
+      contactMessage.touch();
+      showToast(`Please fix ${result.errors.length} error(s) before sending`, 'error');
+    }
+  };
+
+  // Reset contact form
+  const resetContactForm = () => {
+    resetContact();
+    showToast('Contact form has been cleared', 'info');
+  };
+
+  // Character counter effect for contact message
+  useMemo(() => {
+    const currentLength = contactMessage.value?.length || 0;
+    const maxLength = 500;
+    const remaining = maxLength - currentLength;
+
+    if (currentLength >= 10) {
+      setCharacterCounterText(`${currentLength}/500 characters (${remaining} remaining)`);
+      setCharacterCounterClass('success-hint');
+    } else if (contactMessage.touched) {
+      setCharacterCounterText(`${currentLength}/500 characters (minimum 10 required)`);
+      setCharacterCounterClass('error-hint');
+    } else {
+      setCharacterCounterText('10-500 characters required');
+      setCharacterCounterClass('');
+    }
+  }, [contactMessage.value, contactMessage.touched]);
 
   return (
     <div className="comprehensive-demo">
