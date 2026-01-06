@@ -21,7 +21,7 @@
           <input
             id="username"
             v-model="username.modelValue.value"
-            @blur="username.onBlur"
+            @blur="() => { username.onBlur(); username.validate(); }"
             type="text"
             placeholder="john_doe123"
             :class="{
@@ -52,7 +52,7 @@
           <input
             id="password"
             v-model="password.modelValue.value"
-            @blur="password.onBlur"
+            @blur="() => { password.onBlur(); password.validate(); }"
             type="password"
             placeholder="••••••••"
             :class="{
@@ -94,7 +94,7 @@
           <input
             id="email"
             v-model="email.modelValue.value"
-            @blur="email.onBlur"
+            @blur="() => { email.onBlur(); email.validate(); }"
             type="email"
             placeholder="example@company.com"
             :class="{
@@ -123,7 +123,7 @@
           <input
             id="phoneNumber"
             v-model="phoneNumber.modelValue.value"
-            @blur="phoneNumber.onBlur"
+            @blur="() => { phoneNumber.onBlur(); phoneNumber.validate(); }"
             type="tel"
             placeholder="0912345678"
             :class="{
@@ -154,7 +154,7 @@
           <input
             id="age"
             v-model.number="age.modelValue.value"
-            @blur="age.onBlur"
+            @blur="() => { age.onBlur(); age.validate(); }"
             type="number"
             placeholder="25"
             :class="{
@@ -684,6 +684,12 @@ const handleSubmit = () => {
 
     console.log("✅ Registration submitted:", values);
   } else {
+    // Touch all fields to show validation errors
+    username.onBlur();
+    password.onBlur();
+    email.onBlur();
+    phoneNumber.onBlur();
+    age.onBlur();
     showToast(
       `Please fix ${result.errors.length} error(s) before submitting`,
       "error",
@@ -707,6 +713,10 @@ const handleContactSubmit = () => {
     // Reset contact form after successful submission
     resetContact();
   } else {
+    // Touch all fields to show validation errors
+    contactName.onBlur();
+    contactEmail.onBlur();
+    contactMessage.onBlur();
     showToast(
       `Please fix ${result.errors.length} error(s) before sending`,
       "error",
