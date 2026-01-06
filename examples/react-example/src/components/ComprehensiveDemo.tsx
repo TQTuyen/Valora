@@ -203,7 +203,7 @@ const ComprehensiveDemo = () => {
             type="text"
             value={username.value || ''}
             onChange={(e) => username.setValue(e.target.value)}
-            onBlur={username.touch}
+            onBlur={() => { username.touch(); username.validate(); }}
             placeholder="john_doe123"
             className={`${username.shouldShowError ? 'error' : ''} ${username.isValid && username.touched ? 'success' : ''}`}
           />
@@ -230,7 +230,7 @@ const ComprehensiveDemo = () => {
             type="password"
             value={password.value || ''}
             onChange={(e) => password.setValue(e.target.value)}
-            onBlur={password.touch}
+            onBlur={() => { password.touch(); password.validate(); }}
             placeholder="••••••••"
             className={`${password.shouldShowError ? 'error' : ''} ${password.isValid && password.touched ? 'success' : ''}`}
           />
@@ -270,7 +270,7 @@ const ComprehensiveDemo = () => {
             type="email"
             value={email.value || ''}
             onChange={(e) => email.setValue(e.target.value)}
-            onBlur={email.touch}
+            onBlur={() => { email.touch(); email.validate(); }}
             placeholder="example@company.com"
             className={`${email.shouldShowError ? 'error' : ''} ${email.isValid && email.touched ? 'success' : ''}`}
           />
@@ -296,7 +296,7 @@ const ComprehensiveDemo = () => {
             type="tel"
             value={phoneNumber.value || ''}
             onChange={(e) => phoneNumber.setValue(e.target.value)}
-            onBlur={phoneNumber.touch}
+            onBlur={() => { phoneNumber.touch(); phoneNumber.validate(); }}
             placeholder="0912345678"
             className={`${phoneNumber.shouldShowError ? 'error' : ''} ${phoneNumber.isValid && phoneNumber.touched ? 'success' : ''}`}
           />
@@ -322,7 +322,7 @@ const ComprehensiveDemo = () => {
             type="number"
             value={age.value || ''}
             onChange={(e) => age.setValue(Number(e.target.value))}
-            onBlur={age.touch}
+            onBlur={() => { age.touch(); age.validate(); }}
             placeholder="25"
             className={`${age.shouldShowError ? 'error' : ''} ${age.isValid && age.touched ? 'success' : ''}`}
           />
