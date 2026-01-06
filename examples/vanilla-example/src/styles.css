@@ -213,11 +213,6 @@ textarea.valora-invalid:focus {
 /* Error Messages */
 .valora-error {
     margin-top: 0.5rem;
-    padding: 0.75rem;
-    background-color: var(--danger-light);
-    border: 1px solid var(--danger-color);
-    border-radius: var(--border-radius);
-    animation: slideDown 0.2s ease;
 }
 
 .valora-error-message {
@@ -225,17 +220,18 @@ textarea.valora-invalid:focus {
     font-size: 0.875rem;
     font-weight: 500;
     display: flex;
-    align-items: flex-start;
-    margin-bottom: 0.25rem;
+    align-items: center;
+    margin: 0.25rem 0;
+    animation: slideDown 0.2s ease;
 }
 
-.valora-error-message:last-child {
-    margin-bottom: 0;
+.valora-error-message:first-child {
+    margin-top: 0;
 }
 
 .valora-error-message::before {
-    content: '⚠️';
-    margin-right: 0.5rem;
+    content: '⚠';
+    margin-right: 0.375rem;
     flex-shrink: 0;
 }
 

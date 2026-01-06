@@ -12,6 +12,13 @@ interface ComprehensiveForm {
   age: number;
 }
 
+interface ContactForm {
+  [key: string]: any;
+  name: string;
+  email: string;
+  message: string;
+}
+
 interface Toast {
   id: number;
   message: string;
@@ -50,7 +57,7 @@ const ComprehensiveDemo = () => {
 
     // Phone Number - YÊU CẦU 5 & 6: Regex pattern + custom validation
     phoneNumber: string()
-      .required()
+      .required({ message: 'Phone number is required' })
       .numeric()
       .length(10)
       .pattern(/^0\d{9}$/, { message: 'Must start with 0' })
@@ -106,10 +113,43 @@ const ComprehensiveDemo = () => {
   const phoneNumber = useFieldValidation(adapter, 'phoneNumber');
   const age = useFieldValidation(adapter, 'age');
 
+  // Contact Form Setup
+  const contactSchema = {
+    name: string()
+      .required({ message: 'Name is required' })
+      .minLength(2, { message: 'Name must be at least 2 characters' })
+      .maxLength(100, { message: 'Name is too long' }),
+
+    email: string()
+      .required({ message: 'Email is required' })
+      .email({ message: 'Valid email address is required' }),
+
+    message: string()
+      .required({ message: 'Message is required' })
+      .minLength(10, { message: 'Message must be at least 10 characters' })
+      .maxLength(500, { message: 'Message must not exceed 500 characters' }),
+  };
+
+  const {
+    adapter: contactAdapter,
+    validateAll: validateContact,
+    resetAll: resetContact,
+  } = useFormValidation<ContactForm>(contactSchema);
+
+  const contactName = useFieldValidation(contactAdapter, 'name');
+  const contactEmail = useFieldValidation(contactAdapter, 'email');
+  const contactMessage = useFieldValidation(contactAdapter, 'message');
+
   // Toast notifications - YÊU CẦU 1: Cách thông báo khác nhau (Toast)
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successModalTitle, setSuccessModalTitle] = useState('Success!');
+  const [successModalData, setSuccessModalData] = useState('');
+
+  // Character counter for contact message
+  const [characterCounterText, setCharacterCounterText] = useState('10-500 characters required');
+  const [characterCounterClass, setCharacterCounterClass] = useState('');
 
   let toastId = 0;
 
@@ -172,6 +212,12 @@ const ComprehensiveDemo = () => {
         setShowSuccessModal(true);
       } else {
         // YÊU CẦU 1: Hiển thị thông báo lỗi
+        // Touch all fields to show validation errors
+        username.touch();
+        password.touch();
+        email.touch();
+        phoneNumber.touch();
+        age.touch();
         showToast(`Please fix ${result.errors.length} error(s) before submitting`, 'error');
       }
     }, 500);
@@ -182,6 +228,53 @@ const ComprehensiveDemo = () => {
     resetAll();
     showToast('Form has been reset', 'info');
   };
+
+  // Contact form submit
+  const handleContactSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const result = validateContact();
+
+    if (result.success) {
+      const values = contactAdapter.getValues();
+      setSuccessModalTitle('Message Sent!');
+      setSuccessModalData(JSON.stringify(values, null, 2));
+      setShowSuccessModal(true);
+      showToast('Message sent successfully!', 'success');
+
+      // Reset contact form after successful submission
+      resetContact();
+    } else {
+      // Touch all contact fields to show validation errors
+      contactName.touch();
+      contactEmail.touch();
+      contactMessage.touch();
+      showToast(`Please fix ${result.errors.length} error(s) before sending`, 'error');
+    }
+  };
+
+  // Reset contact form
+  const resetContactForm = () => {
+    resetContact();
+    showToast('Contact form has been cleared', 'info');
+  };
+
+  // Character counter effect for contact message
+  useMemo(() => {
+    const currentLength = contactMessage.value?.length || 0;
+    const maxLength = 500;
+    const remaining = maxLength - currentLength;
+
+    if (currentLength >= 10) {
+      setCharacterCounterText(`${currentLength}/500 characters (${remaining} remaining)`);
+      setCharacterCounterClass('success-hint');
+    } else if (contactMessage.touched) {
+      setCharacterCounterText(`${currentLength}/500 characters (minimum 10 required)`);
+      setCharacterCounterClass('error-hint');
+    } else {
+      setCharacterCounterText('10-500 characters required');
+      setCharacterCounterClass('');
+    }
+  }, [contactMessage.value, contactMessage.touched]);
 
   return (
     <div className="comprehensive-demo">
@@ -197,7 +290,7 @@ const ComprehensiveDemo = () => {
             type="text"
             value={username.value || ''}
             onChange={(e) => username.setValue(e.target.value)}
-            onBlur={username.touch}
+            onBlur={() => { username.touch(); username.validate(); }}
             placeholder="john_doe123"
             className={`${username.shouldShowError ? 'error' : ''} ${username.isValid && username.touched ? 'success' : ''}`}
           />
@@ -224,7 +317,7 @@ const ComprehensiveDemo = () => {
             type="password"
             value={password.value || ''}
             onChange={(e) => password.setValue(e.target.value)}
-            onBlur={password.touch}
+            onBlur={() => { password.touch(); password.validate(); }}
             placeholder="••••••••"
             className={`${password.shouldShowError ? 'error' : ''} ${password.isValid && password.touched ? 'success' : ''}`}
           />
@@ -264,7 +357,7 @@ const ComprehensiveDemo = () => {
             type="email"
             value={email.value || ''}
             onChange={(e) => email.setValue(e.target.value)}
-            onBlur={email.touch}
+            onBlur={() => { email.touch(); email.validate(); }}
             placeholder="example@company.com"
             className={`${email.shouldShowError ? 'error' : ''} ${email.isValid && email.touched ? 'success' : ''}`}
           />
@@ -290,7 +383,7 @@ const ComprehensiveDemo = () => {
             type="tel"
             value={phoneNumber.value || ''}
             onChange={(e) => phoneNumber.setValue(e.target.value)}
-            onBlur={phoneNumber.touch}
+            onBlur={() => { phoneNumber.touch(); phoneNumber.validate(); }}
             placeholder="0912345678"
             className={`${phoneNumber.shouldShowError ? 'error' : ''} ${phoneNumber.isValid && phoneNumber.touched ? 'success' : ''}`}
           />
@@ -316,7 +409,7 @@ const ComprehensiveDemo = () => {
             type="number"
             value={age.value || ''}
             onChange={(e) => age.setValue(Number(e.target.value))}
-            onBlur={age.touch}
+            onBlur={() => { age.touch(); age.validate(); }}
             placeholder="25"
             className={`${age.shouldShowError ? 'error' : ''} ${age.isValid && age.touched ? 'success' : ''}`}
           />
@@ -348,6 +441,106 @@ const ComprehensiveDemo = () => {
         </div>
       </form>
 
+      {/* CONTACT US SECTION */}
+      <section  style={{ marginTop: '2rem' }}>
+        <h2>Contact Us</h2>
+        <p className="section-description">Demonstrating character counter using field subscriptions</p>
+
+        <form onSubmit={handleContactSubmit} className="demo-form">
+          {/* NAME */}
+          <div className="form-group">
+            <label htmlFor="contact-name">
+              Name
+              <span className="required">*</span>
+            </label>
+            <input
+              id="contact-name"
+              type="text"
+              value={contactName.value || ''}
+              onChange={(e) => contactName.setValue(e.target.value)}
+              onBlur={() => { contactName.touch(); contactName.validate(); }}
+              placeholder="Your name"
+              className={`${contactName.shouldShowError ? 'error' : ''} ${contactName.isValid && contactName.touched ? 'success' : ''}`}
+            />
+            {contactName.shouldShowError && (
+              <div className="error-messages">
+                {contactName.errorMessages.map((msg, index) => (
+                  <p key={index} className="error-message">
+                    {msg}
+                  </p>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* EMAIL */}
+          <div className="form-group">
+            <label htmlFor="contact-email">
+              Email
+              <span className="required">*</span>
+            </label>
+            <input
+              id="contact-email"
+              type="email"
+              value={contactEmail.value || ''}
+              onChange={(e) => contactEmail.setValue(e.target.value)}
+              onBlur={() => { contactEmail.touch(); contactEmail.validate(); }}
+              placeholder="your@email.com"
+              className={`${contactEmail.shouldShowError ? 'error' : ''} ${contactEmail.isValid && contactEmail.touched ? 'success' : ''}`}
+            />
+            {contactEmail.shouldShowError && (
+              <div className="error-messages">
+                {contactEmail.errorMessages.map((msg, index) => (
+                  <p key={index} className="error-message">
+                    {msg}
+                  </p>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* MESSAGE with Character Counter */}
+          <div className="form-group">
+            <label htmlFor="contact-message">
+              Message
+              <span className="required">*</span>
+            </label>
+            <textarea
+              id="contact-message"
+              value={contactMessage.value || ''}
+              onChange={(e) => contactMessage.setValue(e.target.value)}
+              onBlur={() => { contactMessage.touch(); contactMessage.validate(); }}
+              rows={5}
+              placeholder="Your message here..."
+              className={`${contactMessage.shouldShowError ? 'error' : ''} ${contactMessage.isValid && contactMessage.touched ? 'success' : ''}`}
+            />
+            {/* Character Counter */}
+            <small className={`hint ${characterCounterClass}`}>
+              {characterCounterText}
+            </small>
+            {contactMessage.shouldShowError && (
+              <div className="error-messages">
+                {contactMessage.errorMessages.map((msg, index) => (
+                  <p key={index} className="error-message">
+                    {msg}
+                  </p>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Form Actions */}
+          <div className="form-actions">
+            <button type="submit" className="btn-submit">
+              Send Message
+            </button>
+            <button type="button" className="btn-secondary" onClick={resetContactForm}>
+              Clear
+            </button>
+          </div>
+        </form>
+      </section>
+
       {/* YÊU CẦU 1: Cách 4 - Toast notifications */}
       <div className="toast-container">
         {toasts.map((toast) => (
@@ -361,21 +554,9 @@ const ComprehensiveDemo = () => {
       {showSuccessModal && (
         <div className="modal-overlay" onClick={() => setShowSuccessModal(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h2>Success!</h2>
+            <h2>{successModalTitle}</h2>
             <p>All data has been validated successfully.</p>
-            <pre className="data-preview">
-              {JSON.stringify(
-                {
-                  username: username.value,
-                  password: password.value,
-                  email: email.value,
-                  phoneNumber: phoneNumber.value,
-                  age: age.value,
-                },
-                null,
-                2,
-              )}
-            </pre>
+            <pre className="data-preview">{successModalData}</pre>
             <button onClick={() => setShowSuccessModal(false)} className="btn-close">
               Close
             </button>
