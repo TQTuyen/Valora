@@ -13,6 +13,7 @@ interface ComprehensiveForm {
 }
 
 interface ContactForm {
+  [key: string]: any;
   name: string;
   email: string;
   message: string;
@@ -441,7 +442,7 @@ const ComprehensiveDemo = () => {
       </form>
 
       {/* CONTACT US SECTION */}
-      <section className="form-section" style={{ marginTop: '2rem' }}>
+      <section  style={{ marginTop: '2rem' }}>
         <h2>Contact Us</h2>
         <p className="section-description">Demonstrating character counter using field subscriptions</p>
 
