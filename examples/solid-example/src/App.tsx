@@ -96,7 +96,7 @@ export default function App() {
               onInput={(event) =>
                 createInputHandler(username, 'username')(event.currentTarget.value)
               }
-              onBlur={username.onBlur}
+              onBlur={() => { username.onBlur(); username.validate(); }}
               classList={{ error: username.shouldShowError() }}
               placeholder="Enter username"
             />
@@ -115,7 +115,7 @@ export default function App() {
               type="email"
               value={email.value() ?? ''}
               onInput={(event) => createInputHandler(email, 'email')(event.currentTarget.value)}
-              onBlur={email.onBlur}
+              onBlur={() => { email.onBlur(); email.validate(); }}
               classList={{ error: email.shouldShowError() }}
               placeholder="you@example.com"
             />
@@ -136,7 +136,7 @@ export default function App() {
               onInput={(event) =>
                 createInputHandler(password, 'password')(event.currentTarget.value)
               }
-              onBlur={password.onBlur}
+              onBlur={() => { password.onBlur(); password.validate(); }}
               classList={{ error: password.shouldShowError() }}
               placeholder="At least 8 characters"
             />
@@ -152,7 +152,7 @@ export default function App() {
               type="checkbox"
               checked={terms.value() ?? false}
               onInput={(event) => createInputHandler(terms, 'terms')(event.currentTarget.checked)}
-              onBlur={terms.onBlur}
+              onBlur={() => { terms.onBlur(); terms.validate(); }}
             />
             <span>I agree to the terms</span>
           </label>
