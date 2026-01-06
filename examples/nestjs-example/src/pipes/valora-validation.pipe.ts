@@ -1,8 +1,7 @@
 /// <reference types="reflect-metadata" />
 
 import { ArgumentMetadata, BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
-import { validate } from '@tqtos/valora/decorators';
-import { getPropertyMetadata } from '@tqtos/valora/decorators/core/metadata';
+import { validate, getPropertyMetadata } from '@tqtos/valora/decorators';
 
 @Injectable()
 export class ValoraValidationPipe implements PipeTransform<any> {
