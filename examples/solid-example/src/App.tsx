@@ -92,7 +92,54 @@ export default function App() {
     }
   });
 
-  
+  const handleSubmit = (event: Event) => {
+    event.preventDefault();
+    setSubmitted(true);
+
+    // Touch tất cả fields để hiện errors
+    (Object.keys(schema) as Array<keyof typeof schema>).forEach((field) => {
+      adapter.touchField(field);
+    });
+
+    const validation = validateAll();
+
+    if (validation.success) {
+      setResult(JSON.stringify(getValues(), null, 2));
+    } else {
+      setResult(null);
+    }
+  };
+
+  const handleReset = () => {
+    resetAll();
+    setResult(null);
+    setSubmitted(false);
+  };
+
+  // Contact form handlers
+  const handleContactSubmit = (event: Event) => {
+    event.preventDefault();
+    setContactSubmitted(true);
+
+    // Touch all fields to show errors
+    (Object.keys(contactSchema) as Array<keyof typeof contactSchema>).forEach((field) => {
+      contactAdapter.touchField(field);
+    });
+
+    const validation = validateContact();
+
+    if (validation.success) {
+      setContactResult(JSON.stringify(getContactValues(), null, 2));
+    } else {
+      setContactResult(null);
+    }
+  };
+
+  const handleContactReset = () => {
+    resetContact();
+    setContactResult(null);
+    setContactSubmitted(false);
+  };
 
   // Helper function to handle contact input with validation after submit
   const createContactInputHandler = <T,>(
