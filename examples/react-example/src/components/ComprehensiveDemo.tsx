@@ -50,7 +50,7 @@ const ComprehensiveDemo = () => {
 
     // Phone Number - YÊU CẦU 5 & 6: Regex pattern + custom validation
     phoneNumber: string()
-      .required()
+      .required({ message: 'Phone number is required' })
       .numeric()
       .length(10)
       .pattern(/^0\d{9}$/, { message: 'Must start with 0' })
