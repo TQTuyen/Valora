@@ -4,6 +4,8 @@
  * @module decorators/property/object/validate-nested
  */
 
+/// <reference types="reflect-metadata" />
+
 import { markNested } from '../../core/metadata';
 
 import type { ValidationOptions } from '#types/index';
@@ -57,9 +59,13 @@ export function ValidateNested(options: ValidateNestedOptions = {}): PropertyDec
   return (target: object, propertyKey: string | symbol): void => {
     const { each = false, ...validationOptions } = options;
 
-    // Type getter - currently not used by validation logic
-    // but kept for potential future use (e.g., with emitDecoratorMetadata)
+    // Type getter using TypeScript's emitted metadata (requires emitDecoratorMetadata: true)
+    // Falls back to Reflect.getMetadata if available, otherwise returns undefined
     const typeGetter = (): any => {
+      // Check if Reflect and metadata are available
+      if (typeof Reflect !== 'undefined' && typeof Reflect.getMetadata === 'function') {
+        return Reflect.getMetadata('design:type', target, propertyKey);
+      }
       return undefined;
     };
 

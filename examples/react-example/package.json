@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tqtos/valora": "^0.0.7",
+    "@tqtos/valora": "^0.0.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

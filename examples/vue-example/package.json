@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tqtos/valora": "^0.0.5",
+    "@tqtos/valora": "^0.0.8",
     "vue": "^3.4.0"
   },
   "devDependencies": {

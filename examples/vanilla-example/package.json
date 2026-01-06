@@ -14,6 +14,6 @@
     "preview": "vite preview src"
   },
   "dependencies": {
-    "@tqtos/valora": "^0.0.5"
+    "@tqtos/valora": "^0.0.8"
   }
 }
