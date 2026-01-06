@@ -225,7 +225,7 @@
           <input
             id="contact-name"
             v-model="contactName.modelValue.value"
-            @blur="contactName.onBlur"
+            @blur="() => { contactName.onBlur(); contactName.validate(); }"
             type="text"
             placeholder="Your name"
             :class="{
@@ -253,7 +253,7 @@
           <input
             id="contact-email"
             v-model="contactEmail.modelValue.value"
-            @blur="contactEmail.onBlur"
+            @blur="() => { contactEmail.onBlur(); contactEmail.validate(); }"
             type="email"
             placeholder="your@email.com"
             :class="{
@@ -281,7 +281,7 @@
           <textarea
             id="contact-message"
             v-model="contactMessage.modelValue.value"
-            @blur="contactMessage.onBlur"
+            @blur="() => { contactMessage.onBlur(); contactMessage.validate(); }"
             rows="5"
             placeholder="Your message here..."
             :class="{
