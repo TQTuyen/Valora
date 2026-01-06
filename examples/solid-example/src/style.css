@@ -79,21 +79,32 @@ label {
 
 input[type='text'],
 input[type='email'],
-input[type='password'] {
+input[type='password'],
+input[type='number'],
+input[type='tel'],
+textarea {
     padding: 12px 14px;
     border-radius: 10px;
     border: 1px solid #cbd5e1;
     font-size: 15px;
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    font-family: inherit;
 }
 
-input:focus {
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+input:focus,
+textarea:focus {
     outline: none;
     border-color: #6366f1;
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
 }
 
-input.error {
+input.error,
+textarea.error {
     border-color: #ef4444;
 }
 
@@ -194,4 +205,37 @@ pre {
     .actions {
         flex-direction: column;
     }
+}
+
+/* Additional styles for Contact form */
+.required {
+    color: #ef4444;
+}
+
+.hint {
+    font-size: 13px;
+    color: #64748b;
+    margin-top: 4px;
+}
+
+.hint.success-hint {
+    color: #10b981;
+    font-weight: 500;
+}
+
+.hint.error-hint {
+    color: #ef4444;
+    font-weight: 500;
+}
+
+.section-description {
+    margin: 0 0 12px 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+h2 {
+    margin: 0 0 8px 0;
+    font-size: 20px;
+    color: #0f172a;
 }
