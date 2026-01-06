@@ -53,9 +53,24 @@ export default function App() {
   const terms = createFieldValidation(adapter, 'terms');
 
   const [result, setResult] = createSignal<string | null>(null);
-  
+  const [submitted, setSubmitted] = createSignal(false);
 
- 
+  // Contact form
+  const {
+    adapter: contactAdapter,
+    validateAll: validateContact,
+    resetAll: resetContact,
+    getValues: getContactValues,
+  } = createFormValidation(contactSchema, {
+    validationMode: 'onSubmit',
+  });
+
+  const contactName = createFieldValidation(contactAdapter, 'name');
+  const contactEmail = createFieldValidation(contactAdapter, 'email');
+  const contactMessage = createFieldValidation(contactAdapter, 'message');
+
+  const [contactResult, setContactResult] = createSignal<string | null>(null);
+  const [contactSubmitted, setContactSubmitted] = createSignal(false);
   const [characterCounterText, setCharacterCounterText] = createSignal('10-500 characters required');
   const [characterCounterClass, setCharacterCounterClass] = createSignal('');
 
@@ -78,6 +93,33 @@ export default function App() {
   });
 
   
+
+  // Helper function to handle contact input with validation after submit
+  const createContactInputHandler = <T,>(
+    fieldValidation: { onInput: (value: T) => void },
+    field: keyof typeof contactSchema,
+  ) => {
+    return (value: T) => {
+      fieldValidation.onInput(value);
+      if (contactSubmitted()) {
+        contactAdapter.validateField(field);
+      }
+    };
+  };
+
+  // Helper function to handle input with validation after submit
+  const createInputHandler = <T,>(
+    fieldValidation: { onInput: (value: T) => void },
+    field: keyof typeof schema,
+  ) => {
+    return (value: T) => {
+      fieldValidation.onInput(value);
+      if (submitted()) {
+        adapter.validateField(field);
+      }
+    };
+  };
+
   return (
     <div class="page">
       <header class="hero">
