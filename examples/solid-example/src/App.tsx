@@ -1,4 +1,4 @@
-import { createSignal, For, Show } from 'solid-js';
+import { createSignal, For, Show, createEffect } from 'solid-js';
 
 import { createFieldValidation, createFormValidation } from '@tqtos/valora/adapters/solid';
 import { boolean, string } from '@tqtos/valora/validators';
@@ -27,6 +27,21 @@ const schema = {
     .isTrue({ message: 'Please accept the terms' }),
 };
 
+// Contact form schema
+const contactSchema = {
+  name: string()
+    .required({ message: 'Name is required' })
+    .minLength(2, { message: 'Name must be at least 2 characters' })
+    .maxLength(100, { message: 'Name is too long' }),
+  email: string()
+    .required({ message: 'Email is required' })
+    .email({ message: 'Valid email address is required' }),
+  message: string()
+    .required({ message: 'Message is required' })
+    .minLength(10, { message: 'Message must be at least 10 characters' })
+    .maxLength(500, { message: 'Message must not exceed 500 characters' }),
+};
+
 export default function App() {
   const { adapter, validateAll, resetAll, getValues } = createFormValidation(schema, {
     validationMode: 'onSubmit',
@@ -38,45 +53,31 @@ export default function App() {
   const terms = createFieldValidation(adapter, 'terms');
 
   const [result, setResult] = createSignal<string | null>(null);
-  const [submitted, setSubmitted] = createSignal(false);
+  
 
-  const handleSubmit = (event: Event) => {
-    event.preventDefault();
-    setSubmitted(true);
+ 
+  const [characterCounterText, setCharacterCounterText] = createSignal('10-500 characters required');
+  const [characterCounterClass, setCharacterCounterClass] = createSignal('');
 
-    // Touch tất cả fields để hiện errors
-    (Object.keys(schema) as Array<keyof typeof schema>).forEach((field) => {
-      adapter.touchField(field);
-    });
+  // Character counter effect
+  createEffect(() => {
+    const currentLength = contactMessage.value()?.length || 0;
+    const maxLength = 500;
+    const remaining = maxLength - currentLength;
 
-    const validation = validateAll();
-
-    if (validation.success) {
-      setResult(JSON.stringify(getValues(), null, 2));
+    if (currentLength >= 10) {
+      setCharacterCounterText(`${currentLength}/500 characters (${remaining} remaining)`);
+      setCharacterCounterClass('success-hint');
+    } else if (contactMessage.touched()) {
+      setCharacterCounterText(`${currentLength}/500 characters (minimum 10 required)`);
+      setCharacterCounterClass('error-hint');
     } else {
-      setResult(null);
+      setCharacterCounterText('10-500 characters required');
+      setCharacterCounterClass('');
     }
-  };
+  });
 
-  const handleReset = () => {
-    resetAll();
-    setResult(null);
-    setSubmitted(false);
-  };
-
-  // Helper function to handle input with validation after submit
-  const createInputHandler = <T,>(
-    fieldValidation: { onInput: (value: T) => void },
-    field: keyof typeof schema,
-  ) => {
-    return (value: T) => {
-      fieldValidation.onInput(value);
-      if (submitted()) {
-        adapter.validateField(field);
-      }
-    };
-  };
-
+  
   return (
     <div class="page">
       <header class="hero">
@@ -174,6 +175,111 @@ export default function App() {
           <section class="result">
             <p class="label">Result</p>
             <pre>{result()}</pre>
+          </section>
+        </Show>
+      </main>
+
+      {/* Contact Us Section */}
+      <main class="card">
+        <h2>Contact Us</h2>
+        <p class="section-description">
+          Demonstrating character counter using field subscriptions
+        </p>
+
+        <form class="form" onSubmit={handleContactSubmit}>
+          <div class="field">
+            <label for="contact-name">
+              Name <span class="required">*</span>
+            </label>
+            <input
+              id="contact-name"
+              name="name"
+              type="text"
+              value={contactName.value() ?? ''}
+              onInput={(event) =>
+                createContactInputHandler(contactName, 'name')(event.currentTarget.value)
+              }
+              onBlur={() => {
+                contactName.onBlur();
+                contactName.validate();
+              }}
+              classList={{ error: contactName.shouldShowError() }}
+              placeholder="Your name"
+            />
+            <Show when={contactName.shouldShowError()}>
+              <ul class="errors">
+                <For each={contactName.errorMessages()}>{(msg) => <li>{msg}</li>}</For>
+              </ul>
+            </Show>
+          </div>
+
+          <div class="field">
+            <label for="contact-email">
+              Email <span class="required">*</span>
+            </label>
+            <input
+              id="contact-email"
+              name="email"
+              type="email"
+              value={contactEmail.value() ?? ''}
+              onInput={(event) =>
+                createContactInputHandler(contactEmail, 'email')(event.currentTarget.value)
+              }
+              onBlur={() => {
+                contactEmail.onBlur();
+                contactEmail.validate();
+              }}
+              classList={{ error: contactEmail.shouldShowError() }}
+              placeholder="your@email.com"
+            />
+            <Show when={contactEmail.shouldShowError()}>
+              <ul class="errors">
+                <For each={contactEmail.errorMessages()}>{(msg) => <li>{msg}</li>}</For>
+              </ul>
+            </Show>
+          </div>
+
+          <div class="field">
+            <label for="contact-message">
+              Message <span class="required">*</span>
+            </label>
+            <textarea
+              id="contact-message"
+              name="message"
+              rows="5"
+              value={contactMessage.value() ?? ''}
+              onInput={(event) =>
+                createContactInputHandler(contactMessage, 'message')(event.currentTarget.value)
+              }
+              onBlur={() => {
+                contactMessage.onBlur();
+                contactMessage.validate();
+              }}
+              classList={{ error: contactMessage.shouldShowError() }}
+              placeholder="Your message here..."
+            />
+            <small class="hint" classList={{ [characterCounterClass()]: !!characterCounterClass() }}>
+              {characterCounterText()}
+            </small>
+            <Show when={contactMessage.shouldShowError()}>
+              <ul class="errors">
+                <For each={contactMessage.errorMessages()}>{(msg) => <li>{msg}</li>}</For>
+              </ul>
+            </Show>
+          </div>
+
+          <div class="actions">
+            <button type="submit">Send Message</button>
+            <button type="button" class="secondary" onClick={handleContactReset}>
+              Clear
+            </button>
+          </div>
+        </form>
+
+        <Show when={contactResult()}>
+          <section class="result">
+            <p class="label">Contact Result</p>
+            <pre>{contactResult()}</pre>
           </section>
         </Show>
       </main>
