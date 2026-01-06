@@ -172,6 +172,12 @@ const ComprehensiveDemo = () => {
         setShowSuccessModal(true);
       } else {
         // YÊU CẦU 1: Hiển thị thông báo lỗi
+        // Touch all fields to show validation errors
+        username.touch();
+        password.touch();
+        email.touch();
+        phoneNumber.touch();
+        age.touch();
         showToast(`Please fix ${result.errors.length} error(s) before submitting`, 'error');
       }
     }, 500);
