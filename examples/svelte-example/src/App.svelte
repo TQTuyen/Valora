@@ -160,6 +160,28 @@
     }
   );
 
+  const handleContactSubmit = (event: Event) => {
+    event.preventDefault();
+
+    // Touch all fields to show errors
+    contactName.touch();
+    contactEmail.touch();
+    contactMessage.touch();
+
+    const validation = validateContact();
+
+    if (validation.success) {
+      contactResult = JSON.stringify(getContactValues(), null, 2);
+    } else {
+      contactResult = null;
+    }
+  };
+
+  const handleContactReset = () => {
+    resetContact();
+    contactResult = null;
+  };
+</script>
 
 <div class="page">
   <header class="hero">
@@ -271,6 +293,104 @@
       <section class="result">
         <p class="label">Result</p>
         <pre>{result}</pre>
+      </section>
+    {/if}
+  </main>
+
+  <!-- Contact Us Section -->
+  <main class="card">
+    <h2>Contact Us</h2>
+    <p class="section-description">
+      Demonstrating character counter using field subscriptions
+    </p>
+
+    <form class="form" on:submit|preventDefault={handleContactSubmit}>
+      <div class="field">
+        <label for="contact-name">
+          Name <span class="required">*</span>
+        </label>
+        <input
+          id="contact-name"
+          name="name"
+          type="text"
+          value={$contactNameValue ?? ''}
+          on:input={(event) => contactName.onInput(event.currentTarget.value)}
+          on:blur={contactName.onBlur}
+          class:error={$contactNameShouldShowError}
+          placeholder="Your name"
+        />
+        {#if $contactNameShouldShowError}
+          <ul class="errors">
+            {#each $contactNameErrorMessages as msg}
+              <li>{msg}</li>
+            {/each}
+          </ul>
+        {/if}
+      </div>
+
+      <div class="field">
+        <label for="contact-email">
+          Email <span class="required">*</span>
+        </label>
+        <input
+          id="contact-email"
+          name="email"
+          type="email"
+          value={$contactEmailValue ?? ''}
+          on:input={(event) => contactEmail.onInput(event.currentTarget.value)}
+          on:blur={contactEmail.onBlur}
+          class:error={$contactEmailShouldShowError}
+          placeholder="your@email.com"
+        />
+        {#if $contactEmailShouldShowError}
+          <ul class="errors">
+            {#each $contactEmailErrorMessages as msg}
+              <li>{msg}</li>
+            {/each}
+          </ul>
+        {/if}
+      </div>
+
+      <div class="field">
+        <label for="contact-message">
+          Message <span class="required">*</span>
+        </label>
+        <textarea
+          id="contact-message"
+          name="message"
+          rows="5"
+          value={$contactMessageValue ?? ''}
+          on:input={(event) => contactMessage.onInput(event.currentTarget.value)}
+          on:blur={contactMessage.onBlur}
+          class:error={$contactMessageShouldShowError}
+          placeholder="Your message here..."
+        />
+        <small class="hint {$characterCounterClass}">
+          {$characterCounterText}
+        </small>
+        {#if $contactMessageShouldShowError}
+          <ul class="errors">
+            {#each $contactMessageErrorMessages as msg}
+              <li>{msg}</li>
+            {/each}
+          </ul>
+        {/if}
+      </div>
+
+      <div class="actions">
+        <button type="submit">
+          {$contactFormValidating ? 'Sending…' : 'Send Message'}
+        </button>
+        <button type="button" class="secondary" on:click={handleContactReset}>
+          Clear
+        </button>
+      </div>
+    </form>
+
+    {#if contactResult}
+      <section class="result">
+        <p class="label">Contact Result</p>
+        <pre>{contactResult}</pre>
       </section>
     {/if}
   </main>
