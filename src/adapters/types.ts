@@ -5,6 +5,7 @@
  * Type definitions for framework adapter interfaces.
  */
 
+import type { IValidator, ValidationResult } from '#types/index';
 import type {
   FieldChangeCallback,
   FieldState,
@@ -12,7 +13,6 @@ import type {
   FormState,
   Unsubscribe,
 } from '@notification/types';
-import type { IValidator, ValidationResult } from '#types/index';
 
 /**
  * Framework adapter interface

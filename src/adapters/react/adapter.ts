@@ -34,6 +34,7 @@ export class ReactAdapter<T extends Record<string, unknown>> extends BaseFramewo
         setFieldState({ ...state });
       });
 
+      /* v8 ignore next 3 */
       return () => {
         unsubscribe();
       };
@@ -65,6 +66,7 @@ export class ReactAdapter<T extends Record<string, unknown>> extends BaseFramewo
         setFormState({ ...state });
       });
 
+      /* v8 ignore next 3 */
       return () => {
         unsubscribe();
       };
