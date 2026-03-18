@@ -6,6 +6,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { I18nPlugin } from '@/plugins/i18n/plugin';
+import { configureI18n, getI18n, setI18n, t as globalT } from '@/plugins/i18n/global';
 
 describe('I18nPlugin', () => {
   let i18n: I18nPlugin;
@@ -637,5 +638,53 @@ describe('I18nPlugin', () => {
 
       expect(enKeys.sort()).toEqual(viKeys.sort());
     });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Global i18n functions (global.ts coverage)
+// ---------------------------------------------------------------------------
+
+describe('Global i18n functions', () => {
+  it('getI18n() returns an I18nPlugin instance', () => {
+    const instance = getI18n();
+    expect(instance).toBeInstanceOf(I18nPlugin);
+  });
+
+  it('setI18n() replaces the global instance', () => {
+    const custom = new I18nPlugin({ defaultLocale: 'vi' });
+    setI18n(custom);
+    expect(getI18n()).toBe(custom);
+    // Restore to default
+    setI18n(new I18nPlugin());
+  });
+
+  it('configureI18n() creates and sets a new global instance', () => {
+    const instance = configureI18n({ defaultLocale: 'en' });
+    expect(instance).toBeInstanceOf(I18nPlugin);
+    expect(getI18n()).toBe(instance);
+  });
+
+  it('t() global function translates using global i18n', () => {
+    configureI18n({ defaultLocale: 'en' });
+    const result = globalT('string.required');
+    expect(typeof result).toBe('string');
+    expect(result.length).toBeGreaterThan(0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// plugin.ts: getMessage() with unloaded fallback locale (line 196)
+// ---------------------------------------------------------------------------
+
+describe('I18nPlugin getMessage with unloaded fallback locale', () => {
+  it('returns key when fallback locale has no messages', () => {
+    const i18n = new I18nPlugin({ defaultLocale: 'en' });
+    // Set fallback to a locale that is not loaded
+    i18n.setFallbackLocale('zz');
+    // 'en' has 'string.required' but 'zz' does not
+    // This forces getMessage('zz', key) which returns undefined (line 196)
+    const result = i18n.t('nonexistent.key.xyz');
+    expect(result).toBe('nonexistent.key.xyz');
   });
 });

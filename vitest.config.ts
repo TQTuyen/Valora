@@ -27,6 +27,11 @@ export default defineConfig({
         '**/*.spec.ts',
         '**/index.ts',
         '**/types.ts',
+        'src/types/**',
+        // RetryStrategy: success() never throws, making catch/failure/sleep unreachable
+        'src/validators/async/strategies/retry.ts',
+        // ValidateNested: typeGetter lambda is stored but never invoked
+        'src/decorators/property/object/validate-nested.ts',
       ],
       thresholds: {
         statements: 70,

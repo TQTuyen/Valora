@@ -381,3 +381,76 @@ describe('Date Validator', () => {
     });
   });
 });
+
+describe('Date validator alias/uncovered methods', () => {
+  const ctx = createContext();
+
+  it('between() is alias for range()', () => {
+    const validator = date().between('2024-01-01', '2024-12-31');
+    expectSuccess(validator.validate(new Date('2024-06-15'), ctx));
+    expectFailure(validator.validate(new Date('2025-01-01'), ctx));
+  });
+
+  it('range() validates date is within min/max', () => {
+    const validator = date().range('2024-01-01', '2024-12-31');
+    expectSuccess(validator.validate(new Date('2024-06-15'), ctx));
+    expectFailure(validator.validate(new Date('2023-12-31'), ctx));
+  });
+
+  it('ageRange() validates age is within range', () => {
+    const now = new Date();
+    const thirtyYearsAgo = new Date(now.getFullYear() - 30, now.getMonth(), now.getDate());
+    const validator = date().ageRange(18, 65);
+    expectSuccess(validator.validate(thirtyYearsAgo, ctx));
+  });
+
+  it('clone preserves customMessage', () => {
+    const validator = date();
+    // @ts-expect-error: accessing protected field for testing
+    validator.customMessage = 'custom date msg';
+    const cloned = validator.min(new Date('2024-01-01'));
+    // @ts-expect-error: accessing protected field for testing
+    expect(cloned.customMessage).toBe('custom date msg');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Age boundary edge case: birthday not yet reached this year (age--)
+// ---------------------------------------------------------------------------
+
+describe('Max/Min age birthday-not-yet-reached edge case', () => {
+  const ctx = createContext();
+
+  it('maxAge: counts correctly when birthday is later this month', () => {
+    const today = new Date();
+    // Birthday is tomorrow → age hasn't been reached yet
+    const tomorrow = new Date(today.getFullYear() - 20, today.getMonth(), today.getDate() + 1);
+    const validator = date().maxAge(21);
+    // Person is 19 years old (birthday not yet reached), maxAge is 21 → valid
+    expectSuccess(validator.validate(tomorrow, ctx));
+  });
+
+  it('maxAge: counts correctly when birthday is earlier this month', () => {
+    const today = new Date();
+    // Birthday was yesterday → age already reached
+    const yesterday = new Date(today.getFullYear() - 20, today.getMonth(), today.getDate() - 1);
+    const validator = date().maxAge(19);
+    // Person is 20 years old, maxAge is 19 → invalid
+    expectFailure(validator.validate(yesterday, ctx));
+  });
+
+  it('minAge: counts correctly when birthday is later this month', () => {
+    const today = new Date();
+    const tomorrow = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate() + 1);
+    const validator = date().minAge(18);
+    // Person is 17, minAge is 18 → invalid
+    expectFailure(validator.validate(tomorrow, ctx));
+  });
+
+  it('minAge: counts correctly when birthday is in a previous month', () => {
+    const today = new Date();
+    const lastMonth = new Date(today.getFullYear() - 20, today.getMonth() - 1, 1);
+    const validator = date().minAge(18);
+    expectSuccess(validator.validate(lastMonth, ctx));
+  });
+});

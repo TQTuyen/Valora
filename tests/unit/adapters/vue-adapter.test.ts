@@ -274,3 +274,20 @@ describe('Vue Adapter', () => {
     });
   });
 });
+
+// ---------------------------------------------------------------------------
+// Branch coverage: useField() with uninitialized state covers ?? defaults
+// ---------------------------------------------------------------------------
+
+describe('VueAdapter - undefined state defaults', () => {
+  it('useField() with no initial state uses default values for refs', () => {
+    const adapter = new VueAdapter<{ name: string }>({} as Record<string, never>);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const field = adapter.useField('name' as any);
+    expect(field.touched.value).toBe(false);
+    expect(field.dirty.value).toBe(false);
+    expect(field.validating.value).toBe(false);
+    expect(field.isValid.value).toBe(true);
+    expect(Array.isArray(field.errors.value)).toBe(true);
+  });
+});

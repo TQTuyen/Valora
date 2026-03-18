@@ -384,4 +384,34 @@ describe('File Validator', () => {
       expectFailure(await productImageValidator.validateAsync(rectangularImage, ctx));
     });
   });
+
+  describe('FileValidator methods', () => {
+    it('cancel() should not throw', () => {
+      const validator = file().mimeType(MIME_TYPES.IMAGE);
+      expect(() => validator.cancel()).not.toThrow();
+    });
+
+    it('isPending() should return false', () => {
+      const validator = file().mimeType(MIME_TYPES.IMAGE);
+      expect(validator.isPending()).toBe(false);
+    });
+
+    it('validateAsync should handle error thrown by strategy', async () => {
+      const validator = file();
+      // Add strategy that throws
+      (validator as unknown as { strategies: object[] }).strategies = [{
+        validate: () => { throw new Error('strategy error'); },
+      }];
+      const mockFile = createMockFile('image/jpeg', 1000, 'test.jpg');
+      const result = await validator.validateAsync(mockFile, ctx);
+      expect(result.success).toBe(false);
+    });
+
+    it('validateAsync without context uses createContext', async () => {
+      const validator = file().mimeType(MIME_TYPES.IMAGE);
+      const mockFile = createMockFile('image/jpeg', 1000, 'photo.jpg');
+      const result = await validator.validateAsync(mockFile);
+      expect(result.success).toBe(true);
+    });
+  });
 });

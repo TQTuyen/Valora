@@ -1,4 +1,4 @@
-import { omit } from '@utils/object';
+import { deepMerge, omit, pick } from '@utils/object';
 import { describe, expect, it } from 'vitest';
 
 describe('utils/object', () => {
@@ -38,6 +38,40 @@ describe('utils/object', () => {
       const obj = { a: 1, b: 'string', c: true, d: { nested: true } };
       const result = omit(obj, ['b', 'c']);
       expect(result).toEqual({ a: 1, d: { nested: true } });
+    });
+  });
+
+  describe('pick', () => {
+    it('should pick specified keys', () => {
+      const obj = { a: 1, b: 2, c: 3 };
+      expect(pick(obj, ['a', 'c'])).toEqual({ a: 1, c: 3 });
+    });
+
+    it('should return empty object for empty keys', () => {
+      const obj = { a: 1, b: 2 };
+      expect(pick(obj, [])).toEqual({});
+    });
+  });
+
+  describe('deepMerge', () => {
+    it('should merge flat objects', () => {
+      const result = deepMerge({ a: 1, b: 2 }, { b: 3, c: 4 });
+      expect(result).toEqual({ a: 1, b: 3, c: 4 });
+    });
+
+    it('should deeply merge nested objects', () => {
+      const result = deepMerge({ a: { b: 1 } }, { a: { c: 2 } });
+      expect(result).toEqual({ a: { b: 1, c: 2 } });
+    });
+
+    it('should not override with undefined', () => {
+      const result = deepMerge({ a: 1 }, { a: undefined });
+      expect(result.a).toBe(1);
+    });
+
+    it('should overwrite with non-object source value', () => {
+      const result = deepMerge({ a: { b: 1 } }, { a: 42 as unknown as { b: number } });
+      expect(result.a).toBe(42);
     });
   });
 });

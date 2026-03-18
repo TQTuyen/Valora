@@ -462,5 +462,19 @@ describe('Base Framework Adapter', () => {
       expect(bindings.onBlur).toBeInstanceOf(Function);
       expect(bindings.hasError).toBe(false);
     });
+
+    it('should call onChange and onBlur handlers', () => {
+      const validators = { name: string() };
+      const adapter = new TestAdapter(validators);
+      const bindings = getFieldBindings(adapter, 'name');
+
+      // Call onChange
+      bindings.onChange('Alice');
+      expect(adapter.getFieldState('name')?.value).toBe('Alice');
+
+      // Call onBlur
+      bindings.onBlur();
+      expect(adapter.getFieldState('name')?.touched).toBe(true);
+    });
   });
 });

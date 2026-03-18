@@ -86,4 +86,28 @@ describe('Boolean Validator', () => {
       expectSuccess(validator.validate(true, ctx), true);
     });
   });
+
+  describe('Alias methods and clone with customMessage', () => {
+    it('true() is alias for isTrue()', () => {
+      const validator = boolean().true();
+      expectSuccess(validator.validate(true, ctx), true);
+    });
+
+    it('false() is alias for isFalse()', () => {
+      const validator = boolean().false();
+      expectSuccess(validator.validate(false, ctx), false);
+    });
+
+    it('clone preserves customMessage', () => {
+      // withMessage sets customMessage and returns MessageDecorator
+      // To test clone with customMessage, use the internal clone via addStrategy
+      const validator = boolean();
+      // @ts-expect-error: accessing protected field for testing
+      validator.customMessage = 'custom msg';
+      // addStrategy calls clone() which should copy customMessage
+      const cloned = validator.isTrue();
+      // @ts-expect-error: accessing protected field for testing
+      expect(cloned.customMessage).toBe('custom msg');
+    });
+  });
 });
