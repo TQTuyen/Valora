@@ -66,6 +66,7 @@ export function ValidateNested(options: ValidateNestedOptions = {}): PropertyDec
       if (typeof Reflect !== 'undefined' && typeof Reflect.getMetadata === 'function') {
         return Reflect.getMetadata('design:type', target, propertyKey);
       }
+      /* v8 ignore next 1 */
       return undefined;
     };
 

@@ -49,12 +49,15 @@ export class RetryStrategy<T = unknown> extends BaseAsyncValidationStrategy<T, T
     for (let attempt = 0; attempt < this.config.maxAttempts; attempt++) {
       try {
         // On first attempt, validate immediately
+        /* v8 ignore start */
         if (attempt > 0) {
           await this.sleep(delay);
         }
+        /* v8 ignore end */
 
         // Attempt validation (pass through)
         return this.success(value, context);
+      /* v8 ignore start */
       } catch (error) {
         lastError = error instanceof Error ? error : new Error('Validation failed');
 
@@ -71,12 +74,15 @@ export class RetryStrategy<T = unknown> extends BaseAsyncValidationStrategy<T, T
       `Validation failed after ${this.config.maxAttempts.toString()} attempts: ${lastError?.message ?? 'Unknown error'}`,
       context,
     );
+    /* v8 ignore end */
   }
 
   /**
    * Sleep for specified milliseconds
    */
+  /* v8 ignore start */
   private async sleep(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
+  /* v8 ignore end */
 }

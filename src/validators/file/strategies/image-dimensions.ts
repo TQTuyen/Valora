@@ -57,6 +57,7 @@ export class ImageDimensionsStrategy extends BaseAsyncValidationStrategy<ImageFi
     let height = value.height;
 
     // If dimensions not provided and it's a browser File, try to load the image
+    /* v8 ignore next 12 */
     if ((width === undefined || height === undefined) && typeof window !== 'undefined') {
       try {
         const dimensions = await this.loadImageDimensions(value);
@@ -127,6 +128,7 @@ export class ImageDimensionsStrategy extends BaseAsyncValidationStrategy<ImageFi
   /**
    * Load image dimensions from a File object (browser only)
    */
+  /* v8 ignore next 24 */
   private async loadImageDimensions(
     file: ValidatableFile,
   ): Promise<{ width: number; height: number }> {

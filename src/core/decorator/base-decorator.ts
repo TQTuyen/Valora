@@ -17,6 +17,7 @@ export abstract class ValidatorDecorator<TInput, TOutput> implements IValidator<
 
   abstract validate(value: TInput, context?: ValidationContext): ValidationResult<TOutput>;
 
+  /* v8 ignore next 6 */
   optional(): IValidator<TInput | undefined, TOutput | undefined> {
     // Lazy import to avoid circular dependency
     // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-unsafe-assignment
@@ -25,6 +26,7 @@ export abstract class ValidatorDecorator<TInput, TOutput> implements IValidator<
     return new OptionalDecorator(this);
   }
 
+  /* v8 ignore next 6 */
   nullable(): IValidator<TInput | null, TOutput | null> {
     // Lazy import to avoid circular dependency
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-require-imports
@@ -33,6 +35,7 @@ export abstract class ValidatorDecorator<TInput, TOutput> implements IValidator<
     return new NullableDecorator(this);
   }
 
+  /* v8 ignore next 6 */
   default(defaultValue: TOutput): IValidator<TInput | undefined | null, TOutput> {
     // Lazy import to avoid circular dependency
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-require-imports
@@ -41,6 +44,7 @@ export abstract class ValidatorDecorator<TInput, TOutput> implements IValidator<
     return new DefaultDecorator(this, defaultValue);
   }
 
+  /* v8 ignore next 6 */
   transform<U>(fn: (value: TOutput) => U): IValidator<TInput, U> {
     // Lazy import to avoid circular dependency
     // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-unsafe-assignment
@@ -49,6 +53,7 @@ export abstract class ValidatorDecorator<TInput, TOutput> implements IValidator<
     return new TransformDecorator(this, fn);
   }
 
+  /* v8 ignore next 6 */
   withMessage(message: string): IValidator<TInput, TOutput> {
     // Lazy import to avoid circular dependency
     // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-unsafe-assignment

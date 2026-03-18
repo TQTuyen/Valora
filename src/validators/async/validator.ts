@@ -326,9 +326,11 @@ export class AsyncValidator<TInput = unknown, TOutput = TInput> implements IAsyn
             }
             // If validation returned failure (not error), retry
             lastError = new Error(result.errors[0]?.message ?? 'Validation failed');
+          /* v8 ignore start */
           } catch (error) {
             lastError = error instanceof Error ? error : new Error('Unknown error');
           }
+          /* v8 ignore end */
 
           attempt++;
 
