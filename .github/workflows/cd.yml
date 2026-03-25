@@ -15,10 +15,6 @@ on:
           - "false"
           - "true"
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-
 permissions:
   contents: write
   id-token: write
