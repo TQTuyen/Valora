@@ -57,7 +57,7 @@ export class RetryStrategy<T = unknown> extends BaseAsyncValidationStrategy<T, T
 
         // Attempt validation (pass through)
         return this.success(value, context);
-      /* v8 ignore start */
+        /* v8 ignore start */
       } catch (error) {
         lastError = error instanceof Error ? error : new Error('Validation failed');
 
