@@ -55,17 +55,17 @@ describe('utils/object', () => {
 
   describe('deepMerge', () => {
     it('should merge flat objects', () => {
-      const result = deepMerge({ a: 1, b: 2 }, { b: 3, c: 4 });
-      expect(result).toEqual({ a: 1, b: 3, c: 4 });
+      const result = deepMerge({ a: 1, b: 2 }, { b: 3 } as Partial<{ a: number; b: number }>);
+      expect(result).toEqual({ a: 1, b: 3 });
     });
 
     it('should deeply merge nested objects', () => {
-      const result = deepMerge({ a: { b: 1 } }, { a: { c: 2 } });
+      const result = deepMerge({ a: { b: 1 } }, { a: { c: 2 } } as Partial<{ a: Record<string, unknown> }>);
       expect(result).toEqual({ a: { b: 1, c: 2 } });
     });
 
     it('should not override with undefined', () => {
-      const result = deepMerge({ a: 1 }, { a: undefined });
+      const result = deepMerge({ a: 1 } as Record<string, unknown>, { a: undefined });
       expect(result.a).toBe(1);
     });
 

@@ -5,13 +5,6 @@
  */
 
 import type {
-  IValidationObserver,
-  IValidator,
-  ValidationContext,
-  ValidationEvent,
-  ValidationResult,
-} from '#types/index';
-import type {
   FieldChangeCallback,
   FieldState,
   FormChangeCallback,
@@ -20,6 +13,13 @@ import type {
   Unsubscribe,
   ValidationMode,
 } from './types';
+import type {
+  IValidationObserver,
+  IValidator,
+  ValidationContext,
+  ValidationEvent,
+  ValidationResult,
+} from '#types/index';
 
 /**
  * Form state manager with Observer pattern

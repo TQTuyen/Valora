@@ -178,7 +178,7 @@ describe('Object selection transforms', () => {
 
 describe('Object mapping transforms', () => {
   it('mapValues: transforms values', () => {
-    const result = mapValues((v: number) => v * 2)({ a: 1, b: 2 });
+    const result = mapValues((v: unknown) => (v as number) * 2)({ a: 1, b: 2 });
     expect(result).toEqual({ a: 2, b: 4 });
   });
 
@@ -197,11 +197,11 @@ describe('Object mapping transforms', () => {
 
 describe('Object merging transforms', () => {
   it('merge: merges source into target', () => {
-    expect(merge({ b: 3 })({ a: 1, b: 2 })).toEqual({ a: 1, b: 3 });
+    expect(merge<Record<string, number>>({ b: 3 })({ a: 1, b: 2 })).toEqual({ a: 1, b: 3 });
   });
 
   it('defaults: source values only fill missing keys', () => {
-    expect(defaults({ a: 99, c: 3 })({ a: 1, b: 2 })).toEqual({ a: 1, b: 2, c: 3 });
+    expect(defaults<Record<string, number>>({ a: 99, c: 3 })({ a: 1, b: 2 })).toEqual({ a: 1, b: 2, c: 3 });
   });
 
   it('deepMerge: merges deeply nested objects', () => {

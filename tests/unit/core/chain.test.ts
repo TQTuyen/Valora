@@ -68,7 +68,7 @@ describe('BaseValidationHandler', () => {
     const result = fail.handle('x', ctx);
     expect(result.success).toBe(false);
     expect(result.errors.length).toBe(1);
-    expect(result.errors[0].code).toBe('test.fail');
+    expect(result.errors[0]?.code).toBe('test.fail');
   });
 });
 

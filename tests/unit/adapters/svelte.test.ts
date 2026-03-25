@@ -4,7 +4,7 @@
  * Mocks svelte/store and svelte to test the SvelteAdapter in a Node environment.
  */
 
-import { vi, describe, expect, it, beforeEach } from 'vitest';
+import { vi, describe, expect, it } from 'vitest';
 
 // ── Minimal Svelte store mock ─────────────────────────────────────────────────
 
@@ -91,7 +91,7 @@ import { number } from '@validators/number';
 
 type TestForm = { name: string; email: string; age: number };
 
-function makeAdapter(opts?: Parameters<typeof SvelteAdapter>[1]) {
+function makeAdapter(opts?: ConstructorParameters<typeof SvelteAdapter>[1]) {
   return new SvelteAdapter<TestForm>(
     { name: string().required(), email: string().email(), age: number().min(0) },
     opts,

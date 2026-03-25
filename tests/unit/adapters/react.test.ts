@@ -35,7 +35,7 @@ import { number } from '@validators/number';
 
 type TestForm = { name: string; email: string; age: number };
 
-function makeAdapter(opts?: Parameters<typeof ReactAdapter>[1]) {
+function makeAdapter(opts?: ConstructorParameters<typeof ReactAdapter>[1]) {
   return new ReactAdapter<TestForm>(
     { name: string().required(), email: string().email(), age: number().min(0) },
     opts,

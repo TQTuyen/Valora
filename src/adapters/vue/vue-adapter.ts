@@ -14,8 +14,8 @@ import {
 } from '../adapter-utils';
 import { BaseFrameworkAdapter } from '../base-adapter';
 
-import type { FieldState, FormState } from '@notification/types';
 import type { VueFieldBindings, VueFieldState, VueFormState } from './types';
+import type { FieldState, FormState } from '@notification/types';
 
 /**
  * Vue adapter for Valora validation framework

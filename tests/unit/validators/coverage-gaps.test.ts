@@ -208,7 +208,6 @@ describe('AsyncValidator edge cases', () => {
   it('debounce clear-timeout: second call before debounce fires clears previous timeout', async () => {
     // This covers the `clearTimeout(this.debounceTimeoutId)` branch in validateAsync
     // Use fake timers to control timing precisely
-    const { vi } = await import('vitest');
     vi.useFakeTimers();
 
     const v = asyncValidator(async (value: string) => ({
@@ -233,9 +232,6 @@ describe('AsyncValidator edge cases', () => {
   it('validateFn catch: raw strategy that throws is caught by validateFn', async () => {
     // This covers lines 299-305 (catch block in validateFn in executeAsyncValidation)
     // Inject a raw strategy that throws directly (not wrapped by AsyncStrategy)
-    const v = new (asyncValidator as unknown as { new(): typeof asyncValidator })(
-      async () => ({ success: true, data: 'ok', errors: [] }),
-    );
     // Access private strategies and inject a throwing strategy
     const validator = asyncValidator(async (val: string) => ({
       success: true,

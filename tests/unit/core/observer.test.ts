@@ -11,6 +11,8 @@ function makeEvent(type: 'start' | 'end' | 'error'): ValidationEvent {
   return {
     type,
     field: 'email',
+    value: undefined,
+    timestamp: Date.now(),
     result: { success: true, errors: [], data: undefined },
   };
 }

@@ -315,7 +315,7 @@ describe('FormStateManager', () => {
       const callback = vi.fn();
       mgr.subscribeToField('name', callback);
       expect(callback).toHaveBeenCalledOnce();
-      expect(callback.mock.calls[0][0].value).toBe('Bob');
+      expect(callback.mock.calls[0]?.[0].value).toBe('Bob');
     });
 
     it('should notify subscriber on field change', () => {
@@ -378,7 +378,7 @@ describe('FormStateManager', () => {
   describe('Observer implementation', () => {
     it('onValidationStart should set validating = true', () => {
       const mgr = makeManager();
-      mgr.onValidationStart({ type: 'start', field: 'name', result: { success: true, errors: [], data: undefined } });
+      mgr.onValidationStart({ type: 'start', field: 'name', value: undefined, timestamp: Date.now(), result: { success: true, errors: [], data: undefined } });
       expect(mgr.getFieldState('name')?.validating).toBe(true);
     });
 
@@ -387,6 +387,8 @@ describe('FormStateManager', () => {
       mgr.onValidationEnd({
         type: 'end',
         field: 'name',
+        value: undefined,
+        timestamp: Date.now(),
         result: { success: false, errors: [{ code: 'err', message: 'bad', path: [], field: 'name' }], data: undefined },
       });
       expect(mgr.getFieldState('name')?.isValid).toBe(false);
@@ -398,6 +400,8 @@ describe('FormStateManager', () => {
       mgr.onValidationError({
         type: 'error',
         field: 'name',
+        value: undefined,
+        timestamp: Date.now(),
         result: { success: false, errors: [{ code: 'err', message: 'bad', path: [], field: 'name' }], data: undefined },
       });
       expect(mgr.getFieldState('name')?.isValid).toBe(false);
@@ -406,21 +410,21 @@ describe('FormStateManager', () => {
     it('onValidationStart should ignore unknown fields', () => {
       const mgr = makeManager();
       expect(() =>
-        mgr.onValidationStart({ type: 'start', field: 'unknown', result: { success: true, errors: [], data: undefined } }),
+        mgr.onValidationStart({ type: 'start', field: 'unknown', value: undefined, timestamp: Date.now(), result: { success: true, errors: [], data: undefined } }),
       ).not.toThrow();
     });
 
     it('onValidationEnd should ignore unknown fields', () => {
       const mgr = makeManager();
       expect(() =>
-        mgr.onValidationEnd({ type: 'end', field: 'unknown', result: { success: true, errors: [], data: undefined } }),
+        mgr.onValidationEnd({ type: 'end', field: 'unknown', value: undefined, timestamp: Date.now(), result: { success: true, errors: [], data: undefined } }),
       ).not.toThrow();
     });
 
     it('onValidationError should ignore unknown fields', () => {
       const mgr = makeManager();
       expect(() =>
-        mgr.onValidationError({ type: 'error', field: 'unknown', result: { success: false, errors: [], data: undefined } }),
+        mgr.onValidationError({ type: 'error', field: 'unknown', value: undefined, timestamp: Date.now(), result: { success: false, errors: [], data: undefined } }),
       ).not.toThrow();
     });
   });
@@ -468,7 +472,7 @@ describe('createFieldValidator', () => {
     const cb = vi.fn();
     field.subscribe(cb);
     expect(cb).toHaveBeenCalledOnce();
-    expect(cb.mock.calls[0][0].value).toBe('Alice');
+    expect(cb.mock.calls[0]?.[0].value).toBe('Alice');
   });
 
   it('subscribe returns unsubscribe function', () => {

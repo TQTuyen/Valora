@@ -6,7 +6,7 @@ import { SimpleObserver } from '@core/observer/simple-observer';
 import { describe, expect, it, vi } from 'vitest';
 
 function makeEvent(type: 'start' | 'end' | 'error') {
-  return { type, field: 'x', result: { success: true, errors: [], data: undefined } };
+  return { type, field: 'x', value: undefined, timestamp: Date.now(), result: { success: true, errors: [], data: undefined } };
 }
 
 describe('SimpleObserver', () => {

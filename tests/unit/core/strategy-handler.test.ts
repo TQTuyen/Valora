@@ -4,7 +4,6 @@
 
 import { StrategyHandler } from '@core/chain/strategy-handler';
 import { ValidationPipeline } from '@core/chain/pipeline';
-import { string } from '@validators/string';
 import { describe, expect, it } from 'vitest';
 
 import type { IValidationStrategy, ValidationContext, ValidationResult } from '#types/index';
@@ -31,11 +30,12 @@ class FailStrategy implements IValidationStrategy<string, string> {
   }
 }
 
-// An async strategy (to trigger the error branch)
+// An async strategy (to trigger the error branch - intentionally returns a Promise
+// from a sync interface to test runtime handling)
 class AsyncStrategy implements IValidationStrategy<string, string> {
   readonly name = 'async';
-  validate(value: string): Promise<ValidationResult<string>> {
-    return Promise.resolve({ success: true, data: value, errors: [] });
+  validate(value: string): ValidationResult<string> {
+    return Promise.resolve({ success: true, data: value, errors: [] }) as unknown as ValidationResult<string>;
   }
 }
 

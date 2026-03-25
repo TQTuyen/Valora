@@ -9,8 +9,8 @@ describe('ValidationEventEmitter', () => {
   it('should call listener when event is emitted', () => {
     const emitter = new ValidationEventEmitter();
     const listener = vi.fn();
-    emitter.on('start', listener);
-    emitter.emit('start', { field: 'x' });
+    emitter.on('validation:start', listener);
+    emitter.emit('validation:start', { field: 'x' });
     expect(listener).toHaveBeenCalledWith({ field: 'x' });
   });
 
@@ -18,9 +18,9 @@ describe('ValidationEventEmitter', () => {
     const emitter = new ValidationEventEmitter();
     const a = vi.fn();
     const b = vi.fn();
-    emitter.on('end', a);
-    emitter.on('end', b);
-    emitter.emit('end', 'data');
+    emitter.on('validation:end', a);
+    emitter.on('validation:end', b);
+    emitter.emit('validation:end', 'data');
     expect(a).toHaveBeenCalledOnce();
     expect(b).toHaveBeenCalledOnce();
   });
@@ -28,31 +28,31 @@ describe('ValidationEventEmitter', () => {
   it('should not call listeners for other events', () => {
     const emitter = new ValidationEventEmitter();
     const listener = vi.fn();
-    emitter.on('start', listener);
-    emitter.emit('end', {});
+    emitter.on('validation:start', listener);
+    emitter.emit('validation:end', {});
     expect(listener).not.toHaveBeenCalled();
   });
 
   it('should return unsubscribe function that removes the listener', () => {
     const emitter = new ValidationEventEmitter();
     const listener = vi.fn();
-    const unsub = emitter.on('start', listener);
+    const unsub = emitter.on('validation:start', listener);
     unsub();
-    emitter.emit('start', {});
+    emitter.emit('validation:start', {});
     expect(listener).not.toHaveBeenCalled();
   });
 
   it('should do nothing when emitting event with no listeners', () => {
     const emitter = new ValidationEventEmitter();
-    expect(() => emitter.emit('start', {})).not.toThrow();
+    expect(() => emitter.emit('validation:start', {})).not.toThrow();
   });
 
   it('should remove all listeners for an event with off()', () => {
     const emitter = new ValidationEventEmitter();
     const listener = vi.fn();
-    emitter.on('error', listener);
-    emitter.off('error');
-    emitter.emit('error', {});
+    emitter.on('validation:error', listener);
+    emitter.off('validation:error');
+    emitter.emit('validation:error', {});
     expect(listener).not.toHaveBeenCalled();
   });
 
@@ -60,11 +60,11 @@ describe('ValidationEventEmitter', () => {
     const emitter = new ValidationEventEmitter();
     const a = vi.fn();
     const b = vi.fn();
-    emitter.on('start', a);
-    emitter.on('end', b);
+    emitter.on('validation:start', a);
+    emitter.on('validation:end', b);
     emitter.clear();
-    emitter.emit('start', {});
-    emitter.emit('end', {});
+    emitter.emit('validation:start', {});
+    emitter.emit('validation:end', {});
     expect(a).not.toHaveBeenCalled();
     expect(b).not.toHaveBeenCalled();
   });
@@ -79,8 +79,8 @@ describe('createEventEmitter', () => {
   it('should be functional', () => {
     const emitter = createEventEmitter();
     const listener = vi.fn();
-    emitter.on('start', listener);
-    emitter.emit('start', 'test');
+    emitter.on('validation:start', listener);
+    emitter.emit('validation:start', 'test');
     expect(listener).toHaveBeenCalledWith('test');
   });
 });

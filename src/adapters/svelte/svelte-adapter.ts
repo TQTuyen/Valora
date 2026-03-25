@@ -14,8 +14,8 @@ import {
 } from '../adapter-utils';
 import { BaseFrameworkAdapter } from '../base-adapter';
 
-import type { FieldState, FormState } from '@notification/types';
 import type { SvelteFieldBindings, SvelteFieldState, SvelteFormState } from './types';
+import type { FieldState, FormState } from '@notification/types';
 
 /**
  * Svelte adapter for Valora

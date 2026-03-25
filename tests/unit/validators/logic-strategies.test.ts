@@ -158,7 +158,7 @@ describe('NotStrategy', () => {
 
 describe('UnionStrategy', () => {
   it('should pass when first validator passes', () => {
-    const strategy = new UnionStrategy([string().email(), number()]);
+    const strategy = new UnionStrategy<unknown, unknown>([string().email(), number()]);
     expect(strategy.validate('user@example.com', ctx).success).toBe(true);
   });
 
