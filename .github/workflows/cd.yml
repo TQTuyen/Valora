@@ -179,7 +179,12 @@ jobs:
         run: |
           VERSION="${{ needs.validate.outputs.version }}"
 
-          result_icon() { [[ "$1" == "success" ]] && echo "OK" || [[ "$1" == "skipped" ]] && echo "SKIP" || echo "FAIL"; }
+          result_icon() {
+            if [[ "$1" == "success" ]]; then echo "OK"
+            elif [[ "$1" == "skipped" ]]; then echo "SKIP"
+            else echo "FAIL"
+            fi
+          }
 
           {
             echo "## CD Release Summary - v$VERSION"
@@ -192,5 +197,8 @@ jobs:
             echo "| Dry Run    | $(result_icon "${{ needs.publish-dry-run.result }}") \`${{ needs.publish-dry-run.result }}\` |"
             echo "| Publish    | $(result_icon "${{ needs.publish.result }}") \`${{ needs.publish.result }}\` |"
             echo "| GH Release | $(result_icon "${{ needs.github-release.result }}") \`${{ needs.github-release.result }}\` |"
-            [[ "${{ github.event.inputs.dry_run }}" == "true" ]] && echo "" && echo "> **Dry run** - publish and release were skipped."
+            if [[ "${{ github.event.inputs.dry_run }}" == "true" ]]; then
+              echo ""
+              echo "> **Dry run** - publish and release were skipped."
+            fi
           } >> "$GITHUB_STEP_SUMMARY"
