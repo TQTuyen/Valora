@@ -17,7 +17,7 @@ export function pathToString(path: ReadonlyArray<string | number>): string {
     return '';
   }
 
-  return path.reduce<string>((acc, segment, index) => {
+  return path.reduce((acc: string, segment, index) => {
     if (typeof segment === 'number') {
       return `${acc}[${String(segment)}]`;
     }
