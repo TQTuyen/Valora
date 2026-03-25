@@ -11,10 +11,6 @@ on:
       CODECOV_TOKEN:
         required: false
 
-concurrency:
-  group: ${{ github.workflow }}-ci-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   lint:
     name: Lint
