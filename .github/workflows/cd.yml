@@ -1,0 +1,200 @@
+name: CD
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run (skip publish)"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  id-token: write
+  packages: write
+
+jobs:
+  # ─────────────────────────────────────────────────────────────────────────────
+  # VALIDATE — Ensure tag matches package.json version
+  # ─────────────────────────────────────────────────────────────────────────────
+  validate:
+    name: Validate Release
+    uses: TQTuyen/ci-cd-toolkit/.github/workflows/cd-validate-version.yml@main
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # QUALITY — Reuse ci.yml on the exact commit being released
+  # ─────────────────────────────────────────────────────────────────────────────
+  quality:
+    name: Quality Gate
+    needs: validate
+    uses: ./.github/workflows/ci.yml
+    secrets: inherit
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # BUILD — Produce the dist artifacts that will be published
+  # ─────────────────────────────────────────────────────────────────────────────
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: [validate, quality]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: TQTuyen/ci-cd-toolkit/.github/actions/setup-node@main
+        with:
+          package-manager: bun
+
+      - name: Build package
+        run: bun run build
+
+      - name: Verify dist exports
+        run: |
+          echo "dist/ contents:"
+          ls -lh dist/
+          echo ""
+
+          REQUIRED_FILES=(
+            "dist/index.js"
+            "dist/index.d.ts"
+            "dist/validators/index.js"
+            "dist/adapters/index.js"
+            "dist/decorators/index.js"
+            "dist/plugins/index.js"
+            "dist/schema/index.js"
+          )
+
+          ALL_OK=true
+          for f in "${REQUIRED_FILES[@]}"; do
+            if [[ -f "$f" ]]; then
+              echo "  OK: $f"
+            else
+              echo "  MISSING: $f"
+              ALL_OK=false
+            fi
+          done
+
+          [[ "$ALL_OK" == "false" ]] && { echo "Required dist files missing"; exit 1; }
+          echo "All required dist files present"
+
+      - name: Bundle size report
+        run: |
+          echo "## Bundle Sizes" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| File | Size |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|------|------|" >> "$GITHUB_STEP_SUMMARY"
+          find dist -name "*.js" | sort | while read -r f; do
+            SIZE=$(du -sh "$f" | cut -f1)
+            echo "| \`$f\` | $SIZE |" >> "$GITHUB_STEP_SUMMARY"
+          done
+
+      - name: Upload dist artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ github.sha }}
+          path: |
+            dist/
+            package.json
+            README.md
+            LICENSE
+          retention-days: 7
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # PUBLISH DRY-RUN — Smoke-test without hitting the registry
+  # ─────────────────────────────────────────────────────────────────────────────
+  publish-dry-run:
+    name: Publish Dry Run
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: TQTuyen/ci-cd-toolkit/.github/actions/setup-node@main
+        with:
+          package-manager: bun
+
+      - name: Download dist artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-${{ github.sha }}
+
+      - name: npm pack (dry run)
+        run: |
+          npm pack --dry-run 2>&1 | tee pack-output.txt
+          echo "## npm pack output" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          cat pack-output.txt >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # PUBLISH — Publish to npm with provenance
+  # ─────────────────────────────────────────────────────────────────────────────
+  publish:
+    name: Publish to npm
+    needs: [validate, build, publish-dry-run]
+    if: ${{ github.event.inputs.dry_run != 'true' }}
+    uses: TQTuyen/ci-cd-toolkit/.github/workflows/cd-npm-publish.yml@main
+    with:
+      package-manager: bun
+      tag: ${{ needs.validate.outputs.npm_tag }}
+      artifact-name: dist-${{ github.sha }}
+      access: public
+      provenance: true
+      environment: npm-publish
+    secrets:
+      npm-token: ${{ secrets.NPM_TOKEN }}
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # GITHUB RELEASE — Tag -> Release with auto-generated changelog
+  # ─────────────────────────────────────────────────────────────────────────────
+  github-release:
+    name: GitHub Release
+    needs: [validate, publish]
+    if: ${{ github.event.inputs.dry_run != 'true' }}
+    uses: TQTuyen/ci-cd-toolkit/.github/workflows/cd-github-release.yml@main
+    with:
+      tag-name: ${{ needs.validate.outputs.tag }}
+      prerelease: ${{ needs.validate.outputs.is_prerelease == 'true' }}
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # NOTIFY — Final summary (always runs)
+  # ─────────────────────────────────────────────────────────────────────────────
+  notify:
+    name: Notify
+    runs-on: ubuntu-latest
+    needs: [validate, quality, build, publish-dry-run, publish, github-release]
+    if: always()
+    steps:
+      - name: Release summary
+        run: |
+          VERSION="${{ needs.validate.outputs.version }}"
+
+          result_icon() { [[ "$1" == "success" ]] && echo "OK" || [[ "$1" == "skipped" ]] && echo "SKIP" || echo "FAIL"; }
+
+          {
+            echo "## CD Release Summary - v$VERSION"
+            echo ""
+            echo "| Step | Status |"
+            echo "|------|--------|"
+            echo "| Validate   | $(result_icon "${{ needs.validate.result }}") \`${{ needs.validate.result }}\` |"
+            echo "| Quality    | $(result_icon "${{ needs.quality.result }}") \`${{ needs.quality.result }}\` |"
+            echo "| Build      | $(result_icon "${{ needs.build.result }}") \`${{ needs.build.result }}\` |"
+            echo "| Dry Run    | $(result_icon "${{ needs.publish-dry-run.result }}") \`${{ needs.publish-dry-run.result }}\` |"
+            echo "| Publish    | $(result_icon "${{ needs.publish.result }}") \`${{ needs.publish.result }}\` |"
+            echo "| GH Release | $(result_icon "${{ needs.github-release.result }}") \`${{ needs.github-release.result }}\` |"
+            [[ "${{ github.event.inputs.dry_run }}" == "true" ]] && echo "" && echo "> **Dry run** - publish and release were skipped."
+          } >> "$GITHUB_STEP_SUMMARY"
